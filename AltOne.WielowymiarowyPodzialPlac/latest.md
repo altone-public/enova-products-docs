@@ -1,4 +1,6 @@
 # AltOne.WielowymiarowyPodzialPlac
 
-✅ Kompatybilność z enova365: wersja 2506.1.1 — OK
-✅ Kompatybilność z enova365: wersja 2410.0.0 — OK
+| Wersja enova365 | Status |
+|-----------------|--------|
+| 2506.1.1        | ✅ OK  |
+| 2410.0.0        | ✅ OK  |
