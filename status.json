@@ -22,5 +22,23 @@
     "Wersja": "25060101",
     "Status": 0,
     "Data": "30.07.2025 22:13:47"
+  },
+  {
+    "Nazwa": "AltOne.WielowymiarowyPodzialPlac",
+    "Wersja": "25060101",
+    "Status": 1,
+    "Data": "30.07.2025 22:25:16"
+  },
+  {
+    "Nazwa": "AltOne.Dashboard.Pulpity",
+    "Wersja": "25060101",
+    "Status": 1,
+    "Data": "30.07.2025 22:25:17"
+  },
+  {
+    "Nazwa": "AltOne.Pulpity.Wizytowki",
+    "Wersja": "25060101",
+    "Status": 1,
+    "Data": "30.07.2025 22:25:16"
   }
 ]
