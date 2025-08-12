@@ -2,6 +2,7 @@
 
 | Produkt                               | Wersja dll          | Wersja enova365 | Data testu       | Status |
 |---------------------------------------|---------------------|-----------------|------------------|--------|
+| AltOne.WebAPI.Core                    | 2504.1.1-0.7.1.7    | 2506.1.2        | 12.08.2025 17:24 | ✅     |
 | AltOne.WebApi.DataExchangeTable       | 2410.0.0-0.5.0.1    | 2506.1.2        | 07.08.2025 21:04 | ✅     |
 | AltOne.WebAPI.ObslugaCzasuPracy       | 2410.0.0-0.1.9.0    | 2506.1.2        | 06.08.2025 13:32 | ✅     |
 | AltOne.DataExchangeTable              | 2410.0.0-31.9.2.2   | 2506.1.2        | 04.08.2025 23:31 | ✅     |
