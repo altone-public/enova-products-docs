@@ -89,5 +89,89 @@
     "Wersja": "25060102",
     "Status": "passed",
     "Data": "2025-08-12 17:24:29"
+  },
+  {
+    "Nazwa": "AltOne.AnalizyExcelPlace",
+    "WersjaDLL": "2410.0.0-0.15.0.3",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:30"
+  },
+  {
+    "Nazwa": "AltOne.B2B",
+    "WersjaDLL": "2412.2.3-133.3.12.0",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:31"
+  },
+  {
+    "Nazwa": "AltOne.Dashboard.Pulpity",
+    "WersjaDLL": "2410.1.2-0.1.8.1",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:32"
+  },
+  {
+    "Nazwa": "AltOne.DataExchangeTable",
+    "WersjaDLL": "2410.0.0-31.9.2.2",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:38"
+  },
+  {
+    "Nazwa": "AltOne.ListyProjektowe",
+    "WersjaDLL": "2410.0.0-20.0.0.0",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:38"
+  },
+  {
+    "Nazwa": "AltOne.Pulpity.Wizytowki",
+    "WersjaDLL": "2410.0.0-10.4.3.0",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:40"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.Core",
+    "WersjaDLL": "2504.1.1-0.7.1.7",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:40"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.ObslugaCzasuPracy",
+    "WersjaDLL": "2410.0.0-0.1.9.0",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:42"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.ObslugaFakturHandlowych",
+    "WersjaDLL": "2410.0.0-0.2.0.1",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:45"
+  },
+  {
+    "Nazwa": "AltOne.WebApi.ObslugaFakturKosztowych",
+    "WersjaDLL": "2410.0.0-0.3.1.0",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:45"
+  },
+  {
+    "Nazwa": "AltOne.WielowymiarowyPodzialPlac",
+    "WersjaDLL": "2410.0.0-0.17.0.1",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:45"
+  },
+  {
+    "Nazwa": "AltOne.WebApi.DataExchangeTable",
+    "WersjaDLL": "2410.0.0-0.5.0.1",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:46"
   }
 ]

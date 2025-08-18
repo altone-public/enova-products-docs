@@ -5,5 +5,12 @@
     "Wersja": "25060102",
     "Status": "passed",
     "Data": "2025-08-04 23:09:44"
+  },
+  {
+    "Nazwa": "AltOne.ListyProjektowe",
+    "WersjaDLL": "2410.0.0-20.0.0.0",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-08-18 21:16:38"
   }
 ]
