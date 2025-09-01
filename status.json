@@ -194,5 +194,19 @@
     "Wersja": "25060103",
     "Status": "passed",
     "Data": "2025-09-01 14:50:45"
+  },
+  {
+    "Nazwa": "AltOne.PlanowaneNieobecnosci",
+    "WersjaDLL": "2410.0.0-0.1.5.0",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-09-01 16:20:21"
+  },
+  {
+    "Nazwa": "AltOne.PotwierdzanieObecnosciPulpity",
+    "WersjaDLL": "2410.0.0-9.3.8.1",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-09-01 16:20:20"
   }
 ]
