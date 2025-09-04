@@ -194,5 +194,19 @@
     "Wersja": "25060103",
     "Status": "passed",
     "Data": "2025-09-01 16:20:20"
+  },
+  {
+    "Nazwa": "AltOne.ImportDokHandlowych",
+    "WersjaDLL": "2504.1.1-0.21.5.13",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-09-04 14:08:50"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.ObslugaKadrowa",
+    "WersjaDLL": "2410.0.0-0.1.4.0",
+    "Wersja": "25060103",
+    "Status": "passed",
+    "Data": "2025-09-04 14:08:49"
   }
 ]

@@ -2,6 +2,8 @@
 
 | Produkt                               | Wersja dll          | Wersja enova365 | Data testu       | Status |
 |---------------------------------------|---------------------|-----------------|------------------|--------|
+| AltOne.ImportDokHandlowych            | 2504.1.1-0.21.5.13  | 2506.1.3        | 04.09.2025 14:08 | ✅     |
+| AltOne.WebAPI.ObslugaKadrowa          | 2410.0.0-0.1.4.0    | 2506.1.3        | 04.09.2025 14:08 | ✅     |
 | AltOne.PlanowaneNieobecnosci          | 2410.0.0-0.1.5.0    | 2506.1.3        | 01.09.2025 16:20 | ✅     |
 | AltOne.PotwierdzanieObecnosciPulpity  | 2410.0.0-9.3.8.1    | 2506.1.3        | 01.09.2025 16:20 | ✅     |
 | AltOne.Dashboard.Pulpity              | 2504.1.1-0.1.8.2    | 2506.1.3        | 01.09.2025 15:30 | ✅     |
