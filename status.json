@@ -341,5 +341,19 @@
     "Wersja": "25060204",
     "Status": "passed",
     "Data": "2025-09-05 13:25:10"
+  },
+  {
+    "Nazwa": "AltOne.Dashboard.Pulpity",
+    "WersjaDLL": "2504.1.1-0.1.8.2",
+    "Wersja": "25060204",
+    "Status": "passed",
+    "Data": "2025-09-07 15:06:41"
+  },
+  {
+    "Nazwa": "AltOne.Pulpity.Wizytowki",
+    "WersjaDLL": "2410.0.0-10.4.3.0",
+    "Wersja": "25060204",
+    "Status": "passed",
+    "Data": "2025-09-07 15:06:42"
   }
 ]
