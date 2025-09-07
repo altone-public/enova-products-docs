@@ -355,5 +355,12 @@
     "Wersja": "25060204",
     "Status": "passed",
     "Data": "2025-09-07 15:06:42"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.ObslugaKadrowa",
+    "WersjaDLL": "2410.0.0-0.1.4.0",
+    "Wersja": "25060204",
+    "Status": "passed",
+    "Data": "2025-09-07 15:12:54"
   }
 ]
