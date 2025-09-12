@@ -1,6 +1,16 @@
-**Wyniki testów integracyjnych**
+**Wyniki testów integracyjnych (pogrupowane)**
 
-| Produkt             | Wersja dll       | Wersja enova365 | Data testu       | Status |
-|---------------------|------------------|-----------------|------------------|--------|
-| AltOne.LazyApproval | 2410.0.0-6.1.1.0 | 2506.2.4        | 05.09.2025 13:25 | ✅     |
-| AltOne.LazyApproval | 2410.0.0-6.1.1.0 | 2506.1.3        | 05.09.2025 11:38 | ✅     |
+[2506.2.4](#enova365-250624) · [2506.1.3](#enova365-250613)
+
+### enova365 2506.2.4
+
+| Produkt             | Wersja dll       | Data testu       | Status |
+|---------------------|------------------|------------------|--------|
+| AltOne.LazyApproval | 2410.0.0-6.1.1.0 | 05.09.2025 13:25 | ✅      |
+
+### enova365 2506.1.3
+
+| Produkt             | Wersja dll       | Data testu       | Status |
+|---------------------|------------------|------------------|--------|
+| AltOne.LazyApproval | 2410.0.0-6.1.1.0 | 05.09.2025 11:38 | ✅      |
+
