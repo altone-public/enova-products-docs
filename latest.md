@@ -1,6 +1,33 @@
 **Wyniki testów integracyjnych (pogrupowane)**
 
-[2506.2.4](#enova365-250624) · [2506.1.3](#enova365-250613) · [2506.1.2](#enova365-250612)
+[2510.0.0](#enova365-251000) · [2506.2.4](#enova365-250624) · [2506.1.3](#enova365-250613) · [2506.1.2](#enova365-250612)
+
+### enova365 2510.0.0
+
+| Produkt                               | Wersja dll              | Data testu       | Status |
+|---------------------------------------|-------------------------|------------------|--------|
+| AltOne.Dashboard.Pulpity              | 2504.1.1-0.1.8.2        | 19.09.2025 15:58 | ✅      |
+| AltOne.Pulpity.Wizytowki              | 2504.1.1-10.4.3.2       | 19.09.2025 15:58 | ❌      |
+| enova365                              | 2510.0.0-beta.185782    | 19.09.2025 15:47 | ❌      |
+| AltOne.ImportDoETeczki                | 2410.0.0-2.3.0.0        | 19.09.2025 15:45 | ❌      |
+| AltOne.WebAPI.Motivizer               | 2410.0.0-0.1.1.0        | 19.09.2025 15:45 | ✅      |
+| AltOne.LazyApproval                   | 2410.0.0-6.1.1.0        | 19.09.2025 15:45 | ❌      |
+| AltOne.PowiadomieniaOPlatnosciach     | 2406.0.0-0.1.2.1        | 19.09.2025 15:45 | ❌      |
+| AltOne.TwoFactorAuth                  | 2410.0.0-10.2.0.3-Beta  | 19.09.2025 15:45 | ✅      |
+| AltOne.WebAPI.ObslugaKadrowa          | 2504.1.1-0.1.4.2        | 19.09.2025 15:45 | ❌      |
+| AltOne.ImportDokHandlowych            | 2504.1.1-0.21.5.13      | 19.09.2025 15:45 | ✅      |
+| AltOne.PlanowaneNieobecnosci          | 2410.0.0-0.1.5.0        | 19.09.2025 15:45 | ❌      |
+| AltOne.PotwierdzanieObecnosciPulpity  | 2410.0.0-9.3.8.2        | 19.09.2025 15:45 | ✅      |
+| AltOne.WebApi.DataExchangeTable       | 2410.0.0-0.5.0.1        | 19.09.2025 15:45 | ✅      |
+| AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.11.2       | 19.09.2025 15:45 | ❌      |
+| AltOne.B2B                            | 2506.2.4-133.3.11.2     | 19.09.2025 15:45 | ✅      |
+| AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3        | 19.09.2025 15:45 | ❌      |
+| AltOne.WebAPI.Core                    | 2504.1.1-0.7.1.8        | 19.09.2025 15:45 | ✅      |
+| AltOne.WebApi.ObslugaFakturKosztowych | 2504.1.1-0.3.2.0        | 19.09.2025 15:45 | ❌      |
+| AltOne.AnalizyExcelPlace              | 2410.0.0-0.15.0.3       | 19.09.2025 15:45 | ✅      |
+| AltOne.ListyProjektowe                | 2410.0.0-20.0.0.0       | 19.09.2025 15:45 | ✅      |
+| AltOne.WielowymiarowyPodzialPlac      | 2410.0.0-0.18.0.2-beta  | 19.09.2025 15:45 | ✅      |
+| AltOne.DataExchangeTable              | 2410.0.0-31.10.0.0-alfa | 19.09.2025 15:45 | ❌      |
 
 ### enova365 2506.2.4
 
