@@ -4,9 +4,10 @@
 
 ### enova365 2506.2.4
 
-| Produkt                         | Wersja dll       | Data testu       | Status |
-|---------------------------------|------------------|------------------|--------|
-| AltOne.WebAPI.ObslugaCzasuPracy | 2410.0.0-0.1.9.0 | 05.09.2025 13:25 | ✅      |
+| Produkt                         | Wersja dll        | Data testu       | Status |
+|---------------------------------|-------------------|------------------|--------|
+| AltOne.WebAPI.ObslugaCzasuPracy | 2504.1.1-0.1.11.2 | 19.09.2025 09:34 | ✅      |
+| AltOne.WebAPI.ObslugaCzasuPracy | 2410.0.0-0.1.9.0  | 05.09.2025 13:25 | ✅      |
 
 ### enova365 2506.1.3
 

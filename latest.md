@@ -6,6 +6,8 @@
 
 | Produkt                               | Wersja dll              | Data testu       | Status |
 |---------------------------------------|-------------------------|------------------|--------|
+| AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.11.2       | 19.09.2025 09:34 | ✅      |
+| AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3        | 19.09.2025 09:34 | ✅      |
 | AltOne.ImportDoETeczki                | 2410.0.0-2.3.0.0        | 15.09.2025 12:27 | ✅      |
 | AltOne.WebApi.ObslugaFakturKosztowych | 2504.1.1-0.3.2.0        | 12.09.2025 20:03 | ✅      |
 | AltOne.WebAPI.Core                    | 2504.1.1-0.7.1.8        | 12.09.2025 11:41 | ✅      |

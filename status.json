@@ -418,5 +418,19 @@
     "Wersja": "25060204",
     "Status": "passed",
     "Data": "2025-09-15 12:27:22"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.ObslugaCzasuPracy",
+    "WersjaDLL": "2504.1.1-0.1.11.2",
+    "Wersja": "25060204",
+    "Status": "passed",
+    "Data": "2025-09-19 09:34:33"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.ObslugaFakturHandlowych",
+    "WersjaDLL": "2504.1.1-0.2.0.3",
+    "Wersja": "25060204",
+    "Status": "passed",
+    "Data": "2025-09-19 09:34:31"
   }
 ]
