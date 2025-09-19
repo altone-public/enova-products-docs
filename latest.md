@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll              | Data testu       | Status |
 |---------------------------------------|-------------------------|------------------|--------|
+| enova365                              | 2506.2.4                | 19.09.2025 10:08 | ✅      |
 | AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.11.2       | 19.09.2025 09:34 | ✅      |
 | AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3        | 19.09.2025 09:34 | ✅      |
 | AltOne.ImportDoETeczki                | 2410.0.0-2.3.0.0        | 15.09.2025 12:27 | ✅      |
