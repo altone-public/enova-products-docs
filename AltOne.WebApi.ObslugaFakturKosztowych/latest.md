@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll       | Data testu       | Status |
 |---------------------------------------|------------------|------------------|--------|
+| AltOne.WebApi.ObslugaFakturKosztowych | 2504.1.1-0.3.2.0 | 24.09.2025 15:30 | ✅      |
 | AltOne.WebApi.ObslugaFakturKosztowych | 2504.1.1-0.3.2.0 | 19.09.2025 15:45 | ❌      |
 
 ### enova365 2506.2.4

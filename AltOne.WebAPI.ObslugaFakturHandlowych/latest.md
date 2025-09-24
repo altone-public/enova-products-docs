@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll       | Data testu       | Status |
 |---------------------------------------|------------------|------------------|--------|
+| AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3 | 24.09.2025 15:30 | ✅      |
 | AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3 | 19.09.2025 15:45 | ❌      |
 
 ### enova365 2506.2.4

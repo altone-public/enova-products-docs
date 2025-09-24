@@ -6,6 +6,18 @@
 
 | Produkt                               | Wersja dll              | Data testu       | Status |
 |---------------------------------------|-------------------------|------------------|--------|
+| enova365                              | 2510.0.0-beta.185782    | 24.09.2025 15:32 | ✅      |
+| AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3        | 24.09.2025 15:30 | ✅      |
+| AltOne.ImportDoETeczki                | 2410.0.0-2.3.0.0        | 24.09.2025 15:30 | ✅      |
+| AltOne.LazyApproval                   | 2410.0.0-6.1.1.0        | 24.09.2025 15:30 | ✅      |
+| AltOne.PowiadomieniaOPlatnosciach     | 2406.0.0-0.1.2.1        | 24.09.2025 15:30 | ✅      |
+| AltOne.PlanowaneNieobecnosci          | 2410.0.0-0.1.5.0        | 24.09.2025 15:30 | ✅      |
+| AltOne.WebAPI.ObslugaKadrowa          | 2504.1.1-0.1.4.2        | 24.09.2025 15:30 | ✅      |
+| AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.11.2       | 24.09.2025 15:30 | ✅      |
+| AltOne.DataExchangeTable              | 2410.0.0-31.9.2.2       | 24.09.2025 15:30 | ✅      |
+| AltOne.WebApi.ObslugaFakturKosztowych | 2504.1.1-0.3.2.0        | 24.09.2025 15:30 | ✅      |
+| AltOne.WielowymiarowyPodzialPlac      | 2410.0.0-0.17.0.1       | 24.09.2025 15:30 | ✅      |
+| AltOne.B2B                            | 2412.2.3-133.3.12.0     | 24.09.2025 15:30 | ✅      |
 | AltOne.Dashboard.Pulpity              | 2504.1.1-0.1.8.2        | 19.09.2025 15:58 | ✅      |
 | AltOne.Pulpity.Wizytowki              | 2504.1.1-10.4.3.2       | 19.09.2025 15:58 | ❌      |
 | enova365                              | 2510.0.0-beta.185782    | 19.09.2025 15:47 | ❌      |

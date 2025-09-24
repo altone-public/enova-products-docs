@@ -33,5 +33,12 @@
     "Wersja": "25100000",
     "Status": "failed",
     "Data": "2025-09-19 15:45:43"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.ObslugaCzasuPracy",
+    "WersjaDLL": "2504.1.1-0.1.11.2",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-09-24 15:30:33"
   }
 ]

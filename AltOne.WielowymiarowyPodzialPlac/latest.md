@@ -6,6 +6,7 @@
 
 | Produkt                          | Wersja dll             | Data testu       | Status |
 |----------------------------------|------------------------|------------------|--------|
+| AltOne.WielowymiarowyPodzialPlac | 2410.0.0-0.17.0.1      | 24.09.2025 15:30 | ✅      |
 | AltOne.WielowymiarowyPodzialPlac | 2410.0.0-0.18.0.2-beta | 19.09.2025 15:45 | ✅      |
 
 ### enova365 2506.2.4
