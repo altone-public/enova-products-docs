@@ -6,6 +6,7 @@
 
 | Produkt                      | Wersja dll       | Data testu       | Status |
 |------------------------------|------------------|------------------|--------|
+| AltOne.WebAPI.ObslugaKadrowa | 2504.1.1-0.1.5.0 | 24.09.2025 19:48 | ✅      |
 | AltOne.WebAPI.ObslugaKadrowa | 2504.1.1-0.1.4.2 | 24.09.2025 15:30 | ✅      |
 | AltOne.WebAPI.ObslugaKadrowa | 2504.1.1-0.1.4.2 | 19.09.2025 15:45 | ❌      |
 
