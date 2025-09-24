@@ -1,4 +1,4 @@
-**Wyniki testów integracyjnych (pogrupowane)**
+**Wyniki testów integracyjnych (pogrupowane — historia)**
 
 [2510.0.0](#enova365-251000) · [2506.2.4](#enova365-250624) · [2506.1.3](#enova365-250613) · [2506.1.2](#enova365-250612)
 
