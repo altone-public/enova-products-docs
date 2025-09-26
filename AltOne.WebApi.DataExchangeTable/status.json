@@ -26,5 +26,12 @@
     "Wersja": "25100000",
     "Status": "passed",
     "Data": "2025-09-19 15:45:43"
+  },
+  {
+    "Nazwa": "AltOne.WebApi.DataExchangeTable",
+    "WersjaDLL": "2410.0.0-0.5.0.1",
+    "Wersja": "25060305",
+    "Status": "passed",
+    "Data": "2025-09-26 14:42:47"
   }
 ]

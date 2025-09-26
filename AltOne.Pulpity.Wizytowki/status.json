@@ -33,5 +33,12 @@
     "Wersja": "25100000",
     "Status": "failed",
     "Data": "2025-09-19 15:58:07"
+  },
+  {
+    "Nazwa": "AltOne.Pulpity.Wizytowki",
+    "WersjaDLL": "2504.1.1-10.4.3.2",
+    "Wersja": "25060305",
+    "Status": "passed",
+    "Data": "2025-09-26 14:42:40"
   }
 ]
