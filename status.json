@@ -866,5 +866,26 @@
     "Wersja": "25060305",
     "Status": "passed",
     "Data": "2025-10-01 13:43:09"
+  },
+  {
+    "Nazwa": "enova365",
+    "WersjaDLL": "2510.0.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-03 17:42:49"
+  },
+  {
+    "Nazwa": "AltOne.Pulpity.Wizytowki",
+    "WersjaDLL": "2510.0.0-10.4.3.3",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-03 17:39:24"
+  },
+  {
+    "Nazwa": "AltOne.WielowymiarowyPodzialPlac",
+    "WersjaDLL": "2504.1.1-0.17.0.4",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-03 17:39:15"
   }
 ]
