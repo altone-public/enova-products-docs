@@ -6,6 +6,8 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.ChangeInfos                    | 2410.0.0-7.1.4.1       | 03.10.2025 18:01 | ✅      |
+| AltOne.WnioskiPracownicze             | 2410.0.0-0.2.9.0       | 03.10.2025 18:01 | ✅      |
 | enova365                              | 2510.0.0               | 03.10.2025 17:42 | ✅      |
 | AltOne.Pulpity.Wizytowki              | 2510.0.0-10.4.3.3      | 03.10.2025 17:39 | ✅      |
 | AltOne.WielowymiarowyPodzialPlac      | 2504.1.1-0.17.0.4      | 03.10.2025 17:39 | ✅      |

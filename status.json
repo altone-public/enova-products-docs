@@ -887,5 +887,19 @@
     "Wersja": "25100000",
     "Status": "passed",
     "Data": "2025-10-03 17:39:15"
+  },
+  {
+    "Nazwa": "AltOne.ChangeInfos",
+    "WersjaDLL": "2410.0.0-7.1.4.1",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-03 18:01:39"
+  },
+  {
+    "Nazwa": "AltOne.WnioskiPracownicze",
+    "WersjaDLL": "2410.0.0-0.2.9.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-03 18:01:39"
   }
 ]
