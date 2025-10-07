@@ -6,6 +6,8 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.PotwierdzanieObecnosciPulpity  | 2410.0.0-9.3.9.0       | 07.10.2025 14:31 | ✅      |
+| AltOne.ListyProjektowe                | 2504.1.1-20.0.0.0      | 07.10.2025 14:28 | ✅      |
 | AltOne.ChangeInfos                    | 2410.0.0-7.1.4.1       | 03.10.2025 18:01 | ✅      |
 | AltOne.WnioskiPracownicze             | 2410.0.0-0.2.9.0       | 03.10.2025 18:01 | ✅      |
 | enova365                              | 2510.0.0               | 03.10.2025 17:42 | ✅      |
@@ -25,11 +27,9 @@
 | AltOne.WebAPI.Motivizer               | 2410.0.0-0.1.1.0       | 19.09.2025 15:45 | ✅      |
 | AltOne.TwoFactorAuth                  | 2410.0.0-10.2.0.3-Beta | 19.09.2025 15:45 | ✅      |
 | AltOne.ImportDokHandlowych            | 2504.1.1-0.21.5.13     | 19.09.2025 15:45 | ✅      |
-| AltOne.PotwierdzanieObecnosciPulpity  | 2410.0.0-9.3.8.2       | 19.09.2025 15:45 | ✅      |
 | AltOne.WebApi.DataExchangeTable       | 2410.0.0-0.5.0.1       | 19.09.2025 15:45 | ✅      |
 | AltOne.WebAPI.Core                    | 2504.1.1-0.7.1.8       | 19.09.2025 15:45 | ✅      |
 | AltOne.AnalizyExcelPlace              | 2410.0.0-0.15.0.3      | 19.09.2025 15:45 | ✅      |
-| AltOne.ListyProjektowe                | 2410.0.0-20.0.0.0      | 19.09.2025 15:45 | ✅      |
 
 ### enova365 2506.3.5
 

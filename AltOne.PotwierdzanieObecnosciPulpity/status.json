@@ -26,5 +26,12 @@
     "Wersja": "25060305",
     "Status": "passed",
     "Data": "2025-09-26 14:42:51"
+  },
+  {
+    "Nazwa": "AltOne.PotwierdzanieObecnosciPulpity",
+    "WersjaDLL": "2410.0.0-9.3.9.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-07 14:31:52"
   }
 ]

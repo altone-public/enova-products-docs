@@ -6,6 +6,7 @@
 
 | Produkt                              | Wersja dll       | Data testu       | Status |
 |--------------------------------------|------------------|------------------|--------|
+| AltOne.PotwierdzanieObecnosciPulpity | 2410.0.0-9.3.9.0 | 07.10.2025 14:31 | ✅      |
 | AltOne.PotwierdzanieObecnosciPulpity | 2410.0.0-9.3.8.2 | 19.09.2025 15:45 | ✅      |
 
 ### enova365 2506.3.5
