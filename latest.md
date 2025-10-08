@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.GrafikiPracy.Pulpity           | 2410.0.0-0.3.7.0       | 08.10.2025 15:44 | ✅      |
 | AltOne.PotwierdzanieObecnosciPulpity  | 2410.0.0-9.3.9.0       | 07.10.2025 14:31 | ✅      |
 | AltOne.ListyProjektowe                | 2504.1.1-20.0.0.0      | 07.10.2025 14:28 | ✅      |
 | AltOne.ChangeInfos                    | 2410.0.0-7.1.4.1       | 03.10.2025 18:01 | ✅      |
