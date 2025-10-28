@@ -6,6 +6,7 @@
 
 | Produkt                  | Wersja dll        | Data testu       | Status |
 |--------------------------|-------------------|------------------|--------|
+| AltOne.AnalizyExcelPlace | 2504.1.1-0.15.0.3 | 28.10.2025 14:46 | ✅      |
 | AltOne.AnalizyExcelPlace | 2410.0.0-0.15.0.3 | 19.09.2025 15:45 | ✅      |
 
 ### enova365 2506.3.5

@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.AnalizyExcelPlace              | 2504.1.1-0.15.0.3      | 28.10.2025 14:46 | ✅      |
 | AltOne.ProduktODK                     | 2510.0.0-23.8.6.3-Beta | 28.10.2025 12:28 | ✅      |
 | AltOne.WebAPI.Core                    | 2510.0.0-0.7.3.0       | 27.10.2025 20:11 | ✅      |
 | AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.12.0      | 27.10.2025 20:11 | ✅      |
@@ -31,7 +32,6 @@
 | AltOne.TwoFactorAuth                  | 2410.0.0-10.2.0.3-Beta | 19.09.2025 15:45 | ✅      |
 | AltOne.ImportDokHandlowych            | 2504.1.1-0.21.5.13     | 19.09.2025 15:45 | ✅      |
 | AltOne.WebApi.DataExchangeTable       | 2410.0.0-0.5.0.1       | 19.09.2025 15:45 | ✅      |
-| AltOne.AnalizyExcelPlace              | 2410.0.0-0.15.0.3      | 19.09.2025 15:45 | ✅      |
 
 ### enova365 2506.3.5
 
