@@ -922,5 +922,26 @@
     "Wersja": "25100000",
     "Status": "passed",
     "Data": "2025-10-08 15:44:14"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.Core",
+    "WersjaDLL": "2510.0.0-0.7.3.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-27 20:11:26"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.ObslugaCzasuPracy",
+    "WersjaDLL": "2504.1.1-0.1.12.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-27 20:11:26"
+  },
+  {
+    "Nazwa": "AltOne.WielowymiarowyPodzialPlac",
+    "WersjaDLL": "2504.1.1-0.17.0.5",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-27 20:11:21"
   }
 ]

@@ -6,6 +6,7 @@
 
 | Produkt                          | Wersja dll             | Data testu       | Status |
 |----------------------------------|------------------------|------------------|--------|
+| AltOne.WielowymiarowyPodzialPlac | 2504.1.1-0.17.0.5      | 27.10.2025 20:11 | ✅      |
 | AltOne.WielowymiarowyPodzialPlac | 2504.1.1-0.17.0.4      | 03.10.2025 17:39 | ✅      |
 | AltOne.WielowymiarowyPodzialPlac | 2410.0.0-0.17.0.1      | 24.09.2025 15:30 | ✅      |
 | AltOne.WielowymiarowyPodzialPlac | 2410.0.0-0.18.0.2-beta | 19.09.2025 15:45 | ✅      |
