@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.ProduktODK                     | 2510.0.0-23.8.6.3-Beta | 28.10.2025 12:28 | ✅      |
 | AltOne.WebAPI.Core                    | 2510.0.0-0.7.3.0       | 27.10.2025 20:11 | ✅      |
 | AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.12.0      | 27.10.2025 20:11 | ✅      |
 | AltOne.WielowymiarowyPodzialPlac      | 2504.1.1-0.17.0.5      | 27.10.2025 20:11 | ✅      |
