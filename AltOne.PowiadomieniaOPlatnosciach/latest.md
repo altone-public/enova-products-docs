@@ -6,6 +6,7 @@
 
 | Produkt                           | Wersja dll       | Data testu       | Status |
 |-----------------------------------|------------------|------------------|--------|
+| AltOne.PowiadomieniaOPlatnosciach | 2504.1.1-0.1.2.2 | 29.10.2025 23:32 | ✅      |
 | AltOne.PowiadomieniaOPlatnosciach | 2406.0.0-0.1.2.1 | 24.09.2025 15:30 | ✅      |
 | AltOne.PowiadomieniaOPlatnosciach | 2406.0.0-0.1.2.1 | 19.09.2025 15:45 | ❌      |
 

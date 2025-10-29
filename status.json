@@ -964,5 +964,33 @@
     "Wersja": "25100000",
     "Status": "passed",
     "Data": "2025-10-29 23:02:40"
+  },
+  {
+    "Nazwa": "AltOne.GrafikiPracy.Pulpity",
+    "WersjaDLL": "2504.1.1-0.3.8.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-29 23:35:05"
+  },
+  {
+    "Nazwa": "AltOne.PowiadomieniaOPlatnosciach",
+    "WersjaDLL": "2504.1.1-0.1.2.2",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-29 23:32:41"
+  },
+  {
+    "Nazwa": "AltOne.ProduktODK",
+    "WersjaDLL": "2510.0.0-23.8.8.0-Beta",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-29 23:55:01"
+  },
+  {
+    "Nazwa": "AltOne.TwoFactorAuth",
+    "WersjaDLL": "2504.1.1-10.2.1.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-29 23:32:41"
   }
 ]
