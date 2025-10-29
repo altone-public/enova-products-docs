@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.ImportDoETeczki                | 2504.1.1-2.3.1.0       | 30.10.2025 00:02 | ✅      |
 | AltOne.ProduktODK                     | 2510.0.0-23.8.8.0-Beta | 29.10.2025 23:55 | ✅      |
 | AltOne.GrafikiPracy.Pulpity           | 2504.1.1-0.3.8.0       | 29.10.2025 23:35 | ✅      |
 | AltOne.PowiadomieniaOPlatnosciach     | 2504.1.1-0.1.2.2       | 29.10.2025 23:32 | ✅      |
@@ -23,7 +24,6 @@
 | AltOne.WebAPI.ObslugaKadrowa          | 2504.1.1-0.1.5.0       | 24.09.2025 19:48 | ✅      |
 | AltOne.WebApi.ObslugaFakturKosztowych | 2506.1.1-0.3.3.0       | 24.09.2025 19:48 | ✅      |
 | AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3       | 24.09.2025 15:30 | ✅      |
-| AltOne.ImportDoETeczki                | 2410.0.0-2.3.0.0       | 24.09.2025 15:30 | ✅      |
 | AltOne.LazyApproval                   | 2410.0.0-6.1.1.0       | 24.09.2025 15:30 | ✅      |
 | AltOne.PlanowaneNieobecnosci          | 2410.0.0-0.1.5.0       | 24.09.2025 15:30 | ✅      |
 | AltOne.DataExchangeTable              | 2410.0.0-31.9.2.2      | 24.09.2025 15:30 | ✅      |

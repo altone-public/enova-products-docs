@@ -6,6 +6,7 @@
 
 | Produkt                | Wersja dll       | Data testu       | Status |
 |------------------------|------------------|------------------|--------|
+| AltOne.ImportDoETeczki | 2504.1.1-2.3.1.0 | 30.10.2025 00:02 | ✅      |
 | AltOne.ImportDoETeczki | 2410.0.0-2.3.0.0 | 24.09.2025 15:30 | ✅      |
 | AltOne.ImportDoETeczki | 2410.0.0-2.3.0.0 | 19.09.2025 15:45 | ❌      |
 
