@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.WebAPI.Motivizer               | 2504.1.1-0.1.1.1       | 31.10.2025 12:02 | ✅      |
 | AltOne.WnioskiPracownicze             | 2504.1.1-0.2.10.0      | 31.10.2025 11:04 | ✅      |
 | AltOne.Dashboard.Pulpity              | 2504.1.1-0.1.9.0       | 31.10.2025 10:07 | ✅      |
 | AltOne.WebApi.DataExchangeTable       | 2504.1.1-0.5.1.0       | 31.10.2025 09:59 | ✅      |
@@ -31,7 +32,6 @@
 | AltOne.Pulpity.Wizytowki              | 2510.0.0-10.4.3.3      | 03.10.2025 17:39 | ✅      |
 | AltOne.WebAPI.ObslugaKadrowa          | 2504.1.1-0.1.5.0       | 24.09.2025 19:48 | ✅      |
 | AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3       | 24.09.2025 15:30 | ✅      |
-| AltOne.WebAPI.Motivizer               | 2410.0.0-0.1.1.0       | 19.09.2025 15:45 | ✅      |
 
 ### enova365 2506.3.5
 
