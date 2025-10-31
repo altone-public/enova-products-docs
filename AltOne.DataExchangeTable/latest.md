@@ -6,6 +6,7 @@
 
 | Produkt                  | Wersja dll              | Data testu       | Status |
 |--------------------------|-------------------------|------------------|--------|
+| AltOne.DataExchangeTable | 2504.1.1-31.9.3.0       | 31.10.2025 09:59 | ✅      |
 | AltOne.DataExchangeTable | 2410.0.0-31.9.2.2       | 24.09.2025 15:30 | ✅      |
 | AltOne.DataExchangeTable | 2410.0.0-31.10.0.0-alfa | 19.09.2025 15:45 | ❌      |
 

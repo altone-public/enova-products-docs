@@ -6,6 +6,7 @@
 
 | Produkt                    | Wersja dll         | Data testu       | Status |
 |----------------------------|--------------------|------------------|--------|
+| AltOne.ImportDokHandlowych | 2504.1.1-0.21.6.0  | 31.10.2025 09:59 | ✅      |
 | AltOne.ImportDokHandlowych | 2504.1.1-0.21.5.13 | 19.09.2025 15:45 | ✅      |
 
 ### enova365 2506.3.5

@@ -6,6 +6,7 @@
 
 | Produkt                         | Wersja dll       | Data testu       | Status |
 |---------------------------------|------------------|------------------|--------|
+| AltOne.WebApi.DataExchangeTable | 2504.1.1-0.5.1.0 | 31.10.2025 09:59 | ✅      |
 | AltOne.WebApi.DataExchangeTable | 2410.0.0-0.5.0.1 | 19.09.2025 15:45 | ✅      |
 
 ### enova365 2506.3.5

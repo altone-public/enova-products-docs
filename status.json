@@ -999,5 +999,75 @@
     "Wersja": "25100000",
     "Status": "passed",
     "Data": "2025-10-30 00:02:28"
+  },
+  {
+    "Nazwa": "AltOne.B2B",
+    "WersjaDLL": "2504.1.1-133.3.13.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-31 09:59:37"
+  },
+  {
+    "Nazwa": "AltOne.ChangeInfos",
+    "WersjaDLL": "2504.1.1-7.1.5.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-31 09:59:39"
+  },
+  {
+    "Nazwa": "AltOne.Dashboard.Pulpity",
+    "WersjaDLL": "2504.1.1-0.1.9.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-31 10:07:39"
+  },
+  {
+    "Nazwa": "AltOne.DataExchangeTable",
+    "WersjaDLL": "2504.1.1-31.9.3.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-31 09:59:44"
+  },
+  {
+    "Nazwa": "AltOne.ImportDokHandlowych",
+    "WersjaDLL": "2504.1.1-0.21.6.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-31 09:59:47"
+  },
+  {
+    "Nazwa": "AltOne.LazyApproval",
+    "WersjaDLL": "2504.1.1-6.1.2.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-31 09:59:47"
+  },
+  {
+    "Nazwa": "AltOne.PlanowaneNieobecnosci",
+    "WersjaDLL": "2504.1.1-0.1.7.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-31 09:59:48"
+  },
+  {
+    "Nazwa": "AltOne.PotwierdzanieObecnosciPulpity",
+    "WersjaDLL": "2504.1.1-9.3.10.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-31 09:59:48"
+  },
+  {
+    "Nazwa": "AltOne.WebApi.ObslugaFakturKosztowych",
+    "WersjaDLL": "2506.1.1-0.3.3.2",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-31 09:59:51"
+  },
+  {
+    "Nazwa": "AltOne.WebApi.DataExchangeTable",
+    "WersjaDLL": "2504.1.1-0.5.1.0",
+    "Wersja": "25100000",
+    "Status": "passed",
+    "Data": "2025-10-31 09:59:52"
   }
 ]

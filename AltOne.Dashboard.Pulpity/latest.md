@@ -6,6 +6,7 @@
 
 | Produkt                  | Wersja dll       | Data testu       | Status |
 |--------------------------|------------------|------------------|--------|
+| AltOne.Dashboard.Pulpity | 2504.1.1-0.1.9.0 | 31.10.2025 10:07 | ✅      |
 | AltOne.Dashboard.Pulpity | 2504.1.1-0.1.8.2 | 19.09.2025 15:58 | ✅      |
 
 ### enova365 2506.3.5
