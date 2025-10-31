@@ -1,6 +1,12 @@
 **Wyniki testów integracyjnych (pogrupowane — historia)**
 
-[2510.0.0](#enova365-251000)
+[2510.1.1](#enova365-251011) · [2510.0.0](#enova365-251000)
+
+### enova365 2510.1.1
+
+| Produkt           | Wersja dll             | Data testu       | Status |
+|-------------------|------------------------|------------------|--------|
+| AltOne.ProduktODK | 2510.0.0-23.8.8.0-Beta | 31.10.2025 16:36 | ✅      |
 
 ### enova365 2510.0.0
 

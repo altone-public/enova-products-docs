@@ -33,5 +33,12 @@
     "Wersja": "25100000",
     "Status": "passed",
     "Data": "2025-10-31 09:59:47"
+  },
+  {
+    "Nazwa": "AltOne.ImportDokHandlowych",
+    "WersjaDLL": "2504.1.1-0.21.6.0",
+    "Wersja": "25100101",
+    "Status": "passed",
+    "Data": "2025-10-31 16:35:52"
   }
 ]

@@ -40,5 +40,12 @@
     "Wersja": "25100000",
     "Status": "passed",
     "Data": "2025-10-31 09:59:47"
+  },
+  {
+    "Nazwa": "AltOne.LazyApproval",
+    "WersjaDLL": "2504.1.1-6.1.2.0",
+    "Wersja": "25100101",
+    "Status": "passed",
+    "Data": "2025-10-31 16:35:52"
   }
 ]

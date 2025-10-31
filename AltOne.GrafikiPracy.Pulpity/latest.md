@@ -1,6 +1,12 @@
 **Wyniki testów integracyjnych (pogrupowane — historia)**
 
-[2510.0.0](#enova365-251000)
+[2510.1.1](#enova365-251011) · [2510.0.0](#enova365-251000)
+
+### enova365 2510.1.1
+
+| Produkt                     | Wersja dll       | Data testu       | Status |
+|-----------------------------|------------------|------------------|--------|
+| AltOne.GrafikiPracy.Pulpity | 2504.1.1-0.3.8.0 | 31.10.2025 16:35 | ✅      |
 
 ### enova365 2510.0.0
 

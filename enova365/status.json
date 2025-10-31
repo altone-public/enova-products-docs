@@ -33,5 +33,12 @@
     "Wersja": "25100000",
     "Status": "passed",
     "Data": "2025-10-03 17:42:49"
+  },
+  {
+    "Nazwa": "enova365",
+    "WersjaDLL": "2510.1.1",
+    "Wersja": "25100101",
+    "Status": "passed",
+    "Data": "2025-10-31 16:35:49"
   }
 ]
