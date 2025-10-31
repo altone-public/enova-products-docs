@@ -4,9 +4,10 @@
 
 ### enova365 2510.0.0
 
-| Produkt                   | Wersja dll       | Data testu       | Status |
-|---------------------------|------------------|------------------|--------|
-| AltOne.WnioskiPracownicze | 2410.0.0-0.2.9.0 | 03.10.2025 18:01 | ✅      |
+| Produkt                   | Wersja dll        | Data testu       | Status |
+|---------------------------|-------------------|------------------|--------|
+| AltOne.WnioskiPracownicze | 2504.1.1-0.2.10.0 | 31.10.2025 11:04 | ✅      |
+| AltOne.WnioskiPracownicze | 2410.0.0-0.2.9.0  | 03.10.2025 18:01 | ✅      |
 
 ### enova365 2506.3.5
 

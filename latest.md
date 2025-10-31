@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.WnioskiPracownicze             | 2504.1.1-0.2.10.0      | 31.10.2025 11:04 | ✅      |
 | AltOne.Dashboard.Pulpity              | 2504.1.1-0.1.9.0       | 31.10.2025 10:07 | ✅      |
 | AltOne.WebApi.DataExchangeTable       | 2504.1.1-0.5.1.0       | 31.10.2025 09:59 | ✅      |
 | AltOne.WebApi.ObslugaFakturKosztowych | 2506.1.1-0.3.3.2       | 31.10.2025 09:59 | ✅      |
@@ -26,7 +27,6 @@
 | AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.12.0      | 27.10.2025 20:11 | ✅      |
 | AltOne.WielowymiarowyPodzialPlac      | 2504.1.1-0.17.0.5      | 27.10.2025 20:11 | ✅      |
 | AltOne.ListyProjektowe                | 2504.1.1-20.0.0.0      | 07.10.2025 14:28 | ✅      |
-| AltOne.WnioskiPracownicze             | 2410.0.0-0.2.9.0       | 03.10.2025 18:01 | ✅      |
 | enova365                              | 2510.0.0               | 03.10.2025 17:42 | ✅      |
 | AltOne.Pulpity.Wizytowki              | 2510.0.0-10.4.3.3      | 03.10.2025 17:39 | ✅      |
 | AltOne.WebAPI.ObslugaKadrowa          | 2504.1.1-0.1.5.0       | 24.09.2025 19:48 | ✅      |
