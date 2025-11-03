@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.0       | 03.11.2025 16:39 | ✅      |
 | AltOne.AnalizyExcelPlace              | 2504.1.1-0.15.1.1      | 31.10.2025 16:36 | ✅      |
 | AltOne.WebApi.DataExchangeTable       | 2504.1.1-0.5.1.0       | 31.10.2025 16:36 | ✅      |
 | AltOne.WebAPI.ObslugaKadrowa          | 2504.1.1-0.1.5.0       | 31.10.2025 16:36 | ✅      |
