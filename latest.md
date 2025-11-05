@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.ProduktODK                     | 2504.3.5-23.8.8.0-Beta | 05.11.2025 13:05 | ❌      |
 | AltOne.KartyCzasuPracy                | 2504.1.1-0.2.34.0      | 04.11.2025 11:03 | ✅      |
 | AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.0       | 03.11.2025 16:39 | ✅      |
 | AltOne.AnalizyExcelPlace              | 2504.1.1-0.15.1.1      | 31.10.2025 16:36 | ✅      |
@@ -20,7 +21,6 @@
 | AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.12.0      | 31.10.2025 16:36 | ✅      |
 | AltOne.Pulpity.Wizytowki              | 2510.0.0-10.4.3.3      | 31.10.2025 16:36 | ✅      |
 | AltOne.TwoFactorAuth                  | 2504.1.1-10.2.1.0      | 31.10.2025 16:36 | ✅      |
-| AltOne.ProduktODK                     | 2510.0.0-23.8.8.0-Beta | 31.10.2025 16:36 | ✅      |
 | AltOne.PowiadomieniaOPlatnosciach     | 2504.1.1-0.1.2.2       | 31.10.2025 16:35 | ✅      |
 | AltOne.ImportDokHandlowych            | 2504.1.1-0.21.6.0      | 31.10.2025 16:35 | ✅      |
 | AltOne.LazyApproval                   | 2504.1.1-6.1.2.0       | 31.10.2025 16:35 | ✅      |
