@@ -6,6 +6,7 @@
 
 | Produkt                         | Wersja dll        | Data testu       | Status |
 |---------------------------------|-------------------|------------------|--------|
+| AltOne.WebAPI.ObslugaCzasuPracy | 2504.1.1-0.1.13.1 | 24.11.2025 18:05 | ✅      |
 | AltOne.WebAPI.ObslugaCzasuPracy | 2504.1.1-0.1.13.0 | 14.11.2025 15:03 | ✅      |
 | AltOne.WebAPI.ObslugaCzasuPracy | 2504.1.1-0.1.12.0 | 31.10.2025 16:36 | ✅      |
 

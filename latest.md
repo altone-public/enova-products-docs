@@ -6,7 +6,7 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
-| AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.13.0      | 14.11.2025 15:03 | ✅      |
+| AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.13.1      | 24.11.2025 18:05 | ✅      |
 | AltOne.ProduktODK                     | 2510.1.1-23.8.8.1-Beta | 05.11.2025 13:23 | ✅      |
 | AltOne.KartyCzasuPracy                | 2504.1.1-0.2.34.0      | 04.11.2025 11:03 | ✅      |
 | AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.0       | 03.11.2025 16:39 | ✅      |
