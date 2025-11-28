@@ -1,6 +1,38 @@
 **Wyniki testów integracyjnych (pogrupowane — latest)**
 
-[2510.1.1](#enova365-251011) · [2510.0.0](#enova365-251000) · [2506.3.5](#enova365-250635) · [2506.2.4](#enova365-250624) · [2506.1.3](#enova365-250613) · [2506.1.2](#enova365-250612)
+[2510.2.2](#enova365-251022) · [2510.1.1](#enova365-251011) · [2510.0.0](#enova365-251000) · [2506.3.5](#enova365-250635) · [2506.2.4](#enova365-250624) · [2506.1.3](#enova365-250613) · [2506.1.2](#enova365-250612)
+
+### enova365 2510.2.2
+
+| Produkt                               | Wersja dll             | Data testu       | Status |
+|---------------------------------------|------------------------|------------------|--------|
+| AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3       | 28.11.2025 15:10 | ✅      |
+| AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.0       | 28.11.2025 15:03 | ✅      |
+| AltOne.WebApi.DataExchangeTable       | 2504.1.1-0.5.1.0       | 28.11.2025 15:03 | ✅      |
+| AltOne.WebAPI.ObslugaKadrowa          | 2504.1.1-0.1.5.0       | 28.11.2025 15:03 | ✅      |
+| AltOne.WielowymiarowyPodzialPlac      | 2504.1.1-0.17.0.5      | 28.11.2025 15:03 | ✅      |
+| AltOne.WnioskiPracownicze             | 2504.1.1-0.2.10.0      | 28.11.2025 15:03 | ✅      |
+| AltOne.WebApi.ObslugaFakturKosztowych | 2506.1.1-0.3.3.2       | 28.11.2025 15:03 | ✅      |
+| AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.13.1      | 28.11.2025 15:03 | ✅      |
+| AltOne.WebAPI.Core                    | 2510.1.1-0.7.4.0       | 28.11.2025 15:03 | ✅      |
+| AltOne.WebAPI.Motivizer               | 2504.1.1-0.1.1.1       | 28.11.2025 15:03 | ✅      |
+| AltOne.Pulpity.Wizytowki              | 2510.0.0-10.4.3.3      | 28.11.2025 15:03 | ✅      |
+| AltOne.TwoFactorAuth                  | 2504.1.1-10.2.1.0      | 28.11.2025 15:03 | ✅      |
+| AltOne.ProduktODK                     | 2510.1.1-23.8.8.1-Beta | 28.11.2025 15:03 | ✅      |
+| AltOne.PowiadomieniaOPlatnosciach     | 2504.1.1-0.1.2.2       | 28.11.2025 15:02 | ✅      |
+| AltOne.LazyApproval                   | 2504.1.1-6.1.2.0       | 28.11.2025 15:02 | ✅      |
+| AltOne.ListyProjektowe                | 2504.1.1-20.0.0.0      | 28.11.2025 15:02 | ✅      |
+| AltOne.PlanowaneNieobecnosci          | 2504.1.1-0.1.7.0       | 28.11.2025 15:02 | ✅      |
+| AltOne.PotwierdzanieObecnosciPulpity  | 2504.1.1-9.3.10.0      | 28.11.2025 15:02 | ✅      |
+| AltOne.ImportDokHandlowych            | 2504.1.1-0.21.6.0      | 28.11.2025 15:02 | ✅      |
+| AltOne.ImportDoETeczki                | 2410.0.0-2.3.0.0       | 28.11.2025 15:02 | ✅      |
+| AltOne.DataExchangeTable              | 2504.1.1-31.9.3.0      | 28.11.2025 15:02 | ✅      |
+| AltOne.GrafikiPracy.Pulpity           | 2504.1.1-0.3.8.0       | 28.11.2025 15:02 | ✅      |
+| AltOne.Dashboard.Pulpity              | 2504.1.1-0.1.9.0       | 28.11.2025 15:02 | ✅      |
+| AltOne.B2B                            | 2504.1.1-133.3.13.0    | 28.11.2025 15:02 | ✅      |
+| AltOne.ChangeInfos                    | 2504.1.1-7.1.5.0       | 28.11.2025 15:02 | ✅      |
+| AltOne.AnalizyExcelPlace              | 2504.1.1-0.15.1.1      | 28.11.2025 15:02 | ✅      |
+| enova365                              | 2510.2.2               | 28.11.2025 15:02 | ✅      |
 
 ### enova365 2510.1.1
 
