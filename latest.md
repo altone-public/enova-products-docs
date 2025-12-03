@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.KartyCzasuPracy                | 2504.1.1-0.2.34.0      | 03.12.2025 22:50 | ✅      |
 | AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3       | 28.11.2025 15:10 | ✅      |
 | AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.0       | 28.11.2025 15:03 | ✅      |
 | AltOne.WebApi.DataExchangeTable       | 2504.1.1-0.5.1.0       | 28.11.2025 15:03 | ✅      |
