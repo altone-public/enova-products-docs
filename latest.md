@@ -6,6 +6,7 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.DataExchangeTable              | 2504.1.1-31.9.3.1      | 08.12.2025 12:06 | ✅      |
 | AltOne.KartyCzasuPracy                | 2504.1.1-0.2.34.0      | 03.12.2025 22:50 | ✅      |
 | AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3       | 28.11.2025 15:10 | ✅      |
 | AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.0       | 28.11.2025 15:03 | ✅      |
@@ -27,7 +28,6 @@
 | AltOne.PotwierdzanieObecnosciPulpity  | 2504.1.1-9.3.10.0      | 28.11.2025 15:02 | ✅      |
 | AltOne.ImportDokHandlowych            | 2504.1.1-0.21.6.0      | 28.11.2025 15:02 | ✅      |
 | AltOne.ImportDoETeczki                | 2410.0.0-2.3.0.0       | 28.11.2025 15:02 | ✅      |
-| AltOne.DataExchangeTable              | 2504.1.1-31.9.3.0      | 28.11.2025 15:02 | ✅      |
 | AltOne.GrafikiPracy.Pulpity           | 2504.1.1-0.3.8.0       | 28.11.2025 15:02 | ✅      |
 | AltOne.Dashboard.Pulpity              | 2504.1.1-0.1.9.0       | 28.11.2025 15:02 | ✅      |
 | AltOne.B2B                            | 2504.1.1-133.3.13.0    | 28.11.2025 15:02 | ✅      |
