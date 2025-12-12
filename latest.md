@@ -6,7 +6,7 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
-| AltOne.WielowymiarowyPodzialPlac      | 2510.1.1-0.18.0.3-rc.1 | 08.12.2025 14:51 | ✅      |
+| AltOne.WielowymiarowyPodzialPlac      | 2510.1.1-0.18.0.4-rc.1 | 12.12.2025 12:59 | ✅      |
 | AltOne.ProduktODK                     | 2510.1.1-23.8.9.0      | 08.12.2025 12:15 | ✅      |
 | AltOne.DataExchangeTable              | 2504.1.1-31.9.3.1      | 08.12.2025 12:06 | ✅      |
 | AltOne.KartyCzasuPracy                | 2504.1.1-0.2.34.0      | 03.12.2025 22:50 | ✅      |
