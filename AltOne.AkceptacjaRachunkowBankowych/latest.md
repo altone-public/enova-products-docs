@@ -1,6 +1,12 @@
 **Wyniki testów integracyjnych (pogrupowane — historia)**
 
-[2510.2.2](#enova365-251022) · [2510.1.1](#enova365-251011)
+[2512.0.0](#enova365-251200) · [2510.2.2](#enova365-251022) · [2510.1.1](#enova365-251011)
+
+### enova365 2512.0.0
+
+| Produkt                             | Wersja dll       | Data testu       | Status |
+|-------------------------------------|------------------|------------------|--------|
+| AltOne.AkceptacjaRachunkowBankowych | 2504.1.1-0.1.2.0 | 12.12.2025 16:29 | ✅      |
 
 ### enova365 2510.2.2
 

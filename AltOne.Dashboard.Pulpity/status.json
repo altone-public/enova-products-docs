@@ -61,5 +61,12 @@
     "Wersja": "25100202",
     "Status": "passed",
     "Data": "2025-11-28 15:02:51"
+  },
+  {
+    "Nazwa": "AltOne.Dashboard.Pulpity",
+    "WersjaDLL": "2504.1.1-0.1.9.0",
+    "Wersja": "25120000",
+    "Status": "passed",
+    "Data": "2025-12-12 16:28:35"
   }
 ]

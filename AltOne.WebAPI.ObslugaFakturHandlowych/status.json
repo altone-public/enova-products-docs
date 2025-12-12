@@ -61,5 +61,12 @@
     "Wersja": "25100202",
     "Status": "passed",
     "Data": "2025-11-28 15:10:03"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.ObslugaFakturHandlowych",
+    "WersjaDLL": "2504.1.1-0.2.0.3",
+    "Wersja": "25120000",
+    "Status": "passed",
+    "Data": "2025-12-12 16:29:14"
   }
 ]
