@@ -4,9 +4,10 @@
 
 ### enova365 2512.0.0
 
-| Produkt                               | Wersja dll       | Data testu       | Status |
-|---------------------------------------|------------------|------------------|--------|
-| AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3 | 12.12.2025 16:29 | ✅      |
+| Produkt                               | Wersja dll            | Data testu       | Status |
+|---------------------------------------|-----------------------|------------------|--------|
+| AltOne.WebAPI.ObslugaFakturHandlowych | 2510.1.1-0.2.1.1-rc.1 | 18.12.2025 12:56 | ✅      |
+| AltOne.WebAPI.ObslugaFakturHandlowych | 2504.1.1-0.2.0.3      | 12.12.2025 16:29 | ✅      |
 
 ### enova365 2510.2.2
 
