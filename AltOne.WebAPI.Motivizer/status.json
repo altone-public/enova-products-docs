@@ -47,5 +47,12 @@
     "Wersja": "25120000",
     "Status": "passed",
     "Data": "2025-12-12 16:29:10"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.Motivizer",
+    "WersjaDLL": "2504.1.1-0.1.1.1",
+    "Wersja": "25120101",
+    "Status": "passed",
+    "Data": "2025-12-30 11:39:23"
   }
 ]

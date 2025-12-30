@@ -33,5 +33,12 @@
     "Wersja": "25120000",
     "Status": "passed",
     "Data": "2025-12-12 16:28:44"
+  },
+  {
+    "Nazwa": "AltOne.GrafikiPracy.Pulpity",
+    "WersjaDLL": "2504.1.1-0.3.8.0",
+    "Wersja": "25120101",
+    "Status": "passed",
+    "Data": "2025-12-30 11:38:50"
   }
 ]
