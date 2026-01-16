@@ -39,8 +39,6 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
-| AltOne.PlanowaneNieobecnosci          | 2504.1.1-0.1.7.0       | 07.01.2026 10:32 | ❌      |
-| AltOne.PotwierdzanieObecnosciPulpity  | 2504.1.1-9.3.10.0      | 07.01.2026 10:32 | ❌      |
 | AltOne.WielowymiarowyPodzialPlac      | 2510.1.1-0.18.0.5-rc.1 | 07.01.2026 10:27 | ✅      |
 | AltOne.KartyCzasuPracy                | 2504.1.1-0.2.34.0      | 30.12.2025 11:39 | ✅      |
 | AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.0       | 30.12.2025 11:39 | ✅      |

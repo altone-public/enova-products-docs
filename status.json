@@ -1946,20 +1946,6 @@
     "Data": "2025-12-30 11:39:32"
   },
   {
-    "Nazwa": "AltOne.PlanowaneNieobecnosci",
-    "WersjaDLL": "2504.1.1-0.1.7.0",
-    "Wersja": "25120101",
-    "Status": "failed",
-    "Data": "2026-01-07 10:32:47"
-  },
-  {
-    "Nazwa": "AltOne.PotwierdzanieObecnosciPulpity",
-    "WersjaDLL": "2504.1.1-9.3.10.0",
-    "Wersja": "25120101",
-    "Status": "failed",
-    "Data": "2026-01-07 10:32:47"
-  },
-  {
     "Nazwa": "AltOne.WielowymiarowyPodzialPlac",
     "WersjaDLL": "2510.1.1-0.18.0.5-rc.1",
     "Wersja": "25120101",
