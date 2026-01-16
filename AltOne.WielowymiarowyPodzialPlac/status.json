@@ -103,5 +103,19 @@
     "Wersja": "25120101",
     "Status": "passed",
     "Data": "2025-12-30 11:39:31"
+  },
+  {
+    "Nazwa": "AltOne.WielowymiarowyPodzialPlac",
+    "WersjaDLL": "2510.1.1-0.18.0.5-rc.1",
+    "Wersja": "25120101",
+    "Status": "passed",
+    "Data": "2026-01-07 10:27:25"
+  },
+  {
+    "Nazwa": "AltOne.WielowymiarowyPodzialPlac",
+    "WersjaDLL": "2510.1.1-0.18.0.5-rc.1",
+    "Wersja": "25120202",
+    "Status": "passed",
+    "Data": "2026-01-16 17:41:26"
   }
 ]
