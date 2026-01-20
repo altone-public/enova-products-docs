@@ -6,12 +6,12 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.WielowymiarowyPodzialPlac      | 2510.1.1-0.18.0.7-rc.1 | 20.01.2026 17:45 | ✅      |
 | AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.0       | 16.01.2026 17:41 | ✅      |
 | AltOne.KartyCzasuPracy                | 2504.1.1-0.2.34.0      | 16.01.2026 17:41 | ✅      |
 | AltOne.WebApi.DataExchangeTable       | 2504.1.1-0.5.1.0       | 16.01.2026 17:41 | ✅      |
 | AltOne.WebApi.ObslugaFakturKosztowych | 2510.1.1-0.3.4.1-rc.1  | 16.01.2026 17:41 | ✅      |
 | AltOne.WebAPI.ObslugaKadrowa          | 2504.1.1-0.1.5.0       | 16.01.2026 17:41 | ✅      |
-| AltOne.WielowymiarowyPodzialPlac      | 2510.1.1-0.18.0.5-rc.1 | 16.01.2026 17:41 | ✅      |
 | AltOne.WnioskiPracownicze             | 2504.1.1-0.2.11.1      | 16.01.2026 17:41 | ✅      |
 | AltOne.WebAPI.ObslugaFakturHandlowych | 2510.1.1-0.2.1.1-rc.1  | 16.01.2026 17:41 | ✅      |
 | AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.13.1      | 16.01.2026 17:41 | ✅      |
@@ -54,7 +54,9 @@
 | AltOne.TwoFactorAuth                  | 2504.1.1-10.2.1.0      | 30.12.2025 11:39 | ✅      |
 | AltOne.ProduktODK                     | 2510.1.1-23.8.9.0      | 30.12.2025 11:39 | ✅      |
 | AltOne.PowiadomieniaOPlatnosciach     | 2504.1.1-0.1.2.2       | 30.12.2025 11:38 | ✅      |
+| AltOne.PotwierdzanieObecnosciPulpity  | 2504.1.1-9.3.10.0      | 30.12.2025 11:38 | ✅      |
 | AltOne.ListyProjektowe                | 2504.1.1-20.0.0.0      | 30.12.2025 11:38 | ✅      |
+| AltOne.PlanowaneNieobecnosci          | 2504.1.1-0.1.7.0       | 30.12.2025 11:38 | ✅      |
 | AltOne.LazyApproval                   | 2504.1.1-6.1.2.0       | 30.12.2025 11:38 | ✅      |
 | AltOne.ImportDokHandlowych            | 2504.1.1-0.21.6.0      | 30.12.2025 11:38 | ✅      |
 | AltOne.ImportDoETeczki                | 2410.0.0-2.3.0.0       | 30.12.2025 11:38 | ✅      |
