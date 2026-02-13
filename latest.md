@@ -6,14 +6,14 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.WebApi.ObslugaFakturKosztowych | 2512.1.1-0.3.4.3       | 13.02.2026 22:10 | ✅      |
+| AltOne.WebAPI.ObslugaFakturHandlowych | 2512.1.1-0.2.1.1       | 13.02.2026 22:10 | ✅      |
 | AltOne.KartyCzasuPracy                | 2504.1.1-0.2.34.0      | 13.02.2026 22:03 | ✅      |
 | AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.0       | 13.02.2026 22:03 | ✅      |
 | AltOne.WebApi.DataExchangeTable       | 2504.1.1-0.5.1.0       | 13.02.2026 22:03 | ✅      |
 | AltOne.WielowymiarowyPodzialPlac      | 2510.1.1-0.18.0.7-rc.1 | 13.02.2026 22:03 | ✅      |
 | AltOne.WnioskiPracownicze             | 2504.1.1-0.2.11.1      | 13.02.2026 22:03 | ✅      |
-| AltOne.WebApi.ObslugaFakturKosztowych | 2510.1.1-0.3.4.1-rc.1  | 13.02.2026 22:03 | ✅      |
 | AltOne.WebAPI.ObslugaKadrowa          | 2504.1.1-0.1.5.0       | 13.02.2026 22:03 | ✅      |
-| AltOne.WebAPI.ObslugaFakturHandlowych | 2510.1.1-0.2.1.1-rc.1  | 13.02.2026 22:03 | ✅      |
 | AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.13.1      | 13.02.2026 22:03 | ✅      |
 | AltOne.WebAPI.Core                    | 2510.1.1-0.7.5.4       | 13.02.2026 22:03 | ✅      |
 | AltOne.WebAPI.Motivizer               | 2504.1.1-0.1.1.1       | 13.02.2026 22:03 | ✅      |
