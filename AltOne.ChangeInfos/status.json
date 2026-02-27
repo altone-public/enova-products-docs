@@ -68,5 +68,12 @@
     "Wersja": "25120404",
     "Status": "passed",
     "Data": "2026-02-13 22:03:14"
+  },
+  {
+    "Nazwa": "AltOne.ChangeInfos",
+    "WersjaDLL": "2504.1.1-7.1.5.0",
+    "Wersja": "25120506",
+    "Status": "passed",
+    "Data": "2026-02-27 17:11:14"
   }
 ]
