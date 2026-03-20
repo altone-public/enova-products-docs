@@ -6,13 +6,13 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.WielowymiarowyPodzialPlac      | 2510.1.1-0.18.1.0      | 20.03.2026 15:50 | ✅      |
 | AltOne.BazaWiedzy                     | 2510.1.1-22.2.2.0-Alfa | 20.03.2026 15:39 | ✅      |
 | AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.0       | 20.03.2026 15:39 | ✅      |
 | AltOne.KartyCzasuPracy                | 2504.1.1-0.2.34.0      | 20.03.2026 15:39 | ✅      |
 | AltOne.WebApi.DataExchangeTable       | 2504.1.1-0.5.1.0       | 20.03.2026 15:39 | ✅      |
 | AltOne.WnioskiPracownicze             | 2504.1.1-0.2.11.1      | 20.03.2026 15:39 | ✅      |
 | AltOne.WebAPI.ObslugaKadrowa          | 2504.1.1-0.1.5.0       | 20.03.2026 15:38 | ✅      |
-| AltOne.WielowymiarowyPodzialPlac      | 2510.1.1-0.18.0.8      | 20.03.2026 15:38 | ✅      |
 | AltOne.WebApi.ObslugaFakturKosztowych | 2512.1.1-0.3.4.3       | 20.03.2026 15:38 | ✅      |
 | AltOne.WebAPI.ObslugaFakturHandlowych | 2512.1.1-0.2.1.1       | 20.03.2026 15:38 | ✅      |
 | AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.13.1      | 20.03.2026 15:38 | ✅      |
