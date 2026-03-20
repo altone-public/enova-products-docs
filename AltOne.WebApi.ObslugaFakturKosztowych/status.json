@@ -131,5 +131,12 @@
     "Wersja": "25120506",
     "Status": "passed",
     "Data": "2026-02-27 17:11:45"
+  },
+  {
+    "Nazwa": "AltOne.WebApi.ObslugaFakturKosztowych",
+    "WersjaDLL": "2512.1.1-0.3.4.3",
+    "Wersja": "25120607",
+    "Status": "passed",
+    "Data": "2026-03-20 15:38:58"
   }
 ]
