@@ -6,8 +6,8 @@
 
 | Produkt                               | Wersja dll             | Data testu       | Status |
 |---------------------------------------|------------------------|------------------|--------|
+| AltOne.BazaWiedzy                     | 2510.1.1-22.2.2.0-rc.1 | 20.03.2026 15:55 | ✅      |
 | AltOne.WielowymiarowyPodzialPlac      | 2510.1.1-0.18.1.0      | 20.03.2026 15:50 | ✅      |
-| AltOne.BazaWiedzy                     | 2510.1.1-22.2.2.0-Alfa | 20.03.2026 15:39 | ✅      |
 | AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.0       | 20.03.2026 15:39 | ✅      |
 | AltOne.KartyCzasuPracy                | 2504.1.1-0.2.34.0      | 20.03.2026 15:39 | ✅      |
 | AltOne.WebApi.DataExchangeTable       | 2504.1.1-0.5.1.0       | 20.03.2026 15:39 | ✅      |
