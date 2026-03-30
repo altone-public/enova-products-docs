@@ -82,5 +82,12 @@
     "Wersja": "25120607",
     "Status": "passed",
     "Data": "2026-03-20 15:39:00"
+  },
+  {
+    "Nazwa": "AltOne.WnioskiPracownicze",
+    "WersjaDLL": "2504.1.1-0.2.11.1",
+    "Wersja": "26040000",
+    "Status": "passed",
+    "Data": "2026-03-30 13:19:16"
   }
 ]

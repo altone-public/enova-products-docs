@@ -96,5 +96,12 @@
     "Wersja": "25120607",
     "Status": "passed",
     "Data": "2026-03-20 15:38:17"
+  },
+  {
+    "Nazwa": "enova365",
+    "WersjaDLL": "2604.0.0-beta.212574",
+    "Wersja": "26040000",
+    "Status": "passed",
+    "Data": "2026-03-30 13:18:42"
   }
 ]

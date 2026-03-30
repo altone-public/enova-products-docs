@@ -1,6 +1,12 @@
 **Wyniki testów integracyjnych (pogrupowane — historia)**
 
-[2512.6.7](#enova365-251267) · [2512.5.6](#enova365-251256)
+[2604.0.0](#enova365-260400) · [2512.6.7](#enova365-251267) · [2512.5.6](#enova365-251256)
+
+### enova365 2604.0.0
+
+| Produkt           | Wersja dll             | Data testu       | Status |
+|-------------------|------------------------|------------------|--------|
+| AltOne.BazaWiedzy | 2510.1.1-22.2.2.0-rc.1 | 30.03.2026 13:19 | ✅      |
 
 ### enova365 2512.6.7
 

@@ -96,5 +96,12 @@
     "Wersja": "25120607",
     "Status": "passed",
     "Data": "2026-03-20 15:38:48"
+  },
+  {
+    "Nazwa": "AltOne.TwoFactorAuth",
+    "WersjaDLL": "2504.1.1-10.2.1.0",
+    "Wersja": "26040000",
+    "Status": "passed",
+    "Data": "2026-03-30 13:19:05"
   }
 ]
