@@ -110,5 +110,12 @@
     "Wersja": "25120708",
     "Status": "passed",
     "Data": "2026-04-13 11:24:39"
+  },
+  {
+    "Nazwa": "AltOne.ImportDoETeczki",
+    "WersjaDLL": "2410.0.0-2.3.0.0",
+    "Wersja": "26040101",
+    "Status": "passed",
+    "Data": "2026-04-17 16:35:04"
   }
 ]

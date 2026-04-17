@@ -117,5 +117,12 @@
     "Wersja": "25120708",
     "Status": "passed",
     "Data": "2026-04-13 11:24:56"
+  },
+  {
+    "Nazwa": "AltOne.ProduktODK",
+    "WersjaDLL": "2510.1.1-23.8.9.0",
+    "Wersja": "26040101",
+    "Status": "passed",
+    "Data": "2026-04-17 16:35:22"
   }
 ]

@@ -131,5 +131,12 @@
     "Wersja": "25120708",
     "Status": "passed",
     "Data": "2026-04-13 11:24:59"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.Core",
+    "WersjaDLL": "2510.1.1-0.7.5.4",
+    "Wersja": "26040101",
+    "Status": "passed",
+    "Data": "2026-04-17 16:35:25"
   }
 ]
