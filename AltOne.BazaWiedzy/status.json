@@ -40,5 +40,12 @@
     "Wersja": "26040101",
     "Status": "passed",
     "Data": "2026-04-17 16:35:33"
+  },
+  {
+    "Nazwa": "AltOne.BazaWiedzy",
+    "WersjaDLL": "2510.1.1-22.2.2.0-rc.1",
+    "Wersja": "25120910",
+    "Status": "passed",
+    "Data": "2026-05-08 12:40:50"
   }
 ]

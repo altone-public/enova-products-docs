@@ -82,5 +82,12 @@
     "Wersja": "26040101",
     "Status": "passed",
     "Data": "2026-04-17 16:35:31"
+  },
+  {
+    "Nazwa": "AltOne.KartyCzasuPracy",
+    "WersjaDLL": "2504.1.1-0.2.34.0",
+    "Wersja": "25120910",
+    "Status": "passed",
+    "Data": "2026-05-08 12:40:49"
   }
 ]
