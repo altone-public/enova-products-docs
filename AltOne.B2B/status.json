@@ -152,5 +152,12 @@
     "Wersja": "25120911",
     "Status": "passed",
     "Data": "2026-06-15 22:58:07"
+  },
+  {
+    "Nazwa": "AltOne.B2B",
+    "WersjaDLL": "2510.1.1-133.3.13.2",
+    "Wersja": "25121012",
+    "Status": "passed",
+    "Data": "2026-06-15 23:15:19"
   }
 ]
