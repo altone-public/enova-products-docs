@@ -18,6 +18,7 @@
 
 | Produkt                               | Wersja dll       | Data testu       | Status |
 |---------------------------------------|------------------|------------------|--------|
+| AltOne.WebApi.ObslugaFakturKosztowych | 2512.3.3-0.3.4.5 | 15.06.2026 22:58 | ✅      |
 | AltOne.WebApi.ObslugaFakturKosztowych | 2512.1.1-0.3.4.3 | 08.05.2026 16:31 | ✅      |
 
 ### enova365 2512.9.10

@@ -18,6 +18,7 @@
 
 | Produkt                  | Wersja dll        | Data testu       | Status |
 |--------------------------|-------------------|------------------|--------|
+| AltOne.DataExchangeTable | 2504.1.1-31.9.3.3 | 15.06.2026 22:58 | ✅      |
 | AltOne.DataExchangeTable | 2504.1.1-31.9.3.1 | 08.05.2026 16:30 | ✅      |
 
 ### enova365 2512.9.10

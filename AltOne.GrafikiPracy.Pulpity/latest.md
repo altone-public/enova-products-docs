@@ -18,6 +18,7 @@
 
 | Produkt                     | Wersja dll       | Data testu       | Status |
 |-----------------------------|------------------|------------------|--------|
+| AltOne.GrafikiPracy.Pulpity | 2504.1.1-0.3.8.1 | 15.06.2026 22:58 | ✅      |
 | AltOne.GrafikiPracy.Pulpity | 2504.1.1-0.3.8.0 | 08.05.2026 16:30 | ✅      |
 
 ### enova365 2512.9.10

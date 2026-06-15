@@ -145,5 +145,12 @@
     "Wersja": "25120911",
     "Status": "passed",
     "Data": "2026-05-08 16:30:33"
+  },
+  {
+    "Nazwa": "AltOne.AnalizyExcelPlace",
+    "WersjaDLL": "2510.1.1-0.16.0.2",
+    "Wersja": "25120911",
+    "Status": "passed",
+    "Data": "2026-06-15 22:58:07"
   }
 ]

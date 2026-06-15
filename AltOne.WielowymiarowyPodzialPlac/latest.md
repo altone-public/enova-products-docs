@@ -16,9 +16,10 @@
 
 ### enova365 2512.9.11
 
-| Produkt                          | Wersja dll        | Data testu       | Status |
-|----------------------------------|-------------------|------------------|--------|
-| AltOne.WielowymiarowyPodzialPlac | 2510.1.1-0.18.1.1 | 08.05.2026 16:31 | ✅      |
+| Produkt                          | Wersja dll         | Data testu       | Status |
+|----------------------------------|--------------------|------------------|--------|
+| AltOne.WielowymiarowyPodzialPlac | 2510.1.1-0.18.1.11 | 15.06.2026 22:58 | ✅      |
+| AltOne.WielowymiarowyPodzialPlac | 2510.1.1-0.18.1.1  | 08.05.2026 16:31 | ✅      |
 
 ### enova365 2512.9.10
 

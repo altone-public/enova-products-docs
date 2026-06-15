@@ -159,5 +159,12 @@
     "Wersja": "25120911",
     "Status": "passed",
     "Data": "2026-05-08 16:30:38"
+  },
+  {
+    "Nazwa": "AltOne.DataExchangeTable",
+    "WersjaDLL": "2504.1.1-31.9.3.3",
+    "Wersja": "25120911",
+    "Status": "passed",
+    "Data": "2026-06-15 22:58:08"
   }
 ]

@@ -18,6 +18,7 @@
 
 | Produkt                         | Wersja dll        | Data testu       | Status |
 |---------------------------------|-------------------|------------------|--------|
+| AltOne.WebAPI.ObslugaCzasuPracy | 2504.1.1-0.1.13.4 | 15.06.2026 22:58 | ✅      |
 | AltOne.WebAPI.ObslugaCzasuPracy | 2504.1.1-0.1.13.1 | 08.05.2026 16:31 | ✅      |
 
 ### enova365 2512.9.10

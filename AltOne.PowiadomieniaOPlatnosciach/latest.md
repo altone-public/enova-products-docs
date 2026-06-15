@@ -18,6 +18,7 @@
 
 | Produkt                           | Wersja dll       | Data testu       | Status |
 |-----------------------------------|------------------|------------------|--------|
+| AltOne.PowiadomieniaOPlatnosciach | 2504.1.1-0.1.2.3 | 15.06.2026 22:58 | ✅      |
 | AltOne.PowiadomieniaOPlatnosciach | 2504.1.1-0.1.2.2 | 08.05.2026 16:30 | ✅      |
 
 ### enova365 2512.9.10
