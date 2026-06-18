@@ -110,5 +110,12 @@
     "Wersja": "25121012",
     "Status": "passed",
     "Data": "2026-06-15 23:15:43"
+  },
+  {
+    "Nazwa": "AltOne.AkceptacjaRachunkowBankowych",
+    "WersjaDLL": "2504.1.1-0.1.2.1",
+    "Wersja": "26060000",
+    "Status": "passed",
+    "Data": "2026-06-16 15:10:32"
   }
 ]

@@ -1,6 +1,58 @@
 **Wyniki testów integracyjnych (pogrupowane — latest)**
 
-[2604.1.1](#enova365-260411) · [2604.0.0](#enova365-260400) · [2512.10.12](#enova365-25121012) · [2512.9.11](#enova365-2512911) · [2512.9.10](#enova365-2512910) · [2512.7.8](#enova365-251278) · [2512.6.7](#enova365-251267) · [2512.5.6](#enova365-251256) · [2512.4.4](#enova365-251244) · [2512.3.3](#enova365-251233) · [2512.2.2](#enova365-251222) · [2512.1.1](#enova365-251211) · [2512.0.0](#enova365-251200) · [2510.2.2](#enova365-251022) · [2510.1.1](#enova365-251011) · [2510.0.0](#enova365-251000) · [2506.3.5](#enova365-250635) · [2506.2.4](#enova365-250624) · [2506.1.3](#enova365-250613) · [2506.1.2](#enova365-250612)
+[2606.0.0-beta](#enova365-260600-beta) · [2604.1.1](#enova365-260411) · [2604.0.0](#enova365-260400) · [2512.10.12](#enova365-25121012) · [2512.9.11](#enova365-2512911) · [2512.9.10](#enova365-2512910) · [2512.7.8](#enova365-251278) · [2512.6.7](#enova365-251267) · [2512.5.6](#enova365-251256) · [2512.4.4](#enova365-251244) · [2512.3.3](#enova365-251233) · [2512.2.2](#enova365-251222) · [2512.1.1](#enova365-251211) · [2512.0.0](#enova365-251200) · [2510.2.2](#enova365-251022) · [2510.1.1](#enova365-251011) · [2510.0.0](#enova365-251000) · [2506.3.5](#enova365-250635) · [2506.2.4](#enova365-250624) · [2506.1.3](#enova365-250613) · [2506.1.2](#enova365-250612)
+
+### enova365 2606.0.0-beta
+
+#### Notatka kompatybilności
+
+enova365 2606 wymagała dostosowania bibliotek AltOne do zmian w środowisku uruchomieniowym; część problemów występowała już na etapie ładowania modułu, inicjalizacji lub konwersji bazy danych.
+
+Dla endpointów WebAPI korzystających ze starszego mechanizmu `MethodInvoker` konieczne było jawne włączenie go w konfiguracji:
+
+```json
+{
+  "WebApi": {
+    "LegacyControllers": {
+      "MethodInvoker": true
+    }
+  }
+}
+```
+
+Testy integracyjne dla enova365 2606-beta zakończyły się pomyślnie. Niezależnie od tego, zgodnie z zaleceniami producenta enova365 oraz ze względu na zmianę środowiska z .NET 8 na .NET 10, zmiany w UI i katalogach enova365, planowane jest przygotowanie nowych wersji bibliotek AltOne dostosowanych do wersji produkcyjnej enova365.
+
+| Produkt                               | Wersja dll                    | Data testu       | Status |
+|---------------------------------------|-------------------------------|------------------|--------|
+| AltOne.BazaWiedzy                     | 2510.1.1-22.2.2.0-rc.2        | 16.06.2026 15:10 | ✅      |
+| AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.1              | 16.06.2026 15:10 | ✅      |
+| AltOne.KartyCzasuPracy                | 2504.1.1-0.2.35.1             | 16.06.2026 15:10 | ✅      |
+| AltOne.WebApi.DataExchangeTable       | 2504.1.1-0.5.1.1              | 16.06.2026 15:10 | ✅      |
+| AltOne.WielowymiarowyPodzialPlac      | 2510.1.1-0.18.1.11            | 16.06.2026 15:10 | ✅      |
+| AltOne.WnioskiPracownicze             | 2606.0.0-beta.223203-0.2.11.1 | 16.06.2026 15:10 | ✅      |
+| AltOne.WebAPI.ObslugaFakturHandlowych | 2512.6.7-0.2.2.1              | 16.06.2026 15:10 | ✅      |
+| AltOne.WebApi.ObslugaFakturKosztowych | 2512.3.3-0.3.4.5              | 16.06.2026 15:10 | ✅      |
+| AltOne.WebAPI.ObslugaKadrowa          | 2504.1.1-0.1.5.1              | 16.06.2026 15:10 | ✅      |
+| AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.13.4             | 16.06.2026 15:10 | ✅      |
+| AltOne.WebAPI.Core                    | 2510.1.1-0.7.7.1              | 16.06.2026 15:10 | ✅      |
+| AltOne.WebAPI.Motivizer               | 2504.1.1-0.1.1.2              | 16.06.2026 15:10 | ✅      |
+| AltOne.Pulpity.Wizytowki              | 2510.0.0-10.4.3.4             | 16.06.2026 15:10 | ✅      |
+| AltOne.TwoFactorAuth                  | 2504.1.1-10.2.1.1             | 16.06.2026 15:10 | ✅      |
+| AltOne.ProduktODK                     | 2512.3.3-23.8.9.4             | 16.06.2026 15:10 | ✅      |
+| AltOne.PowiadomieniaOPlatnosciach     | 2504.1.1-0.1.2.3              | 16.06.2026 15:10 | ✅      |
+| AltOne.LazyApproval                   | 2504.1.1-6.1.2.1              | 16.06.2026 15:10 | ✅      |
+| AltOne.ListyProjektowe                | 2504.1.1-20.0.0.1             | 16.06.2026 15:10 | ✅      |
+| AltOne.PlanowaneNieobecnosci          | 2606.0.0-beta.223203-0.1.11.1 | 16.06.2026 15:10 | ✅      |
+| AltOne.PotwierdzanieObecnosciPulpity  | 2510.1.1-9.3.11.2             | 16.06.2026 15:10 | ✅      |
+| AltOne.ImportDoETeczki                | 2504.1.1-2.3.1.1              | 16.06.2026 15:10 | ✅      |
+| AltOne.ImportDokHandlowych            | 2504.1.1-0.21.6.1             | 16.06.2026 15:10 | ✅      |
+| AltOne.DataExchangeTable              | 2504.1.1-31.9.3.3             | 16.06.2026 15:10 | ✅      |
+| AltOne.GrafikiPracy.Pulpity           | 2504.1.1-0.3.8.1              | 16.06.2026 15:10 | ✅      |
+| AltOne.AnalizyExcelPlace              | 2510.1.1-0.16.0.2             | 16.06.2026 15:10 | ✅      |
+| AltOne.B2B                            | 2510.1.1-133.3.13.2           | 16.06.2026 15:10 | ✅      |
+| AltOne.ChangeInfos                    | 2504.1.1-7.1.5.1              | 16.06.2026 15:10 | ✅      |
+| AltOne.Dashboard.Pulpity              | 2510.1.1-0.1.10.1             | 16.06.2026 15:10 | ✅      |
+| enova365                              | 2606.0.0-beta.223203          | 16.06.2026 15:10 | ✅      |
 
 ### enova365 2604.1.1
 
