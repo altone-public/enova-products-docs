@@ -4,9 +4,10 @@
 
 ### enova365 2606.0.1
 
-| Produkt                | Wersja dll        | Data testu       | Status |
-|------------------------|-------------------|------------------|--------|
-| AltOne.KartyCzasuPracy | 2504.1.1-0.2.35.1 | 30.06.2026 22:12 | ✅      |
+| Produkt                | Wersja dll          | Data testu       | Status |
+|------------------------|---------------------|------------------|--------|
+| AltOne.KartyCzasuPracy | 2606.0.1.30001-Alfa | 14.07.2026 23:20 | ✅      |
+| AltOne.KartyCzasuPracy | 2504.1.1-0.2.35.1   | 30.06.2026 22:12 | ✅      |
 
 ### enova365 2606.0.0
 

@@ -4,9 +4,10 @@
 
 ### enova365 2606.0.1
 
-| Produkt                 | Wersja dll       | Data testu       | Status |
-|-------------------------|------------------|------------------|--------|
-| AltOne.WebAPI.Motivizer | 2504.1.1-0.1.1.2 | 30.06.2026 22:12 | ✅      |
+| Produkt                 | Wersja dll             | Data testu       | Status |
+|-------------------------|------------------------|------------------|--------|
+| AltOne.WebAPI.Motivizer | 2606.0.1.20000-Upgrade | 14.07.2026 23:20 | ✅      |
+| AltOne.WebAPI.Motivizer | 2504.1.1-0.1.1.2       | 30.06.2026 22:12 | ✅      |
 
 ### enova365 2606.0.0
 

@@ -4,37 +4,37 @@
 
 ### enova365 2606.0.1
 
-| Produkt                               | Wersja dll             | Data testu       | Status |
-|---------------------------------------|------------------------|------------------|--------|
-| AltOne.BazaWiedzy                     | 2510.1.1-22.2.2.0-rc.2 | 30.06.2026 22:12 | ✅      |
-| AltOne.AkceptacjaRachunkowBankowych   | 2504.1.1-0.1.2.1       | 30.06.2026 22:12 | ✅      |
-| AltOne.KartyCzasuPracy                | 2504.1.1-0.2.35.1      | 30.06.2026 22:12 | ✅      |
-| AltOne.WebApi.DataExchangeTable       | 2504.1.1-0.5.1.1       | 30.06.2026 22:12 | ✅      |
-| AltOne.WebAPI.ObslugaKadrowa          | 2504.1.1-0.1.5.1       | 30.06.2026 22:12 | ✅      |
-| AltOne.WielowymiarowyPodzialPlac      | 2510.1.1-0.18.1.11     | 30.06.2026 22:12 | ✅      |
-| AltOne.WnioskiPracownicze             | 2504.1.1-0.2.11.2      | 30.06.2026 22:12 | ✅      |
-| AltOne.WebApi.ObslugaFakturKosztowych | 2512.3.3-0.3.4.5       | 30.06.2026 22:12 | ✅      |
-| AltOne.WebAPI.ObslugaFakturHandlowych | 2512.6.7-0.2.2.1       | 30.06.2026 22:12 | ✅      |
-| AltOne.WebAPI.ObslugaCzasuPracy       | 2504.1.1-0.1.13.4      | 30.06.2026 22:12 | ✅      |
-| AltOne.WebAPI.Motivizer               | 2504.1.1-0.1.1.2       | 30.06.2026 22:12 | ✅      |
-| AltOne.WebAPI.Core                    | 2510.1.1-0.7.7.1       | 30.06.2026 22:11 | ✅      |
-| AltOne.Pulpity.Wizytowki              | 2510.0.0-10.4.3.4      | 30.06.2026 22:11 | ✅      |
-| AltOne.TwoFactorAuth                  | 2504.1.1-10.2.1.1      | 30.06.2026 22:11 | ✅      |
-| AltOne.ProduktODK                     | 2512.3.3-23.8.9.4      | 30.06.2026 22:11 | ✅      |
-| AltOne.LazyApproval                   | 2504.1.1-6.1.2.1       | 30.06.2026 22:11 | ✅      |
-| AltOne.ListyProjektowe                | 2504.1.1-20.0.0.1      | 30.06.2026 22:11 | ✅      |
-| AltOne.PlanowaneNieobecnosci          | 2504.1.1-0.1.10.1      | 30.06.2026 22:11 | ✅      |
-| AltOne.PotwierdzanieObecnosciPulpity  | 2510.1.1-9.3.11.2      | 30.06.2026 22:11 | ✅      |
-| AltOne.PowiadomieniaOPlatnosciach     | 2504.1.1-0.1.2.3       | 30.06.2026 22:11 | ✅      |
-| AltOne.ImportDoETeczki                | 2504.1.1-2.3.1.1       | 30.06.2026 22:11 | ✅      |
-| AltOne.ImportDokHandlowych            | 2504.1.1-0.21.6.1      | 30.06.2026 22:11 | ✅      |
-| AltOne.GrafikiPracy.Pulpity           | 2504.1.1-0.3.8.1       | 30.06.2026 22:11 | ✅      |
-| AltOne.DataExchangeTable              | 2504.1.1-31.9.3.3      | 30.06.2026 22:11 | ✅      |
-| AltOne.Dashboard.Pulpity              | 2510.1.1-0.1.10.1      | 30.06.2026 22:11 | ✅      |
-| AltOne.AnalizyExcelPlace              | 2510.1.1-0.16.0.2      | 30.06.2026 22:11 | ✅      |
-| AltOne.B2B                            | 2510.1.1-133.3.13.2    | 30.06.2026 22:11 | ✅      |
-| AltOne.ChangeInfos                    | 2504.1.1-7.1.5.1       | 30.06.2026 22:11 | ✅      |
-| enova365                              | 2606.0.1               | 30.06.2026 22:11 | ✅      |
+| Produkt                               | Wersja dll              | Data testu       | Status |
+|---------------------------------------|-------------------------|------------------|--------|
+| AltOne.BazaWiedzy                     | 2606.0.1.30000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.AkceptacjaRachunkowBankowych   | 2606.0.1.20000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.KartyCzasuPracy                | 2606.0.1.30001-Alfa     | 14.07.2026 23:20 | ✅      |
+| AltOne.WebApi.DataExchangeTable       | 2606.0.1.60000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.WielowymiarowyPodzialPlac      | 2606.0.1.190000-Upgrade | 14.07.2026 23:20 | ✅      |
+| AltOne.WnioskiPracownicze             | 2606.0.1.30000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.WebAPI.ObslugaKadrowa          | 2606.0.1.20000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.WebApi.ObslugaFakturKosztowych | 2606.0.1.40000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.WebAPI.ObslugaFakturHandlowych | 2606.0.1.30000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.WebAPI.ObslugaCzasuPracy       | 2606.0.1.20000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.WebAPI.Core                    | 2606.0.1.80000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.WebAPI.Motivizer               | 2606.0.1.20000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.Pulpity.Wizytowki              | 2606.0.1.50000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.TwoFactorAuth                  | 2606.0.1.30000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.ProduktODK                     | 2606.0.1.90000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.PlanowaneNieobecnosci          | 2606.0.1.20000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.PotwierdzanieObecnosciPulpity  | 2606.0.1.40000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.PowiadomieniaOPlatnosciach     | 2606.0.1.20000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.LazyApproval                   | 2606.0.1.20000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.ListyProjektowe                | 2606.0.1.210000-Upgrade | 14.07.2026 23:20 | ✅      |
+| AltOne.ImportDoETeczki                | 2606.0.1.40000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.ImportDokHandlowych            | 2606.0.1.220000-Upgrade | 14.07.2026 23:20 | ❌      |
+| AltOne.DataExchangeTable              | 2606.0.1.100000-Upgrade | 14.07.2026 23:20 | ✅      |
+| AltOne.GrafikiPracy.Pulpity           | 2606.0.1.40000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.Dashboard.Pulpity              | 2606.0.1.20000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.AnalizyExcelPlace              | 2606.0.1.170000-Upgrade | 14.07.2026 23:20 | ✅      |
+| AltOne.B2B                            | 2606.0.1.40000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| AltOne.ChangeInfos                    | 2606.0.1.20000-Upgrade  | 14.07.2026 23:20 | ✅      |
+| enova365                              | 2606.0.1                | 30.06.2026 22:11 | ✅      |
 
 ### enova365 2606.0.0
 

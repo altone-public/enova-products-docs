@@ -4,9 +4,10 @@
 
 ### enova365 2606.0.1
 
-| Produkt                          | Wersja dll         | Data testu       | Status |
-|----------------------------------|--------------------|------------------|--------|
-| AltOne.WielowymiarowyPodzialPlac | 2510.1.1-0.18.1.11 | 30.06.2026 22:12 | ✅      |
+| Produkt                          | Wersja dll              | Data testu       | Status |
+|----------------------------------|-------------------------|------------------|--------|
+| AltOne.WielowymiarowyPodzialPlac | 2606.0.1.190000-Upgrade | 14.07.2026 23:20 | ✅      |
+| AltOne.WielowymiarowyPodzialPlac | 2510.1.1-0.18.1.11      | 30.06.2026 22:12 | ✅      |
 
 ### enova365 2606.0.0
 

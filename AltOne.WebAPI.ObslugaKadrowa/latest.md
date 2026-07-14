@@ -4,9 +4,10 @@
 
 ### enova365 2606.0.1
 
-| Produkt                      | Wersja dll       | Data testu       | Status |
-|------------------------------|------------------|------------------|--------|
-| AltOne.WebAPI.ObslugaKadrowa | 2504.1.1-0.1.5.1 | 30.06.2026 22:12 | ✅      |
+| Produkt                      | Wersja dll             | Data testu       | Status |
+|------------------------------|------------------------|------------------|--------|
+| AltOne.WebAPI.ObslugaKadrowa | 2606.0.1.20000-Upgrade | 14.07.2026 23:20 | ✅      |
+| AltOne.WebAPI.ObslugaKadrowa | 2504.1.1-0.1.5.1       | 30.06.2026 22:12 | ✅      |
 
 ### enova365 2606.0.0
 

@@ -4,9 +4,10 @@
 
 ### enova365 2606.0.1
 
-| Produkt                  | Wersja dll        | Data testu       | Status |
-|--------------------------|-------------------|------------------|--------|
-| AltOne.DataExchangeTable | 2504.1.1-31.9.3.3 | 30.06.2026 22:11 | ✅      |
+| Produkt                  | Wersja dll              | Data testu       | Status |
+|--------------------------|-------------------------|------------------|--------|
+| AltOne.DataExchangeTable | 2606.0.1.100000-Upgrade | 14.07.2026 23:20 | ✅      |
+| AltOne.DataExchangeTable | 2504.1.1-31.9.3.3       | 30.06.2026 22:11 | ✅      |
 
 ### enova365 2606.0.0
 

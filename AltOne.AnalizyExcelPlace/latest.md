@@ -4,9 +4,10 @@
 
 ### enova365 2606.0.1
 
-| Produkt                  | Wersja dll        | Data testu       | Status |
-|--------------------------|-------------------|------------------|--------|
-| AltOne.AnalizyExcelPlace | 2510.1.1-0.16.0.2 | 30.06.2026 22:11 | ✅      |
+| Produkt                  | Wersja dll              | Data testu       | Status |
+|--------------------------|-------------------------|------------------|--------|
+| AltOne.AnalizyExcelPlace | 2606.0.1.170000-Upgrade | 14.07.2026 23:20 | ✅      |
+| AltOne.AnalizyExcelPlace | 2510.1.1-0.16.0.2       | 30.06.2026 22:11 | ✅      |
 
 ### enova365 2606.0.0
 

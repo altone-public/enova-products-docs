@@ -4,9 +4,10 @@
 
 ### enova365 2606.0.1
 
-| Produkt                               | Wersja dll       | Data testu       | Status |
-|---------------------------------------|------------------|------------------|--------|
-| AltOne.WebApi.ObslugaFakturKosztowych | 2512.3.3-0.3.4.5 | 30.06.2026 22:12 | ✅      |
+| Produkt                               | Wersja dll             | Data testu       | Status |
+|---------------------------------------|------------------------|------------------|--------|
+| AltOne.WebApi.ObslugaFakturKosztowych | 2606.0.1.40000-Upgrade | 14.07.2026 23:20 | ✅      |
+| AltOne.WebApi.ObslugaFakturKosztowych | 2512.3.3-0.3.4.5       | 30.06.2026 22:12 | ✅      |
 
 ### enova365 2606.0.0
 

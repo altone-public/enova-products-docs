@@ -4,9 +4,10 @@
 
 ### enova365 2606.0.1
 
-| Produkt                              | Wersja dll        | Data testu       | Status |
-|--------------------------------------|-------------------|------------------|--------|
-| AltOne.PotwierdzanieObecnosciPulpity | 2510.1.1-9.3.11.2 | 30.06.2026 22:11 | ✅      |
+| Produkt                              | Wersja dll             | Data testu       | Status |
+|--------------------------------------|------------------------|------------------|--------|
+| AltOne.PotwierdzanieObecnosciPulpity | 2606.0.1.40000-Upgrade | 14.07.2026 23:20 | ✅      |
+| AltOne.PotwierdzanieObecnosciPulpity | 2510.1.1-9.3.11.2      | 30.06.2026 22:11 | ✅      |
 
 ### enova365 2606.0.0
 

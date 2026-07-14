@@ -4,9 +4,10 @@
 
 ### enova365 2606.0.1
 
-| Produkt                    | Wersja dll        | Data testu       | Status |
-|----------------------------|-------------------|------------------|--------|
-| AltOne.ImportDokHandlowych | 2504.1.1-0.21.6.1 | 30.06.2026 22:11 | ✅      |
+| Produkt                    | Wersja dll              | Data testu       | Status |
+|----------------------------|-------------------------|------------------|--------|
+| AltOne.ImportDokHandlowych | 2606.0.1.220000-Upgrade | 14.07.2026 23:20 | ❌      |
+| AltOne.ImportDokHandlowych | 2504.1.1-0.21.6.1       | 30.06.2026 22:11 | ✅      |
 
 ### enova365 2606.0.0
 
