@@ -6,6 +6,7 @@
 
 | Produkt                | Wersja dll              | Data testu       | Status |
 |------------------------|-------------------------|------------------|--------|
+| AltOne.ListyProjektowe | 2606.0.1.210000         | 05.08.2026 23:33 | ✅      |
 | AltOne.ListyProjektowe | 2606.0.1.210000-Upgrade | 05.08.2026 23:27 | ✅      |
 
 ### enova365 2606.0.1
