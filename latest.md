@@ -6,18 +6,18 @@
 
 | Produkt                               | Wersja dll      | Data testu       | Status |
 |---------------------------------------|-----------------|------------------|--------|
+| AltOne.WebAPI.Core                    | 2606.0.1.80001  | 13.08.2026 14:36 | ✅      |
+| AltOne.WebApi.DataExchangeTable       | 2606.0.1.60100  | 13.08.2026 14:36 | ✅      |
 | AltOne.ListyProjektowe                | 2606.0.1.210000 | 05.08.2026 23:33 | ✅      |
 | AltOne.BazaWiedzy                     | 2606.0.1.30000  | 05.08.2026 23:28 | ✅      |
 | AltOne.AkceptacjaRachunkowBankowych   | 2606.0.1.20000  | 05.08.2026 23:28 | ✅      |
 | AltOne.KartyCzasuPracy                | 2606.0.1.30001  | 05.08.2026 23:28 | ✅      |
-| AltOne.WebApi.DataExchangeTable       | 2606.0.1.60000  | 05.08.2026 23:28 | ✅      |
 | AltOne.WebAPI.ObslugaKadrowa          | 2606.0.1.20000  | 05.08.2026 23:28 | ✅      |
 | AltOne.WielowymiarowyPodzialPlac      | 2606.0.1.190000 | 05.08.2026 23:28 | ✅      |
 | AltOne.WnioskiPracownicze             | 2606.0.1.30000  | 05.08.2026 23:28 | ✅      |
 | AltOne.WebAPI.ObslugaFakturHandlowych | 2606.0.1.30000  | 05.08.2026 23:28 | ✅      |
 | AltOne.WebApi.ObslugaFakturKosztowych | 2606.0.1.40000  | 05.08.2026 23:28 | ✅      |
 | AltOne.WebAPI.ObslugaCzasuPracy       | 2606.0.1.20001  | 05.08.2026 23:27 | ✅      |
-| AltOne.WebAPI.Core                    | 2606.0.1.80000  | 05.08.2026 23:27 | ✅      |
 | AltOne.WebAPI.Motivizer               | 2606.0.1.20000  | 05.08.2026 23:27 | ✅      |
 | AltOne.ProduktODK                     | 2606.0.1.90000  | 05.08.2026 23:27 | ✅      |
 | AltOne.Pulpity.Wizytowki              | 2606.0.1.50000  | 05.08.2026 23:27 | ✅      |

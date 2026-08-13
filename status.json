@@ -5409,5 +5409,19 @@
     "Wersja": "26060102",
     "Status": "passed",
     "Data": "2026-08-05 23:33:19"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.Core",
+    "WersjaDLL": "2606.0.1.80001",
+    "Wersja": "26060102",
+    "Status": "passed",
+    "Data": "2026-08-13 14:36:50"
+  },
+  {
+    "Nazwa": "AltOne.WebApi.DataExchangeTable",
+    "WersjaDLL": "2606.0.1.60100",
+    "Wersja": "26060102",
+    "Status": "passed",
+    "Data": "2026-08-13 14:36:49"
   }
 ]
