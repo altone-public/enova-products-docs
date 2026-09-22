@@ -5423,5 +5423,208 @@
     "Wersja": "26060102",
     "Status": "passed",
     "Data": "2026-08-13 14:36:49"
+  },
+  {
+    "Nazwa": "AltOne.BazaWiedzy",
+    "WersjaDLL": "2606.0.1.30000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:15:07"
+  },
+  {
+    "Nazwa": "AltOne.KartyCzasuPracy",
+    "WersjaDLL": "2606.0.1.30001",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:15:05"
+  },
+  {
+    "Nazwa": "enova365",
+    "WersjaDLL": "2606.2.3",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:12"
+  },
+  {
+    "Nazwa": "AltOne.AkceptacjaRachunkowBankowych",
+    "WersjaDLL": "2606.0.1.20000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:15:05"
+  },
+  {
+    "Nazwa": "AltOne.AnalizyExcelPlace",
+    "WersjaDLL": "2606.0.1.170001",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:29"
+  },
+  {
+    "Nazwa": "AltOne.B2B",
+    "WersjaDLL": "2606.0.1.40000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:29"
+  },
+  {
+    "Nazwa": "AltOne.ChangeInfos",
+    "WersjaDLL": "2606.0.1.20000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:29"
+  },
+  {
+    "Nazwa": "AltOne.Dashboard.Pulpity",
+    "WersjaDLL": "2606.0.1.20000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:29"
+  },
+  {
+    "Nazwa": "AltOne.DataExchangeTable",
+    "WersjaDLL": "2606.0.1.100000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:30"
+  },
+  {
+    "Nazwa": "AltOne.GrafikiPracy.Pulpity",
+    "WersjaDLL": "2606.0.1.40000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:31"
+  },
+  {
+    "Nazwa": "AltOne.ImportDoETeczki",
+    "WersjaDLL": "2606.0.1.40000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:32"
+  },
+  {
+    "Nazwa": "AltOne.ImportDokHandlowych",
+    "WersjaDLL": "2606.0.1.220101",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:32"
+  },
+  {
+    "Nazwa": "AltOne.LazyApproval",
+    "WersjaDLL": "2606.0.1.20000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:33"
+  },
+  {
+    "Nazwa": "AltOne.ListyProjektowe",
+    "WersjaDLL": "2606.0.1.210000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:33"
+  },
+  {
+    "Nazwa": "AltOne.PlanowaneNieobecnosci",
+    "WersjaDLL": "2606.0.1.20000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:33"
+  },
+  {
+    "Nazwa": "AltOne.PotwierdzanieObecnosciPulpity",
+    "WersjaDLL": "2606.0.1.40000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:33"
+  },
+  {
+    "Nazwa": "AltOne.PowiadomieniaOPlatnosciach",
+    "WersjaDLL": "2606.0.1.20000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:33"
+  },
+  {
+    "Nazwa": "AltOne.ProduktODK",
+    "WersjaDLL": "2606.0.1.90000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:58"
+  },
+  {
+    "Nazwa": "AltOne.Pulpity.Wizytowki",
+    "WersjaDLL": "2606.0.1.50000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:58"
+  },
+  {
+    "Nazwa": "AltOne.TwoFactorAuth",
+    "WersjaDLL": "2606.0.1.30000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:14:59"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.Core",
+    "WersjaDLL": "2606.0.1.80001",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:15:00"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.Motivizer",
+    "WersjaDLL": "2606.0.1.20000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:15:00"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.ObslugaCzasuPracy",
+    "WersjaDLL": "2606.0.1.20001",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:15:01"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.ObslugaFakturHandlowych",
+    "WersjaDLL": "2606.0.1.30000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:15:03"
+  },
+  {
+    "Nazwa": "AltOne.WebApi.ObslugaFakturKosztowych",
+    "WersjaDLL": "2606.0.1.40000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:15:03"
+  },
+  {
+    "Nazwa": "AltOne.WebAPI.ObslugaKadrowa",
+    "WersjaDLL": "2606.0.1.20000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:15:04"
+  },
+  {
+    "Nazwa": "AltOne.WielowymiarowyPodzialPlac",
+    "WersjaDLL": "2606.0.1.190000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:15:04"
+  },
+  {
+    "Nazwa": "AltOne.WnioskiPracownicze",
+    "WersjaDLL": "2606.0.1.30000",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:15:04"
+  },
+  {
+    "Nazwa": "AltOne.WebApi.DataExchangeTable",
+    "WersjaDLL": "2606.0.1.60100",
+    "Wersja": "26060203",
+    "Status": "passed",
+    "Data": "2026-09-22 20:15:05"
   }
 ]
