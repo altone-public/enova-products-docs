@@ -618,9 +618,9 @@ https://ServerName/api/MethodInvoker/InvokeServiceMethod
   "Value": &lt;any type&gt;,          // Required (can be null) - feature value
   "Type": "String",             // Feature type (String, Int, Bool, Date, etc.)
   "UpdateDate": {               // Optional - for historical features
-    "Rok": 2026,
-    "Miesiac": 2,
-    "Dzien": 10
+    "Year": 2026,
+    "Month": 2,
+    "Day": 10
   }
 }
         </pre>
@@ -659,8 +659,8 @@ https://ServerName/api/MethodInvoker/InvokeServiceMethod
     <h4>Default Values by Feature Type:</h4>
     <div class="code-container">
         <pre class="code-block">
-// String and Reference types - cleared to null
-"String":     null
+// Text is cleared to an empty string; a reference is cleared to null
+"String":     ""
 "Reference":  null
 
 // Numeric types - reset to zero
@@ -728,9 +728,9 @@ https://ServerName/api/MethodInvoker/InvokeServiceMethod
         "Value": "15.5",
         "Type": "Percent",
         "UpdateDate": {
-          "Rok": 2026,
-          "Miesiac": 1,
-          "Dzien": 1
+          "Year": 2026,
+          "Month": 1,
+          "Day": 1
         }
       }
     ]
@@ -744,7 +744,7 @@ https://ServerName/api/MethodInvoker/InvokeServiceMethod
     <h3>Writing Features - Example Request</h3>
     <p>
         When updating objects, you can include features in the request. 
-        Only features marked as "Obsługa WCF" (WCF Support) in enova365 can be modified via API.
+        The feature definition must have either "Dostęp przez WebAPI" (WebAPI Access) or the legacy "Obsługa WCF" flag set to true.
     </p>
     <div class="code-container">
         <pre class="code-block">
@@ -777,9 +777,9 @@ https://ServerName/api/MethodInvoker/InvokeServiceMethod
           "Name": "HistoricalDiscount",
           "Value": "20.0",
           "UpdateDate": {                    // Required for historical features
-            "Rok": 2026,
-            "Miesiac": 2,
-            "Dzien": 10
+            "Year": 2026,
+            "Month": 2,
+            "Day": 10
           }
         },
         {
@@ -789,7 +789,7 @@ https://ServerName/api/MethodInvoker/InvokeServiceMethod
         },
         {
           "Name": "Notes",
-          "Value": null                      // Clear field (sets to null)
+          "Value": null                      // Clear text field (sets to an empty string)
         },
         {
           "Name": "Discount",
@@ -810,9 +810,9 @@ https://ServerName/api/MethodInvoker/InvokeServiceMethod
     </p>
     <div class="code-container">
         <pre class="code-block">
-// Clearing text fields (String) - sets to null
-{ "Name": "Description", "Value": null }       // → null
-{ "Name": "Description", "Value": "" }         // → null
+// Clearing text fields (String) - sets to an empty string
+{ "Name": "Description", "Value": null }       // → ""
+{ "Name": "Description", "Value": "" }         // → ""
 
 // Clearing references (Reference) - removes link
 { "Name": "Manager", "Value": null }           // → null
@@ -843,16 +843,31 @@ https://ServerName/api/MethodInvoker/InvokeServiceMethod
         <button class="expand-btn" onclick="toggleExpand(this)">Expand</button>
     </div>
 
+    <h3>WebAPI Access and Backward Compatibility</h3>
+    <p>
+        For new configurations, define a boolean feature named <code>Dostęp przez WebAPI</code> on feature definitions.
+        The legacy name <code>Obsługa WCF</code> remains supported indefinitely.
+        Reading and writing use the same rule: access is enabled when either flag is <code>true</code>.
+        An absent flag is treated as <code>false</code>. Adding the new flag with a default value of <code>false</code>
+        preserves access already enabled by the legacy flag. To disable access, both flags must be false or absent.
+    </p>
+    <p>
+        Existing configurations require no migration. An optional migration consists of creating the new flag,
+        transferring the legacy values or algorithm, verifying access, and then disabling the legacy flag.
+        The library does not create or rename feature definitions automatically. Algorithmic flags are evaluated
+        in the current session for each access check. Operator permissions and read-only feature restrictions still apply.
+    </p>
+
     <h3>Important Notes</h3>
     <ul>
         <li>Feature <code>Name</code> must match exactly the feature name defined in enova365</li>
-        <li>Features must have "Obsługa WCF" enabled in their definition to be accessible via API</li>
+        <li>Feature definitions must have <code>Dostęp przez WebAPI</code> or the legacy <code>Obsługa WCF</code> set to <code>true</code> to be accessible via API</li>
         <li>Historical features require <code>UpdateDate</code> to specify the validity date</li>
         <li>Read-only (calculated) features are returned in responses but cannot be modified</li>
         <li>The <code>Value</code> can be sent as a typed value or string - both formats are accepted</li>
         <li>Sending <code>null</code> or <code>""</code> clears the field and sets it to its default value</li>
         <li>Default values match the behavior of clearing fields in the enova365 user interface</li>
-        <li>String and Reference types are cleared to <code>null</code>, other types to their zero/empty values</li>
+        <li>String values are cleared to <code>""</code>, references to <code>null</code>, and other types to their zero/empty values</li>
     </ul>
 
     <h3>Type Flexibility (since v0.7.5.4)</h3>
@@ -881,8 +896,8 @@ https://ServerName/api/MethodInvoker/InvokeServiceMethod
 
 // String features - null and empty both clear the field:
 { "Name": "Notes", "Value": "Some text" }     // Sets text
-{ "Name": "Notes", "Value": null }            // Clears to null
-{ "Name": "Notes", "Value": "" }              // Clears to null
+{ "Name": "Notes", "Value": null }            // Clears to ""
+{ "Name": "Notes", "Value": "" }              // Clears to ""
 
 // Reference features - multiple ways to clear:
 { "Name": "Manager", "Value": "Pracownicy:5" }  // Sets reference
@@ -1012,7 +1027,7 @@ echo $response->getBody();
 
 <hr class='section-separator' />
 <h2 id='AltOne_WCF_Core'>AltOne.WebAPI.Core</h2>
-<p class='assembly-version'>Assembly name: AltOne.WCF.Core<br> Version: 2606.0.1.80001+9ad3def70247160ce91314247d85e08693f9c4b8,<br>Last modified: 13.08.2026 14:32:51</p>
+<p class='assembly-version'>Assembly name: AltOne.WCF.Core<br> Version: 2606.0.1.80100-Alfa+484a165d431e3a96981c4d14afda9c20201236a1,<br>Last modified: 2.10.2026 13:47:10</p>
 <h3 id='AltOne_WCF_Core-Metody'>List of available methods:</h3>
 <h4>Interface: IHandel2</h4>
 <ul class='methods-list'>
@@ -1037,15 +1052,17 @@ echo $response->getBody();
 <li><a href='#AltOne_WCF_Core-UpdateDictionary-IOperationFunctions2'>04. UpdateDictionary</a></li>
 <li><a href='#AltOne_WCF_Core-GetAttachments-IOperationFunctions2'>05. GetAttachments</a></li>
 <li><a href='#AltOne_WCF_Core-InsertAttachment-IOperationFunctions2'>06. InsertAttachment</a></li>
-<li><a href='#AltOne_WCF_Core-GetContractors-IOperationFunctions2'>07. GetContractors</a></li>
-<li><a href='#AltOne_WCF_Core-GetPackableContractors-IOperationFunctions2'>08. GetPackableContractors</a></li>
-<li><a href='#AltOne_WCF_Core-UpdateContractor-IOperationFunctions2'>09. UpdateContractor</a></li>
-<li><a href='#AltOne_WCF_Core-ZastapKontrahenta-IOperationFunctions2'>10. ZastapKontrahenta</a></li>
-<li><a href='#AltOne_WCF_Core-DodajPowiazanieKontrahenta-IOperationFunctions2'>11. DodajPowiazanieKontrahenta</a></li>
-<li><a href='#AltOne_WCF_Core-GetVATRates-IOperationFunctions2'>12. GetVATRates</a></li>
-<li><a href='#AltOne_WCF_Core-GetPaymentMethods-IOperationFunctions2'>13. GetPaymentMethods</a></li>
-<li><a href='#AltOne_WCF_Core-GetCashRegister-IOperationFunctions2'>14. GetCashRegister</a></li>
-<li><a href='#AltOne_WCF_Core-GetServicesToControllersMap-IOperationFunctions2'>15. GetServicesToControllersMap</a></li>
+<li><a href='#AltOne_WCF_Core-GetFeatures-IOperationFunctions2'>07. GetFeatures</a></li>
+<li><a href='#AltOne_WCF_Core-UpdateFeatures-IOperationFunctions2'>08. UpdateFeatures</a></li>
+<li><a href='#AltOne_WCF_Core-GetContractors-IOperationFunctions2'>09. GetContractors</a></li>
+<li><a href='#AltOne_WCF_Core-GetPackableContractors-IOperationFunctions2'>10. GetPackableContractors</a></li>
+<li><a href='#AltOne_WCF_Core-UpdateContractor-IOperationFunctions2'>11. UpdateContractor</a></li>
+<li><a href='#AltOne_WCF_Core-ZastapKontrahenta-IOperationFunctions2'>12. ZastapKontrahenta</a></li>
+<li><a href='#AltOne_WCF_Core-DodajPowiazanieKontrahenta-IOperationFunctions2'>13. DodajPowiazanieKontrahenta</a></li>
+<li><a href='#AltOne_WCF_Core-GetVATRates-IOperationFunctions2'>14. GetVATRates</a></li>
+<li><a href='#AltOne_WCF_Core-GetPaymentMethods-IOperationFunctions2'>15. GetPaymentMethods</a></li>
+<li><a href='#AltOne_WCF_Core-GetCashRegister-IOperationFunctions2'>16. GetCashRegister</a></li>
+<li><a href='#AltOne_WCF_Core-GetServicesToControllersMap-IOperationFunctions2'>17. GetServicesToControllersMap</a></li>
 </ul>
 <h3>Method descriptions and usage examples:</h3>
 <div class='method-detail'>
@@ -1073,7 +1090,7 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "DokumentHandlowy": {
-    "Guid": "d5e55185-ea3d-4e98-93fd-06ff84c5509b",
+    "Guid": "db27c5a1-c207-4ef7-bf12-26f043bd952c",
     "NumerPelny": "NumerPelny",
     "Definicja": "Definicja",
     "Magazyn": "Magazyn",
@@ -1082,13 +1099,13 @@ echo $response->getBody();
     "Opis": "Opis",
     "Data": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "DataOperacji": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "SposobLiczeniaVAT": "OdNetto",
     "DaneKontrahenta": {
@@ -1125,8 +1142,8 @@ echo $response->getBody();
       "Numer": "Numer",
       "DataOtrzymania": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       }
     },
     "NettoCy": {
@@ -1167,8 +1184,8 @@ echo $response->getBody();
           {
             "Data": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 9,
-              "<b>Day</b>": 14
+              "<b>Month</b>": 10,
+              "<b>Day</b>": 12
             },
             "<b>Symbol</b>": "Symbol",
             "<b>Wymiar</b>": "Wymiar",
@@ -1218,7 +1235,7 @@ echo $response->getBody();
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "CZwAL+kMYM27Og==",
+        "Base64": "kJd//lGFBaqS8Q==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -1265,8 +1282,8 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "7f8d5188-cb51-4a60-9c23-f18bbdd1c5b0",
-  "DataAktualizacji": "2026-09-14T13:07:34.3232182Z",
+  "Guid": "f0f98a4d-f26e-46fb-ab51-78c82e848c0f",
+  "DataAktualizacji": "2026-10-12T13:36:29.9384485Z",
   "Aktualizuj": false,
   "PowodAktualizacji": "PowodAktualizacji",
   "Kod": "Kod",
@@ -1287,7 +1304,7 @@ echo $response->getBody();
   },
   "Obywatelstwo": "Obywatelstwo",
   "Plec": "Kobieta",
-  "DataUrodzenia": "2026-09-14T13:07:34.3232411Z",
+  "DataUrodzenia": "2026-10-12T13:36:29.9384719Z",
   "MiejsceUrodzenia": "MiejsceUrodzenia",
   "PESEL": "PESEL",
   "NIP": "5242873585",
@@ -1387,13 +1404,13 @@ echo $response->getBody();
   "Zatrudnienie": {
     "OkresOd": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "OkresDo": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "TypUmowy": "Brak",
     "Wymiar": {
@@ -1406,13 +1423,13 @@ echo $response->getBody();
     "Zwolniony": false,
     "DataRozpPracy": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "DataZawarcia": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "ID": 1,
     "Features": [
@@ -1434,7 +1451,7 @@ echo $response->getBody();
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "tKlk4ld758iC3w==",
+        "Base64": "hlpoKEgWxaDEpw==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -1475,7 +1492,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "XD7TtRrLxrO4kw==",
+          "Base64": "yPAKjD/Os2BTKw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -1508,7 +1525,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "yzh7I1BvpB1Q2A==",
+      "Base64": "/3FSA9O4+Edhmw==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -1563,9 +1580,9 @@ echo $response->getBody();
 <div class='code-container'><pre class='code-block'>{
   "Kod": "Kod",
   "ID": 1,
-  "Guid": "27dcec58-7d8a-4fc7-bc2a-5ee6cb4b4e7d",
+  "Guid": "d4bb547b-0411-4d5e-8437-23fb8b6b1690",
   "CechaExternalID": "CechaExternalID",
-  "DataAktualnosci": "2026-09-14T13:07:34.3274478Z",
+  "DataAktualnosci": "2026-10-12T13:36:29.9423335Z",
   "Zatrudnienie": false,
   "AdresDoKorespondencji": false,
   "Rachunki": false,
@@ -1584,8 +1601,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -1594,8 +1611,8 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "PracownikDTO": {
-    "Guid": "e73e495f-2fdd-4267-b3a6-0b982feb01a0",
-    "DataAktualizacji": "2026-09-14T13:07:34.3426030Z",
+    "Guid": "e23339a4-0e4b-4e4a-8c77-8c9e7706e5e0",
+    "DataAktualizacji": "2026-10-12T13:36:29.9573415Z",
     "Aktualizuj": false,
     "PowodAktualizacji": "PowodAktualizacji",
     "Kod": "Kod",
@@ -1616,7 +1633,7 @@ echo $response->getBody();
     },
     "Obywatelstwo": "Obywatelstwo",
     "Plec": "Kobieta",
-    "DataUrodzenia": "2026-09-14T13:07:34.3426193Z",
+    "DataUrodzenia": "2026-10-12T13:36:29.9573710Z",
     "MiejsceUrodzenia": "MiejsceUrodzenia",
     "PESEL": "PESEL",
     "NIP": "5242873585",
@@ -1716,13 +1733,13 @@ echo $response->getBody();
     "Zatrudnienie": {
       "OkresOd": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "OkresDo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "TypUmowy": "Brak",
       "Wymiar": {
@@ -1735,13 +1752,13 @@ echo $response->getBody();
       "Zwolniony": false,
       "DataRozpPracy": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DataZawarcia": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "ID": 1,
       "AttachmentsCount": 1,
@@ -1766,7 +1783,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "5mClcfaxl1KUtw==",
+          "Base64": "8OerWOTtoFfF5g==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -1810,7 +1827,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "imhnrZIuNyYZlg==",
+            "Base64": "JJrDoGJYTChD5w==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -1846,7 +1863,7 @@ echo $response->getBody();
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "ip8LtamHU2nFGg==",
+        "Base64": "q1UtWC92rRP/Kw==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -1894,9 +1911,9 @@ echo $response->getBody();
 <div class='code-container'><pre class='code-block'>{
   "Kod": "Kod",
   "ID": 1,
-  "Guid": "50ac14ff-b8f2-48a8-8a2a-b8023d0184a4",
+  "Guid": "6d6a364f-1aad-4e26-86f1-89857d09e141",
   "CechaExternalID": "CechaExternalID",
-  "DataAktualnosci": "2026-09-14T13:07:34.3448832Z",
+  "DataAktualnosci": "2026-10-12T13:36:29.9599860Z",
   "Zatrudnienie": false,
   "AdresDoKorespondencji": false,
   "Rachunki": false,
@@ -1915,8 +1932,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -1930,8 +1947,8 @@ echo $response->getBody();
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "802b5496-887f-4755-b46d-497cbe28530d",
-      "DataAktualizacji": "2026-09-14T13:07:34.3610647Z",
+      "Guid": "73a19398-e1cd-4cfd-9c2d-297f661b1f20",
+      "DataAktualizacji": "2026-10-12T13:36:29.9755790Z",
       "Aktualizuj": false,
       "PowodAktualizacji": "PowodAktualizacji",
       "Kod": "Kod",
@@ -1952,7 +1969,7 @@ echo $response->getBody();
       },
       "Obywatelstwo": "Obywatelstwo",
       "Plec": "Kobieta",
-      "DataUrodzenia": "2026-09-14T13:07:34.3610802Z",
+      "DataUrodzenia": "2026-10-12T13:36:29.9756033Z",
       "MiejsceUrodzenia": "MiejsceUrodzenia",
       "PESEL": "PESEL",
       "NIP": "5242873585",
@@ -2052,13 +2069,13 @@ echo $response->getBody();
       "Zatrudnienie": {
         "OkresOd": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "OkresDo": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "TypUmowy": "Brak",
         "Wymiar": {
@@ -2071,13 +2088,13 @@ echo $response->getBody();
         "Zwolniony": false,
         "DataRozpPracy": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DataZawarcia": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "ID": 1,
         "AttachmentsCount": 1,
@@ -2102,7 +2119,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "vAHC7E24ZZRhGA==",
+            "Base64": "bTXh0rznphBZ7Q==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -2146,7 +2163,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "uY12R0RuwlKRQw==",
+              "Base64": "hrtTCPc7n73dsQ==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -2182,7 +2199,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "6IKbjzuIoAXNMA==",
+          "Base64": "hpsDYbewSq5kYQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -2230,9 +2247,9 @@ echo $response->getBody();
 <div class='code-container'><pre class='code-block'>{
   "Kod": "Kod",
   "ID": 1,
-  "Guid": "1738eaac-252e-4dd7-9468-9bc9edf6032a",
+  "Guid": "6832248c-1903-4349-8901-3c9d6b574844",
   "CechaExternalID": "CechaExternalID",
-  "DataAktualnosci": "2026-09-14T13:07:34.3635489Z",
+  "DataAktualnosci": "2026-10-12T13:36:29.9779808Z",
   "Zatrudnienie": false,
   "AdresDoKorespondencji": false,
   "Rachunki": false,
@@ -2251,8 +2268,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -2266,7 +2283,7 @@ echo $response->getBody();
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "1bcd829a-8942-48dc-86a9-6ff5d3171cf9",
+      "Guid": "85a333e9-464e-4ef5-8676-f109bca7d695",
       "Kod": "Kod",
       "NumerAkt": "NumerAkt",
       "<b>Imie</b>": "Imie",
@@ -2282,13 +2299,13 @@ echo $response->getBody();
       "Zatrudnienie": {
         "OkresOd": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "OkresDo": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "JednostkaOrg": "JednostkaOrg"
       },
@@ -2315,7 +2332,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "JCMpIkWlHg7Aww==",
+          "Base64": "3/hO5ThtMDArzA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -2400,7 +2417,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "6XtKe4WleTt9Gw==",
+          "Base64": "foJEzLc4dD1K3w==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -2468,7 +2485,7 @@ echo $response->getBody();
     "LoginSuccess": false,
     "ZalogowanyOperator": "ZalogowanyOperator",
     "InformationError": "InformationError",
-    "RefreshConfig": "2026-09-14T13:07:34.3833516Z"
+    "RefreshConfig": "2026-10-12T13:36:29.9946037Z"
   },
   "Key": "Key",
   "<b>Success</b>": false,
@@ -2593,7 +2610,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "w0FElbXqQ8EzfA==",
+            "Base64": "0PFyD9iAd9pfeA==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -2629,7 +2646,7 @@ echo $response->getBody();
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "Dz1V70FmR6CL6g==",
+        "Base64": "BksB1xRdO2iSVg==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -2705,7 +2722,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "9guCgMmMbmxhBQ==",
+          "Base64": "HY0ay1cgFxsL3g==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -2738,7 +2755,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "PCk4bWbxYhjE8Q==",
+      "Base64": "0AShV7RbLL5GlQ==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -2814,7 +2831,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "DYlz3p9b+uruiQ==",
+      "Base64": "0T6r630SHNSMTA==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -2869,8 +2886,115 @@ echo $response->getBody();
   "Extension": "Extension",
   "Link": "Link",
   "SubType": "None",
-  "Base64": "EdAlYZRtGyrEyg==",
+  "Base64": "G5+GLQcbJeMeRA==",
   "Features": [
+    {
+      "<b>Name</b>": "Name",
+      "<b>Value</b>": null,
+      "Type": "Type",
+      "UpdateDate": null
+    }
+  ]
+}</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
+<h5>Sample response:</h5>
+<h5>Schema (JSON) for class <b>UpdateResult</b>:</h5>
+<div class='schema-container'><pre class='code-block'>{<br>  "title": "UpdateResult",<br>  "definitions": {<br>    "Error": {<br>      "type": "object",<br>      "properties": {<br>        "Source": {<br>          "type": "string"<br>        },<br>        "Type": {<br>          "type": "string"<br>        },<br>        "Message": {<br>          "type": "string"<br>        },<br>        "StackTrace": {<br>          "type": "string"<br>        }<br>      }<br>    },<br>    "Warning": {<br>      "type": "object",<br>      "properties": {<br>        "Lp": {<br>          "type": "integer"<br>        },<br>        "Type": {<br>          "type": "string"<br>        },<br>        "Message": {<br>          "type": "string"<br>        }<br>      }<br>    }<br>  },<br>  "type": "object",<br>  "properties": {<br>    "ID": {<br>      "type": "integer"<br>    },<br>    "Kod": {<br>      "type": "string"<br>    },<br>    "Success": {<br>      "type": "boolean"<br>    },<br>    "Description": {<br>      "type": "string"<br>    },<br>    "Errors": {<br>      "type": "array",<br>      "items": {<br>        "$ref": "#/definitions/Error"<br>      }<br>    },<br>    "Warnings": {<br>      "type": "array",<br>      "items": {<br>        "$ref": "#/definitions/Warning"<br>      }<br>    },<br>    "TestMode": {<br>      "type": "boolean"<br>    }<br>  },<br>  "required": [<br>    "Success"<br>  ]<br>}</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
+<h5>Sample JSON file:</h5>
+<div class='code-container'><pre class='code-block'>{
+  "TestMode": false,
+  "ID": 1,
+  "Kod": "Kod",
+  "<b>Success</b>": false,
+  "Description": "Description",
+  "Errors": [
+    {
+      "Source": "Source",
+      "Type": "Type",
+      "Message": "Message",
+      "StackTrace": "StackTrace"
+    }
+  ],
+  "Warnings": [
+    {
+      "Lp": 1,
+      "Type": "Type",
+      "Message": "Message"
+    }
+  ]
+}</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
+<p class='back-to-list'><a href='#AltOne_WCF_Core'>Back to the methods list for AltOne.WCF.Core</a></p>
+</div>
+<div class='method-detail'>
+<h4 id='AltOne_WCF_Core-GetFeatures-IOperationFunctions2' class='method-header'>Method name: GetFeatures</h4>
+<p class='method-info'><strong>Service name:</strong> AltOne.WCF.Core.Interfaces.IOperationFunctions2, AltOne.WCF.Core</p>
+<p class='method-info'><strong>HTTP method:</strong> <b>POST</b></p>
+<p class='method-info'><strong>Params type:</strong> <b>GetFeaturesParams</b></p>
+<p class='method-info'><strong>Result type:</strong> <b>GetResultFeatures</b></p>
+<p class='method-info'><strong>Description:</strong> The method retrieves features of an object by ID and table name / Metoda odczytu cech obiektu według ID i nazwy tabeli</p>
+<p class='method-info'><strong>Comment:</strong> Provide ID and TableName. DataAktualnosci determines the date for historical and context-dependent algorithmic features. A definition must have 'Dostęp przez WebAPI' or the legacy 'Obsługa WCF' flag set to true. To disable access, both flags must be false or absent / Podaj ID i TableName. DataAktualnosci określa datę odczytu cech historycznych i algorytmicznych zależnych od kontekstu. Definicja musi mieć 'Dostęp przez WebAPI' lub historyczną 'Obsługa WCF' ustawioną na true. Wyłączenie dostępu wymaga false lub braku obu znaczników</p>
+<p class='method-example'>Sample request for object GetFeaturesParams. Replace placeholders with real values.</p>
+<h5>Schema (JSON) for class <b>GetFeaturesParams</b>:</h5>
+<div class='schema-container'><pre class='code-block'>{<br>  "title": "GetFeaturesParams",<br>  "type": "object",<br>  "properties": {<br>    "ID": {<br>      "type": "integer"<br>    },<br>    "TableName": {<br>      "type": "string"<br>    },<br>    "DataAktualnosci": {<br>      "type": "string",<br>      "format": "date-time"<br>    }<br>  },<br>  "required": [<br>    "ID",<br>    "TableName"<br>  ]<br>}</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
+<h5>Sample JSON file:</h5>
+<div class='code-container'><pre class='code-block'>{
+  "<b>ID</b>": 1,
+  "<b>TableName</b>": "TableName",
+  "DataAktualnosci": "2026-10-12T13:36:30.0217825Z"
+}</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
+<h5>Sample response:</h5>
+<h5>Schema (JSON) for class <b>GetResultFeatures</b>:</h5>
+<div class='schema-container'><pre class='code-block'>{<br>  "title": "GetResultFeatures",<br>  "definitions": {<br>    "DataDTO": {<br>      "type": [<br>        "object",<br>        "null"<br>      ],<br>      "properties": {<br>        "Year": {<br>          "type": "integer"<br>        },<br>        "Month": {<br>          "type": "integer"<br>        },<br>        "Day": {<br>          "type": "integer"<br>        }<br>      },<br>      "required": [<br>        "Year",<br>        "Month",<br>        "Day"<br>      ]<br>    },<br>    "Error": {<br>      "type": "object",<br>      "properties": {<br>        "Source": {<br>          "type": "string"<br>        },<br>        "Type": {<br>          "type": "string"<br>        },<br>        "Message": {<br>          "type": "string"<br>        },<br>        "StackTrace": {<br>          "type": "string"<br>        }<br>      }<br>    },<br>    "FeatureDTO": {<br>      "type": "object",<br>      "properties": {<br>        "Name": {<br>          "type": "string"<br>        },<br>        "Value": {},<br>        "Type": {<br>          "type": "string"<br>        },<br>        "UpdateDate": {<br>          "$ref": "#/definitions/DataDTO"<br>        }<br>      },<br>      "required": [<br>        "Name",<br>        "Value"<br>      ]<br>    },<br>    "Warning": {<br>      "type": "object",<br>      "properties": {<br>        "Lp": {<br>          "type": "integer"<br>        },<br>        "Type": {<br>          "type": "string"<br>        },<br>        "Message": {<br>          "type": "string"<br>        }<br>      }<br>    }<br>  },<br>  "type": "object",<br>  "properties": {<br>    "ID": {<br>      "type": "integer"<br>    },<br>    "TableName": {<br>      "type": "string"<br>    },<br>    "Count": {<br>      "type": "integer"<br>    },<br>    "Features": {<br>      "type": "array",<br>      "items": {<br>        "$ref": "#/definitions/FeatureDTO"<br>      }<br>    },<br>    "Key": {<br>      "type": "string"<br>    },<br>    "Success": {<br>      "type": "boolean"<br>    },<br>    "Description": {<br>      "type": "string"<br>    },<br>    "Errors": {<br>      "type": "array",<br>      "items": {<br>        "$ref": "#/definitions/Error"<br>      }<br>    },<br>    "Warnings": {<br>      "type": "array",<br>      "items": {<br>        "$ref": "#/definitions/Warning"<br>      }<br>    },<br>    "TestMode": {<br>      "type": "boolean"<br>    }<br>  },<br>  "required": [<br>    "Success"<br>  ]<br>}</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
+<h5>Sample JSON file:</h5>
+<div class='code-container'><pre class='code-block'>{
+  "ID": 1,
+  "TableName": "TableName",
+  "Count": 1,
+  "Features": [
+    {
+      "<b>Name</b>": "Name",
+      "<b>Value</b>": null,
+      "Type": "Type",
+      "UpdateDate": null
+    }
+  ],
+  "Key": "Key",
+  "<b>Success</b>": false,
+  "Description": "Description",
+  "Errors": [
+    {
+      "Source": "Source",
+      "Type": "Type",
+      "Message": "Message",
+      "StackTrace": "StackTrace"
+    }
+  ],
+  "Warnings": [
+    {
+      "Lp": 1,
+      "Type": "Type",
+      "Message": "Message"
+    }
+  ]
+}</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
+<p class='back-to-list'><a href='#AltOne_WCF_Core'>Back to the methods list for AltOne.WCF.Core</a></p>
+</div>
+<div class='method-detail'>
+<h4 id='AltOne_WCF_Core-UpdateFeatures-IOperationFunctions2' class='method-header'>Method name: UpdateFeatures</h4>
+<p class='method-info'><strong>Service name:</strong> AltOne.WCF.Core.Interfaces.IOperationFunctions2, AltOne.WCF.Core</p>
+<p class='method-info'><strong>HTTP method:</strong> <b>POST</b></p>
+<p class='method-info'><strong>Params type:</strong> <b>UpdateFeaturesParams</b></p>
+<p class='method-info'><strong>Result type:</strong> <b>UpdateResult</b></p>
+<p class='method-info'><strong>Description:</strong> The method updates feature values on an existing object / Metoda aktualizacji wartości cech istniejącego obiektu</p>
+<p class='method-info'><strong>Comment:</strong> Only supplied feature values are changed; the object and feature definitions must already exist. Value is required; null clears the value according to its type. Historical features require UpdateDate. Read-only algorithms (Get/GetArgs) are skipped with a ReadOnlyFeature warning. TestMode=true rolls back the write / Zmieniane są tylko przekazane wartości cech; obiekt i definicje cech muszą już istnieć. Value jest wymagane; null czyści wartość zgodnie z typem cechy. Cechy historyczne wymagają UpdateDate. Algorytmy tylko do odczytu (Get/GetArgs) są pomijane z ostrzeżeniem ReadOnlyFeature. TestMode=true wycofuje zapis</p>
+<p class='method-example'>Sample request for object UpdateFeaturesParams. Replace placeholders with real values.</p>
+<h5>Schema (JSON) for class <b>UpdateFeaturesParams</b>:</h5>
+<div class='schema-container'><pre class='code-block'>{<br>  "title": "UpdateFeaturesParams",<br>  "definitions": {<br>    "DataDTO": {<br>      "type": [<br>        "object",<br>        "null"<br>      ],<br>      "properties": {<br>        "Year": {<br>          "type": "integer"<br>        },<br>        "Month": {<br>          "type": "integer"<br>        },<br>        "Day": {<br>          "type": "integer"<br>        }<br>      },<br>      "required": [<br>        "Year",<br>        "Month",<br>        "Day"<br>      ]<br>    },<br>    "FeatureDTO": {<br>      "type": "object",<br>      "properties": {<br>        "Name": {<br>          "type": "string"<br>        },<br>        "Value": {},<br>        "Type": {<br>          "type": "string"<br>        },<br>        "UpdateDate": {<br>          "$ref": "#/definitions/DataDTO"<br>        }<br>      },<br>      "required": [<br>        "Name",<br>        "Value"<br>      ]<br>    }<br>  },<br>  "type": "object",<br>  "properties": {<br>    "ID": {<br>      "type": "integer"<br>    },<br>    "TableName": {<br>      "type": "string"<br>    },<br>    "Features": {<br>      "type": "array",<br>      "items": {<br>        "$ref": "#/definitions/FeatureDTO"<br>      }<br>    },<br>    "TestMode": {<br>      "type": [<br>        "boolean",<br>        "null"<br>      ]<br>    }<br>  },<br>  "required": [<br>    "ID",<br>    "TableName",<br>    "Features"<br>  ]<br>}</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
+<h5>Sample JSON file:</h5>
+<div class='code-container'><pre class='code-block'>{
+  "TestMode": false,
+  "<b>ID</b>": 1,
+  "<b>TableName</b>": "TableName",
+  "<b>Features</b>": [
     {
       "<b>Name</b>": "Name",
       "<b>Value</b>": null,
@@ -2925,7 +3049,7 @@ echo $response->getBody();
   "EuVAT": "EuVAT",
   "PESEL": "PESEL",
   "Miejscowosc": "Miejscowosc",
-  "Guid": "4bf84e62-3b81-4ba4-85b1-6c75a655809b",
+  "Guid": "cf57d4b5-b52a-4bff-b2a5-be9e30976c4b",
   "CechaExternalID": "CechaExternalID",
   "Powiazania": false,
   "WarunkiHandlowe": false,
@@ -2945,8 +3069,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -2957,7 +3081,7 @@ echo $response->getBody();
   "Count": 1,
   "Kontrahenci": [
     {
-      "Guid": "c62f87ba-8c1f-4d22-8a61-dfe471d85cea",
+      "Guid": "0169cd63-20b9-4aeb-af44-105411af9781",
       "Kod": null,
       "<b>Nazwa</b>": "Nazwa",
       "Blokada": false,
@@ -3077,7 +3201,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "Lo5kQdjlV9vgdA==",
+              "Base64": "le10hPvX1UtFoQ==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -3132,13 +3256,13 @@ echo $response->getBody();
             "RodzajPowiazania": "Inny",
             "DataOd": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 9,
-              "<b>Day</b>": 14
+              "<b>Month</b>": 10,
+              "<b>Day</b>": 12
             },
             "DataDo": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 9,
-              "<b>Day</b>": 14
+              "<b>Month</b>": 10,
+              "<b>Day</b>": 12
             },
             "RolaPodmiotu": "Inna",
             "OdbiorcaPlatnik": false
@@ -3175,7 +3299,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "bbFeQBASaSSJjA==",
+          "Base64": "/05PKSyu+aN9KQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -3227,7 +3351,7 @@ echo $response->getBody();
   "EuVAT": "EuVAT",
   "PESEL": "PESEL",
   "Miejscowosc": "Miejscowosc",
-  "Guid": "1466a3e5-88ae-40eb-b128-fce891055cba",
+  "Guid": "c51ff0ba-088f-4c6f-9a23-e48d54242acb",
   "CechaExternalID": "CechaExternalID",
   "Powiazania": false,
   "WarunkiHandlowe": false,
@@ -3247,8 +3371,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -3262,7 +3386,7 @@ echo $response->getBody();
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "90d752af-1886-457b-99b7-92ea0722b981",
+      "Guid": "f9c8840e-415d-4d4c-b69d-3a1f3f79447d",
       "Kod": null,
       "<b>Nazwa</b>": "Nazwa",
       "Blokada": false,
@@ -3382,7 +3506,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "OOmsJJCmFh6lTg==",
+              "Base64": "kD6J+z1q8jMhwA==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -3437,13 +3561,13 @@ echo $response->getBody();
             "RodzajPowiazania": "Inny",
             "DataOd": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 9,
-              "<b>Day</b>": 14
+              "<b>Month</b>": 10,
+              "<b>Day</b>": 12
             },
             "DataDo": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 9,
-              "<b>Day</b>": 14
+              "<b>Month</b>": 10,
+              "<b>Day</b>": 12
             },
             "RolaPodmiotu": "Inna",
             "OdbiorcaPlatnik": false
@@ -3480,7 +3604,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "5iwt8c5osc2FeQ==",
+          "Base64": "nBO2Y0YonkNe+A==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -3527,7 +3651,7 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "032f0351-f6cf-4427-ab2b-01a06e18aea1",
+  "Guid": "d6ecd880-fa11-4d5c-a96c-a72a0ac99a0d",
   "Kod": null,
   "<b>Nazwa</b>": "Nazwa",
   "Blokada": false,
@@ -3644,7 +3768,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "OpY68lWipLCEBA==",
+          "Base64": "tUU8fxcd/pQmJg==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -3699,13 +3823,13 @@ echo $response->getBody();
         "RodzajPowiazania": "Inny",
         "DataOd": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DataDo": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "RolaPodmiotu": "Inna",
         "OdbiorcaPlatnik": false
@@ -3739,7 +3863,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "IoGyATdqXrP4zA==",
+      "Base64": "lJCXX2+7iCZ4cQ==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -3853,13 +3977,13 @@ echo $response->getBody();
   "RodzajPowiazania": "Inny",
   "DataOd": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DataDo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "RolaPodmiotu": "Inna",
   "OdbiorcaPlatnik": false
@@ -3942,7 +4066,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "Uvqz14xi+GYJRQ==",
+          "Base64": "YA3ZYPADMu0fUw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -4025,7 +4149,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "ttl+yUrxZItDVQ==",
+          "Base64": "LBdWaZBqbauYOg==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -4112,7 +4236,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "rq1DuPdvM96hbg==",
+          "Base64": "5sZlULHYIEzYTA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -4216,7 +4340,7 @@ echo $response->getBody();
 <div class='code-container'><pre class='code-block'>{
   "<b>ExternalSystem</b>": "ExternalSystem",
   "<b>SecurityCode</b>": "SecurityCode",
-  "ShowFutureRecords": "2026-09-14T13:07:34.4931019Z"
+  "ShowFutureRecords": "2026-10-12T13:36:30.1072649Z"
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
 <h5>Schema (JSON) for class <b>GetTablesDataChangeResult</b>:</h5>
@@ -4267,7 +4391,7 @@ echo $response->getBody();
   "<b>SourceTable</b>": "SourceTable",
   "<b>ExternalSystem</b>": "ExternalSystem",
   "<b>SecurityCode</b>": "SecurityCode",
-  "ShowFutureRecords": "2026-09-14T13:07:34.4970481Z",
+  "ShowFutureRecords": "2026-10-12T13:36:30.1110471Z",
   "SourceID": 1,
   "HideErrors": false,
   "Extended": false,
@@ -4283,8 +4407,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -4307,8 +4431,8 @@ echo $response->getBody();
       "Error": false,
       "Description": "Description",
       "Extended": {
-        "CreationTime": "2026-09-14T13:07:34.5006059Z",
-        "TermToExport": "2026-09-14T13:07:34.5006116Z",
+        "CreationTime": "2026-10-12T13:36:30.1140878Z",
+        "TermToExport": "2026-10-12T13:36:30.1140923Z",
         "Operator": "Operator",
         "Memo": "Memo"
       }
@@ -4444,16 +4568,16 @@ echo $response->getBody();
       },
       "DataRozliczenia": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "StanRozliczenia": "Nierozliczony",
-      "Guid": "fddab929-1b19-45b5-948b-3badd45965df",
+      "Guid": "3cba028c-00e5-4e3c-ba1c-de9c81b3e60f",
       "Podmiot": {
         "TypPodmiotu": "NieOkreślony",
         "ID": 1,
         "Kod": "Kod",
-        "Guid": "9dd7a7fc-f336-4be3-9ad7-a85bb0da149c",
+        "Guid": "3171d26f-e6a2-4f5a-92f5-00d52b8be9e3",
         "ExternalID": "ExternalID",
         "EuVAT": "EuVAT",
         "Miejscowosc": "Miejscowosc"
@@ -4464,8 +4588,8 @@ echo $response->getBody();
       "Opis": "Opis",
       "Termin": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "TerminDni": 1,
       "Kwota": {
@@ -4501,7 +4625,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "SRX0b5g4A2JhCA==",
+          "Base64": "MCCxFzc/4nvYiA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -4555,28 +4679,28 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "Data": {
-    "Guid": "9b4ede31-3ec8-49d6-a9ac-43980f44a010",
+    "Guid": "2d5629aa-8f11-485d-8cbd-9928e3934b9d",
     "Definicja": "Definicja",
     "DataWplywu": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "DataEwidencji": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "Numer": "Numer",
     "Opis": "Opis",
     "Dekrety": [
       {
-        "Guid": "9d6425e1-25af-4fb7-b4db-0f98b4b96c21",
+        "Guid": "5c863ed6-a99c-41f6-8e74-b6a9762c54df",
         "Numer": "Numer",
         "Data": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "Opis": "Opis",
         "WN": {
@@ -4639,7 +4763,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "1SjgHhIPWPeIhA==",
+            "Base64": "T9AVDnGRp4g0Jg==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -4675,7 +4799,7 @@ echo $response->getBody();
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "tjrIj9mqz9iT9A==",
+        "Base64": "NSRgm+/mPdAUiw==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -4734,16 +4858,16 @@ echo $response->getBody();
   {
     "<b>ZrodloDodatku</b>": "Pracownik",
     "<b>IdZrodla</b>": 1,
-    "Guid": "edc1872f-46db-4479-9cf2-5ab784cbd3a5",
+    "Guid": "157ac353-3ca7-4f39-9f9b-1e798726a993",
     "<b>DataAktualnosci</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>OkresOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>OkresDo</b>": null,
     "<b>CzyAktualizowac</b>": false,
@@ -4783,7 +4907,7 @@ echo $response->getBody();
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "ZW3csvq5/Ckxlg==",
+        "Base64": "V0uTd4+yD9LIXw==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -4839,12 +4963,12 @@ echo $response->getBody();
 <div class='code-container'><pre class='code-block'>{
   "Kod": "Kod",
   "ID": 1,
-  "Guid": "9c8bb31f-d191-40b3-8106-545ec8141114",
+  "Guid": "8af09d33-c202-4ad5-b998-102c368694b6",
   "CechaExternalID": "CechaExternalID",
   "DataAktualnosci": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "IDs": [
     1
@@ -4861,8 +4985,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -4876,7 +5000,7 @@ echo $response->getBody();
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "4044264d-8f30-4358-9912-67e296ce4642",
+      "Guid": "71511488-b593-43ee-b6a9-dc07fa1ee61d",
       "Kod": "Kod",
       "NumerAkt": "NumerAkt",
       "<b>Imie</b>": "Imie",
@@ -4906,7 +5030,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "u7p0E1/Tt4t4YQ==",
+          "Base64": "bdNwthCAXcex2Q==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -4953,7 +5077,7 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "<b>Guid</b>": "fa1139fb-b841-4cb7-823e-c0b38e4c586a"
+  "<b>Guid</b>": "5350e161-88cc-4f07-9720-f7c590133276"
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
 <h5>Schema (JSON) for class <b>UpdateResult</b>:</h5>
@@ -5051,8 +5175,8 @@ echo $response->getBody();
         "KodPracownika": "KodPracownika",
         "<b>Data</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DzienTygodnia": "Sunday",
         "StatusDnia": "Kalendarz",
@@ -5095,7 +5219,7 @@ echo $response->getBody();
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "xRe7ZHw6WA1j4w==",
+                "Base64": "S+w0kmmqoz5XmQ==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -5128,7 +5252,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "ZHuYsmMFC8JMUw==",
+            "Base64": "5LhUDfStuxe87g==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -5194,8 +5318,8 @@ echo $response->getBody();
         "KodPracownika": "KodPracownika",
         "<b>Data</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "StatusDnia": "Kalendarz",
         "Godziny": {
@@ -5236,7 +5360,7 @@ echo $response->getBody();
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "I6iIbK+c6zUQkg==",
+                "Base64": "FHlJXH2M+VDt6g==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -5270,7 +5394,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "PdbSKjvheX9dVA==",
+            "Base64": "yUuhA8jvWVaxhA==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -5334,13 +5458,13 @@ echo $response->getBody();
   "Okres": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "OgraniczDoOkresuZatrudnienia": false
@@ -5356,8 +5480,8 @@ echo $response->getBody();
       "KodPracownika": "KodPracownika",
       "<b>Data</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DzienTygodnia": "Sunday",
       "StatusDnia": "Kalendarz",
@@ -5403,7 +5527,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "TQ2JIY6ytE0kow==",
+              "Base64": "9JDH1craaHeGqg==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -5439,7 +5563,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "I2HMTPQk8He9SQ==",
+          "Base64": "arabijOc9DLtpQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -5493,13 +5617,13 @@ echo $response->getBody();
   "Okres": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "OgraniczDoOkresuZatrudnienia": false
@@ -5515,8 +5639,8 @@ echo $response->getBody();
       "KodPracownika": "KodPracownika",
       "<b>Data</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "StatusDnia": "Kalendarz",
       "Godziny": {
@@ -5560,7 +5684,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "iJy7SU6Y/ND4ww==",
+              "Base64": "iSWenagTjWUl8A==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -5597,7 +5721,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "T2ePm05bowM11Q==",
+          "Base64": "yT4fYvsHFqn5wA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -5656,8 +5780,8 @@ echo $response->getBody();
       "KodPracownika": "KodPracownika",
       "<b>Data</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DzienTygodnia": "Sunday",
       "StatusDnia": "Kalendarz",
@@ -5703,7 +5827,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "wp44jml+iEG/Qg==",
+              "Base64": "llTLrmsx6o7kHQ==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -5739,7 +5863,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "m519c6N+4wTH1Q==",
+          "Base64": "MT42tAIDMB4+Ug==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -5793,13 +5917,13 @@ echo $response->getBody();
   "Okres": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "Definicja": "Definicja",
@@ -5816,8 +5940,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -5831,19 +5955,19 @@ echo $response->getBody();
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "6adb1ea3-ef7f-436c-acf7-f43d8b053d46",
+      "Guid": "ff32299f-61e3-49cd-b3b1-28b20e493e7a",
       "IDPracownika": 1,
       "KodPracownika": "KodPracownika",
       "Definicja": "Definicja",
       "DataOd": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DataDo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DniPracy": 1,
       "Godziny": {
@@ -5864,7 +5988,7 @@ echo $response->getBody();
           "IdCzlonkaRodziny": 1
         }
       },
-      "LastChange": "2026-09-14T13:07:34.6112111Z",
+      "LastChange": "2026-10-12T13:36:30.2129194Z",
       "Korekty": [
         {
           "IDPracownika": 1,
@@ -5872,13 +5996,13 @@ echo $response->getBody();
           "Definicja": "Definicja",
           "DataOd": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           },
           "DataDo": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           },
           "DniPracy": 1,
           "Godziny": {
@@ -5899,7 +6023,7 @@ echo $response->getBody();
               "IdCzlonkaRodziny": 1
             }
           },
-          "LastChange": "2026-09-14T13:07:34.6112280Z",
+          "LastChange": "2026-10-12T13:36:30.2129331Z",
           "ID": 1,
           "AttachmentsCount": 1,
           "TableName": "TableName",
@@ -5923,7 +6047,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "FxQFM9zFzSUD4g==",
+              "Base64": "ouXtiXdMjAL6CA==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -5960,7 +6084,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "5s5g6dp/s5fiHQ==",
+          "Base64": "wporfRSzFy84vg==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -6054,7 +6178,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "Hk1PSWP5U2Iigg==",
+          "Base64": "VeqBqKRkIUp+dQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -6146,19 +6270,19 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "dfd7aa3b-c16b-40c3-989d-26f7b7f45c12",
+  "Guid": "cdd60e2c-f0e1-4fe5-a55b-0ac8407413aa",
   "IDPracownika": 1,
   "KodPracownika": "KodPracownika",
   "Definicja": "Definicja",
   "DataOd": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DataDo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DniPracy": 1,
   "Godziny": {
@@ -6179,7 +6303,7 @@ echo $response->getBody();
       "IdCzlonkaRodziny": 1
     }
   },
-  "LastChange": "2026-09-14T13:07:34.6304362Z",
+  "LastChange": "2026-10-12T13:36:30.2296326Z",
   "Korekty": [
     {
       "IDPracownika": 1,
@@ -6187,13 +6311,13 @@ echo $response->getBody();
       "Definicja": "Definicja",
       "DataOd": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DataDo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DniPracy": 1,
       "Godziny": {
@@ -6214,7 +6338,7 @@ echo $response->getBody();
           "IdCzlonkaRodziny": 1
         }
       },
-      "LastChange": "2026-09-14T13:07:34.6304565Z",
+      "LastChange": "2026-10-12T13:36:30.2296508Z",
       "ID": 1,
       "Features": [
         {
@@ -6235,7 +6359,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "BPB9V86wsWq1Zg==",
+          "Base64": "C4OdtiUW+NbQDg==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -6269,7 +6393,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "Z5gq432DZv98iw==",
+      "Base64": "YX2DHxsltbRntA==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -6328,13 +6452,13 @@ echo $response->getBody();
   "Definicja": "Definicja",
   "DataOd": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DataDo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DniPracy": 1,
   "Godziny": {
@@ -6355,7 +6479,7 @@ echo $response->getBody();
       "IdCzlonkaRodziny": 1
     }
   },
-  "LastChange": "2026-09-14T13:07:34.6435299Z",
+  "LastChange": "2026-10-12T13:36:30.2374573Z",
   "ID": 1,
   "Features": [
     {
@@ -6376,7 +6500,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "4CTnFW9ujvvtUw==",
+      "Base64": "0hTtmR1FD2QW0A==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -6431,7 +6555,7 @@ echo $response->getBody();
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
   "ID": 1,
-  "Guid": "313a46ff-b04a-4ccf-bff1-9e72bb80d11c"
+  "Guid": "ae578e85-9c79-463d-9bc1-1e3a1941eb4c"
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
 <h5>Schema (JSON) for class <b>UpdateResult</b>:</h5>
@@ -6479,8 +6603,8 @@ echo $response->getBody();
   ],
   "Data": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "IDPracownika": 1,
   "KodPracownika": "KodPracownika",
@@ -6507,13 +6631,13 @@ echo $response->getBody();
       "Okres": {
         "<b>DataOd</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "<b>DataDo</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         }
       },
       "LimitDni": 1,
@@ -6545,7 +6669,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "dVcUoa2tZUux3Q==",
+          "Base64": "gQ1qu10ovRFMyw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -6595,13 +6719,13 @@ echo $response->getBody();
   "<b>Okres</b>": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
@@ -6614,19 +6738,19 @@ echo $response->getBody();
     {
       "TypDnia": "Pracy",
       "Nieobecnosc": {
-        "Guid": "4fbe9aa6-0bfd-40ad-8b6b-2fa0d44de1fd",
+        "Guid": "2e9d2593-5ad6-4299-937c-d5568ab07ee4",
         "IDPracownika": 1,
         "KodPracownika": "KodPracownika",
         "Definicja": "Definicja",
         "DataOd": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DataDo": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DniPracy": 1,
         "Godziny": {
@@ -6647,7 +6771,7 @@ echo $response->getBody();
             "IdCzlonkaRodziny": 1
           }
         },
-        "LastChange": "2026-09-14T13:07:34.6687396Z",
+        "LastChange": "2026-10-12T13:36:30.2612834Z",
         "Korekty": [
           {
             "IDPracownika": 1,
@@ -6655,13 +6779,13 @@ echo $response->getBody();
             "Definicja": "Definicja",
             "DataOd": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 9,
-              "<b>Day</b>": 14
+              "<b>Month</b>": 10,
+              "<b>Day</b>": 12
             },
             "DataDo": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 9,
-              "<b>Day</b>": 14
+              "<b>Month</b>": 10,
+              "<b>Day</b>": 12
             },
             "DniPracy": 1,
             "Godziny": {
@@ -6682,7 +6806,7 @@ echo $response->getBody();
                 "IdCzlonkaRodziny": 1
               }
             },
-            "LastChange": "2026-09-14T13:07:34.6687572Z",
+            "LastChange": "2026-10-12T13:36:30.2612967Z",
             "ID": 1,
             "AttachmentsCount": 1,
             "TableName": "TableName",
@@ -6706,7 +6830,7 @@ echo $response->getBody();
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "Rh62kQKgvXBhqQ==",
+                "Base64": "7lnJ7Te8OFD/ig==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -6743,7 +6867,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "NbXgq4cNrlcrjw==",
+            "Base64": "FegxlQ4TquB/aA==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -6760,8 +6884,8 @@ echo $response->getBody();
         "KodPracownika": "KodPracownika",
         "<b>Data</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "StatusDnia": "Kalendarz",
         "Godziny": {
@@ -6805,7 +6929,7 @@ echo $response->getBody();
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "xdR6oZ/oDBHKiQ==",
+                "Base64": "k+RgsllSrUjjOg==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -6842,7 +6966,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "ARsAno3765mH7Q==",
+            "Base64": "yexhbRlrahInCw==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -6890,18 +7014,18 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "4835914e-da81-44af-bbee-3cea2dd6098a",
+  "Guid": "fc397f8e-e7d7-4385-9ad0-3bda1ccee0d4",
   "IDPracownika": 1,
   "KodPracownika": "KodPracownika",
   "DataOd": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DataDo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "Numer": "Numer",
   "ID": 1,
@@ -6924,7 +7048,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "v/gmdtj2c/Mvlg==",
+      "Base64": "r9+SaQxWrjf+fw==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -6984,8 +7108,8 @@ echo $response->getBody();
   "KodPracownika": "KodPracownika",
   "Data": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -6995,18 +7119,18 @@ echo $response->getBody();
 <div class='code-container'><pre class='code-block'>{
   "Data": [
     {
-      "Guid": "33a39c3c-7e05-407b-a12a-1d9d1a52af22",
+      "Guid": "c4073555-cdfe-4d11-934f-aae09d6bbcac",
       "IDPracownika": 1,
       "KodPracownika": "KodPracownika",
       "DataOd": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DataDo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "Numer": "Numer",
       "ID": 1,
@@ -7032,7 +7156,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "sblQRcNpO75Fkw==",
+          "Base64": "O7wvizXMjm2dIw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -7084,8 +7208,8 @@ echo $response->getBody();
   "KodPracownika": "KodPracownika",
   "<b>Data</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -7099,32 +7223,32 @@ echo $response->getBody();
       "KodPracownika": "KodPracownika",
       "Dzien": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "PracaZdalnaNaDzien": false,
       "WniosekPracaZdalna": {
         "Definicja": "Definicja",
         "DataZlozenia": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DataDecyzji": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "Okres": {
           "<b>DataOd</b>": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           },
           "<b>DataDo</b>": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           }
         }
       }
@@ -7170,13 +7294,13 @@ echo $response->getBody();
   "<b>Okres</b>": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "DefinicjaZdarzeniaKod": "DefinicjaZdarzeniaKod"
@@ -7196,8 +7320,8 @@ echo $response->getBody();
       "Uwagi": "Uwagi",
       "Data": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "Godzina": "Godzina"
     }
@@ -7243,13 +7367,13 @@ echo $response->getBody();
   "Period": {
     "DateFrom": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "DateTo": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "LimitToEmploymentPeriod": false
@@ -7265,8 +7389,8 @@ echo $response->getBody();
       "EmployeeCode": "EmployeeCode",
       "<b>Date</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DayOfWeek": "Sunday",
       "DayStatus": "Kalendarz",
@@ -7312,7 +7436,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "itlxAo6O1TfXRA==",
+              "Base64": "OLxdHufzRVkrvg==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -7348,7 +7472,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "p1ouEK4lOzNorQ==",
+          "Base64": "C4ItOvr/4LlbcA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -7402,13 +7526,13 @@ echo $response->getBody();
   "Period": {
     "DateFrom": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "DateTo": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "LimitToEmploymentPeriod": false
@@ -7424,8 +7548,8 @@ echo $response->getBody();
       "EmployeeCode": "EmployeeCode",
       "<b>Date</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DayStatus": "Kalendarz",
       "Hours": {
@@ -7469,7 +7593,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "h171E9mIN20LbQ==",
+              "Base64": "kGJdQ2HJHlNdQw==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -7505,7 +7629,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "oQJ5L2HcQgd3Kg==",
+          "Base64": "K16ryuXfPpL5aw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -7561,8 +7685,8 @@ echo $response->getBody();
         "EmployeeCode": "EmployeeCode",
         "<b>Date</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DayOfWeek": "Sunday",
         "DayStatus": "Kalendarz",
@@ -7605,7 +7729,7 @@ echo $response->getBody();
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "kmrHbtxvMKuqsw==",
+                "Base64": "pAVO+26Z1d6nCA==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -7638,7 +7762,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "PNf1teTi5bYB1A==",
+            "Base64": "9/hwMbyIg9n9Qg==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -7704,8 +7828,8 @@ echo $response->getBody();
         "EmployeeCode": "EmployeeCode",
         "<b>Date</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DayStatus": "Kalendarz",
         "Hours": {
@@ -7746,7 +7870,7 @@ echo $response->getBody();
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "6o0CvK52AlHSIQ==",
+                "Base64": "ViFTFGACWgii3w==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -7779,7 +7903,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "DhNNeLQZ0u/97w==",
+            "Base64": "lWX5H+KW+m+gWQ==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -7848,8 +7972,8 @@ echo $response->getBody();
       "EmployeeCode": "EmployeeCode",
       "<b>Date</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DayOfWeek": "Sunday",
       "DayStatus": "Kalendarz",
@@ -7895,7 +8019,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "PkXKngRyCaxkoA==",
+              "Base64": "C0LQZVKPb/xfsw==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -7931,7 +8055,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "iBA7cnoiH0tPeA==",
+          "Base64": "2lrsKBegELvifQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -7985,13 +8109,13 @@ echo $response->getBody();
   "Period": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "Definition": "Definition",
@@ -8008,19 +8132,19 @@ echo $response->getBody();
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "cb64bbba-b1b3-4855-9e6a-4ebaf6619da2",
+      "Guid": "6226716b-6df9-4b68-ad5e-3311e6cb0878",
       "EmployeeID": 1,
       "EmployeeCode": "EmployeeCode",
       "AbsenceDefinition": "AbsenceDefinition",
       "DateFrom": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DateTo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "WorkingDaysNo": 1,
       "Hours": {
@@ -8042,7 +8166,7 @@ echo $response->getBody();
           "DependantGuid": 1
         }
       },
-      "LastChange": "2026-09-14T13:07:34.7602713Z",
+      "LastChange": "2026-10-12T13:36:30.3409756Z",
       "Corrections": [
         {
           "EmployeeID": 1,
@@ -8050,13 +8174,13 @@ echo $response->getBody();
           "AbsenceDefinition": "AbsenceDefinition",
           "DateFrom": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           },
           "DateTo": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           },
           "WorkingDaysNo": 1,
           "Hours": {
@@ -8078,7 +8202,7 @@ echo $response->getBody();
               "DependantGuid": 1
             }
           },
-          "LastChange": "2026-09-14T13:07:34.7602897Z",
+          "LastChange": "2026-10-12T13:36:30.3409885Z",
           "ID": 1,
           "AttachmentsCount": 1,
           "TableName": "TableName",
@@ -8102,7 +8226,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "zJP2TKpOhCDzqg==",
+              "Base64": "O249dUcUayd3jA==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -8139,7 +8263,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "DfplUJyLRrf3UA==",
+          "Base64": "4RiXZrI/nDPWgg==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -8233,7 +8357,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "sqAM7HbTA1xirw==",
+          "Base64": "mJdFxSxU0PmDGw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -8325,19 +8449,19 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "b821969e-1a9c-4069-b6fa-4a659163954e",
+  "Guid": "fc4b6de2-caa5-4cd4-b1a0-dc8712c9cbd9",
   "EmployeeID": 1,
   "EmployeeCode": "EmployeeCode",
   "AbsenceDefinition": "AbsenceDefinition",
   "DateFrom": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DateTo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "WorkingDaysNo": 1,
   "Hours": {
@@ -8359,7 +8483,7 @@ echo $response->getBody();
       "DependantGuid": 1
     }
   },
-  "LastChange": "2026-09-14T13:07:34.7796239Z",
+  "LastChange": "2026-10-12T13:36:30.3585171Z",
   "Corrections": [
     {
       "EmployeeID": 1,
@@ -8367,13 +8491,13 @@ echo $response->getBody();
       "AbsenceDefinition": "AbsenceDefinition",
       "DateFrom": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DateTo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "WorkingDaysNo": 1,
       "Hours": {
@@ -8395,7 +8519,7 @@ echo $response->getBody();
           "DependantGuid": 1
         }
       },
-      "LastChange": "2026-09-14T13:07:34.7796442Z",
+      "LastChange": "2026-10-12T13:36:30.3585315Z",
       "ID": 1,
       "Features": [
         {
@@ -8416,7 +8540,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "Y8H0ucDZWRq4rg==",
+          "Base64": "4M/IjHf8etnPrQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -8450,7 +8574,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "MSiccjqubHe7kw==",
+      "Base64": "8e1sS1WvHMVqMA==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -8509,13 +8633,13 @@ echo $response->getBody();
   "AbsenceDefinition": "AbsenceDefinition",
   "DateFrom": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DateTo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "WorkingDaysNo": 1,
   "Hours": {
@@ -8537,7 +8661,7 @@ echo $response->getBody();
       "DependantGuid": 1
     }
   },
-  "LastChange": "2026-09-14T13:07:34.7884931Z",
+  "LastChange": "2026-10-12T13:36:30.3657744Z",
   "ID": 1,
   "Features": [
     {
@@ -8558,7 +8682,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "owFj00nRslmIJQ==",
+      "Base64": "LjJytewvl496JQ==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -8613,7 +8737,7 @@ echo $response->getBody();
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
   "ID": 1,
-  "Guid": "e735f829-4e72-4b21-95b6-b150e64e932c"
+  "Guid": "8dea59cf-b0fc-4222-a77f-b2aacfd6740b"
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
 <h5>Schema (JSON) for class <b>UpdateResult</b>:</h5>
@@ -8661,8 +8785,8 @@ echo $response->getBody();
   ],
   "Date": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "EmployeeID": 1,
   "EmployeeCode": "EmployeeCode",
@@ -8689,13 +8813,13 @@ echo $response->getBody();
       "Period": {
         "DateFrom": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DateTo": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         }
       },
       "DaysLimit": 1,
@@ -8727,7 +8851,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "q8heokt8H0EN3w==",
+          "Base64": "Hx451NJXa9JsrA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -8777,13 +8901,13 @@ echo $response->getBody();
   "<b>Period</b>": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
@@ -8796,19 +8920,19 @@ echo $response->getBody();
     {
       "DayType": "Pracy",
       "Absence": {
-        "Guid": "05563fb5-1b97-48d2-80c0-c3f8965ae03c",
+        "Guid": "ab72e868-b2dc-4343-a461-9116d06b2a46",
         "IDPracownika": 1,
         "KodPracownika": "KodPracownika",
         "Definicja": "Definicja",
         "DataOd": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DataDo": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DniPracy": 1,
         "Godziny": {
@@ -8829,7 +8953,7 @@ echo $response->getBody();
             "IdCzlonkaRodziny": 1
           }
         },
-        "LastChange": "2026-09-14T13:07:34.8177031Z",
+        "LastChange": "2026-10-12T13:36:30.3912708Z",
         "Korekty": [
           {
             "IDPracownika": 1,
@@ -8837,13 +8961,13 @@ echo $response->getBody();
             "Definicja": "Definicja",
             "DataOd": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 9,
-              "<b>Day</b>": 14
+              "<b>Month</b>": 10,
+              "<b>Day</b>": 12
             },
             "DataDo": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 9,
-              "<b>Day</b>": 14
+              "<b>Month</b>": 10,
+              "<b>Day</b>": 12
             },
             "DniPracy": 1,
             "Godziny": {
@@ -8864,7 +8988,7 @@ echo $response->getBody();
                 "IdCzlonkaRodziny": 1
               }
             },
-            "LastChange": "2026-09-14T13:07:34.8177210Z",
+            "LastChange": "2026-10-12T13:36:30.3912890Z",
             "ID": 1,
             "AttachmentsCount": 1,
             "TableName": "TableName",
@@ -8888,7 +9012,7 @@ echo $response->getBody();
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "F2TcrF0o3vu7fA==",
+                "Base64": "QK4DVNRbjOxlmQ==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -8925,7 +9049,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "P0HReemCQBtwaw==",
+            "Base64": "4gizyNQoG2Blyw==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -8942,8 +9066,8 @@ echo $response->getBody();
         "EmployeeCode": "EmployeeCode",
         "<b>Date</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DayStatus": "Kalendarz",
         "Hours": {
@@ -8987,7 +9111,7 @@ echo $response->getBody();
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "cMHbRPgLDOYymQ==",
+                "Base64": "/MVXz4C1stTpLA==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -9023,7 +9147,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "mg+DnTq0s3L2oQ==",
+            "Base64": "ASIonxQBvf1KfQ==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -9071,18 +9195,18 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "7994bb2e-2259-45fa-9216-21e45291553d",
+  "Guid": "e961848d-6e60-4ca0-b34a-2603ac81211b",
   "EmployeeID": 1,
   "EmployeeCode": "EmployeeCode",
   "DateFrom": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DateTo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "Number": "Number",
   "ID": 1,
@@ -9105,7 +9229,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "jj+49BDIyrGjHg==",
+      "Base64": "fjd8Sju4+Qk1cw==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -9163,8 +9287,8 @@ echo $response->getBody();
   ],
   "Date": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "EmployeeID": 1,
   "EmployeeCode": "EmployeeCode"
@@ -9176,18 +9300,18 @@ echo $response->getBody();
 <div class='code-container'><pre class='code-block'>{
   "Data": [
     {
-      "Guid": "8018bf58-ee1f-4a00-9336-04d27d09974c",
+      "Guid": "a608fdb0-a88b-4ad2-9721-c135284ade6e",
       "EmployeeID": 1,
       "EmployeeCode": "EmployeeCode",
       "DateFrom": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DateTo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "Number": "Number",
       "ID": 1,
@@ -9213,7 +9337,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "gPHtEf/VQaTkcw==",
+          "Base64": "FyzwHAPtySZilw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -9266,13 +9390,13 @@ echo $response->getBody();
   "<b>Period</b>": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "EventDefinitionCode": "EventDefinitionCode"
@@ -9292,8 +9416,8 @@ echo $response->getBody();
       "Uwagi": "Uwagi",
       "Date": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "Time": "8:00"
     }
@@ -9337,8 +9461,8 @@ echo $response->getBody();
   "EmployeeCode": "EmployeeCode",
   "<b>Date</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -9352,32 +9476,32 @@ echo $response->getBody();
       "EmployeeCode": "EmployeeCode",
       "Date": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "RemoteWorkForDay": false,
       "RemoteWorkRequest": {
         "Definicja": "Definicja",
         "DataZlozenia": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DataDecyzji": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "Okres": {
           "<b>DataOd</b>": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           },
           "<b>DataDo</b>": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           }
         }
       }
@@ -9431,21 +9555,21 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "a244b5b4-57a0-4d11-85a5-636e52eacbf9",
+  "Guid": "5a5158ed-6e34-46c9-8c6d-00141fdaf5d1",
   "<b>DataOperacji</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "<b>Data</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DataDostawy": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "<b>Definicja</b>": "Definicja",
   "<b>Magazyn</b>": "Magazyn",
@@ -9497,8 +9621,8 @@ echo $response->getBody();
         {
           "Data": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           },
           "<b>Symbol</b>": "Symbol",
           "<b>Wymiar</b>": "Wymiar",
@@ -9531,7 +9655,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "RBNVWXrazfpPuQ==",
+              "Base64": "whcHleRTi3OMSw==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -9564,7 +9688,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "CP1PhutPisACaQ==",
+          "Base64": "JsYUI5mdMK3+/Q==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -9589,16 +9713,16 @@ echo $response->getBody();
     "Numer": "Numer",
     "DataOtrzymania": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "Korekta": {
     "<b>NumerZrodlowy</b>": "NumerZrodlowy",
     "DataDokumentu": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "KorektaVAT": false,
@@ -9632,13 +9756,13 @@ echo $response->getBody();
     "<b>DataKSeF</b>": null,
     "DataPrzeslaniaKSeF": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "DataPrzyjeciaKSeF": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "Link": "Link",
     "ContentXML": "ContentXML"
@@ -9704,7 +9828,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "Xf3VX4L/2NA0BA==",
+      "Base64": "vRaTlmjcregT8Q==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -9722,13 +9846,13 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "c704fc0a-89e9-4fe1-8da7-5d5cc569c0c5",
+  "Guid": "c7231303-38e0-4c5e-b5ba-c69f17f84796",
   "NumerDokumentu": "NumerDokumentu",
   "Kurs": 1.0,
   "DataWystawienia": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "WartoscBruttoCy": {
     "<b>Value</b>": 1.0,
@@ -9792,7 +9916,7 @@ echo $response->getBody();
     "Extension": "Extension",
     "Link": "Link",
     "SubType": "None",
-    "Base64": "ScVTtAehgbLmrw==",
+    "Base64": "+nLwbURfKgEMqw==",
     "Features": [
       {
         "<b>Name</b>": "Name",
@@ -9836,7 +9960,7 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "9038e9ae-8283-49d5-b133-0fe43cfe0baf",
+  "Guid": "c18ec4c0-3971-4026-b2ab-ac904b490d28",
   "<b>Kod</b>": "Kod",
   "<b>Nazwa</b>": "Nazwa",
   "<b>TypTowaru</b>": "Towar",
@@ -9871,7 +9995,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "dbrnjhGlbuHo5w==",
+      "Base64": "g55Yoh2GgQZsdw==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -9939,8 +10063,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -9954,7 +10078,7 @@ echo $response->getBody();
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "128dc158-41d9-4f5e-81ef-c61009ac2dae",
+      "Guid": "c0bed985-6590-469e-9402-a48d8595746c",
       "<b>Kod</b>": "Kod",
       "<b>Nazwa</b>": "Nazwa",
       "<b>TypTowaru</b>": "Towar",
@@ -9992,7 +10116,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "KYXHLM+iF9aTfg==",
+          "Base64": "2NX3VV1rb7dhXw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10054,8 +10178,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -10069,21 +10193,21 @@ echo $response->getBody();
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "746f6ed2-1d99-42f1-a31d-d23f42036963",
+      "Guid": "6973df79-6e07-4285-b49d-f237237366e0",
       "<b>DataOperacji</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "<b>Data</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DataDostawy": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "<b>Definicja</b>": "Definicja",
       "<b>Magazyn</b>": "Magazyn",
@@ -10135,8 +10259,8 @@ echo $response->getBody();
             {
               "Data": {
                 "<b>Year</b>": 2026,
-                "<b>Month</b>": 9,
-                "<b>Day</b>": 14
+                "<b>Month</b>": 10,
+                "<b>Day</b>": 12
               },
               "<b>Symbol</b>": "Symbol",
               "<b>Wymiar</b>": "Wymiar",
@@ -10172,7 +10296,7 @@ echo $response->getBody();
                   "Extension": "Extension",
                   "Link": "Link",
                   "SubType": "None",
-                  "Base64": "wcOJNaqaMSn7fw==",
+                  "Base64": "+aS9TQv5/o7PWA==",
                   "Features": [
                     {
                       "<b>Name</b>": "Name",
@@ -10208,7 +10332,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "TQMDczhNaD4KCg==",
+              "Base64": "ShP2Ye6XL0Y/OQ==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -10233,16 +10357,16 @@ echo $response->getBody();
         "Numer": "Numer",
         "DataOtrzymania": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         }
       },
       "Korekta": {
         "<b>NumerZrodlowy</b>": "NumerZrodlowy",
         "DataDokumentu": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         }
       },
       "KorektaVAT": false,
@@ -10276,13 +10400,13 @@ echo $response->getBody();
         "<b>DataKSeF</b>": null,
         "DataPrzeslaniaKSeF": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DataPrzyjeciaKSeF": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "Link": "Link",
         "ContentXML": "ContentXML"
@@ -10351,7 +10475,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "7LCUgoDSYAjPNw==",
+          "Base64": "K9h9HDV1LpXx3g==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10412,8 +10536,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -10495,7 +10619,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "uNR24dgHNqkpHA==",
+          "Base64": "UTJvgXUZjpkyQg==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10562,26 +10686,26 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "8845fd85-6bf5-41e9-b584-7c61e468952b",
+  "Guid": "1410af92-91b9-4ae5-9f65-37d9cef37064",
   "DataEwidencji": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DataWplywu": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DataWystawienia": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DataOperacji": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DaneKontrahenta": {
     "Nazwa": "Nazwa",
@@ -10614,15 +10738,15 @@ echo $response->getBody();
     "KodDefinicjiPOV": "KodDefinicjiPOV",
     "DataPowstania": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "Podmiot": {
     "TypPodmiotu": "NieOkreślony",
     "ID": 1,
     "Kod": "Kod",
-    "Guid": "b0f73784-913a-4f2e-a75e-b0ace353f591",
+    "Guid": "e48cc20b-bdce-4b1b-8e84-7d093d9e30b1",
     "ExternalID": "ExternalID",
     "EuVAT": "EuVAT",
     "Miejscowosc": "Miejscowosc"
@@ -10660,7 +10784,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "LqqyJ/gxeYib7A==",
+          "Base64": "27A8EDEHg9BrEA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10675,12 +10799,12 @@ echo $response->getBody();
   ],
   "Platnosci": [
     {
-      "Guid": "52060f1d-8b59-4ba7-b088-52639c7d48ab",
+      "Guid": "f1af20eb-a71e-46a2-8797-99fc7eddd12d",
       "Podmiot": {
         "TypPodmiotu": "NieOkreślony",
         "ID": 1,
         "Kod": "Kod",
-        "Guid": "bd5f349b-c9d9-4dd8-be35-48f462edeb4b",
+        "Guid": "def715dc-f479-481e-befe-55702dd38733",
         "ExternalID": "ExternalID",
         "EuVAT": "EuVAT",
         "Miejscowosc": "Miejscowosc"
@@ -10691,8 +10815,8 @@ echo $response->getBody();
       "Opis": "Opis",
       "Termin": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "TerminDni": 1,
       "Kwota": {
@@ -10726,7 +10850,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "FNWM9HhCfl2WuQ==",
+          "Base64": "y6f1KHl2X62NNw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10743,8 +10867,8 @@ echo $response->getBody();
     {
       "Data": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "Symbol": "Symbol",
       "Wymiar": "Wymiar",
@@ -10777,7 +10901,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "rsqyGf3Tlbi++g==",
+          "Base64": "Ob0hDqygHfkIEw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10792,20 +10916,20 @@ echo $response->getBody();
   ],
   "ZadaniaCRM": [
     {
-      "Guid": "cf3d53a0-e368-4f00-9ae2-aa56017e040b",
+      "Guid": "79b65c14-6346-4cf0-afbc-35123813658b",
       "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
       "Numer": "Numer",
       "<b>Nazwa</b>": "Nazwa",
       "Opis": "Opis",
       "<b>DataOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "<b>DataDo</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "ProwadzacyKod": "ProwadzacyKod",
       "KontrahentKod": "KontrahentKod",
@@ -10831,7 +10955,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "QwfIC1HrzJLjxw==",
+          "Base64": "8fqlDuCVMXxqAQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10849,13 +10973,13 @@ echo $response->getBody();
     "<b>DataKSeF</b>": null,
     "DataPrzeslaniaKSeF": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "DataPrzyjeciaKSeF": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "Link": "Link",
     "ContentXML": "ContentXML"
@@ -10880,7 +11004,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "i/ssOsc0QHS8uQ==",
+      "Base64": "NYM8ikrDpwdTWQ==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -10898,7 +11022,7 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "dea6dbaf-05d2-4861-a2e9-f46c0ef95c65",
+  "Guid": "b4bbac6a-c0fd-459e-bd65-b14b5a56fc02",
   "NumerDokumentu": "NumerDokumentu",
   "NumerDodatkowy": "NumerDodatkowy",
   "WartoscCy": {
@@ -10911,20 +11035,20 @@ echo $response->getBody();
   },
   "ZadaniaCRM": [
     {
-      "Guid": "1d0b33a1-2b07-405f-aab6-056f05d28429",
+      "Guid": "3aed8467-5d8e-4194-b760-1aa65dd32612",
       "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
       "Numer": "Numer",
       "<b>Nazwa</b>": "Nazwa",
       "Opis": "Opis",
       "<b>DataOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "<b>DataDo</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "ProwadzacyKod": "ProwadzacyKod",
       "KontrahentKod": "KontrahentKod",
@@ -10950,7 +11074,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "2kF9G/z2w2bE0g==",
+          "Base64": "HBFRkqNpnqQ5Ng==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10999,26 +11123,26 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "ff37dd48-3602-49da-a13c-4fed5062ec37",
+  "Guid": "70b5fad8-c914-4c44-af3b-325151d116a7",
   "DataEwidencji": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DataWplywu": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DataWystawienia": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DataOperacji": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "DaneKontrahenta": {
     "Nazwa": "Nazwa",
@@ -11051,15 +11175,15 @@ echo $response->getBody();
     "KodDefinicjiPOV": "KodDefinicjiPOV",
     "DataPowstania": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "Podmiot": {
     "TypPodmiotu": "NieOkreślony",
     "ID": 1,
     "Kod": "Kod",
-    "Guid": "cb003080-6588-453c-93c3-bbde63ee7570",
+    "Guid": "db5c45b1-5e7e-453a-a76e-ad3986e15303",
     "ExternalID": "ExternalID",
     "EuVAT": "EuVAT",
     "Miejscowosc": "Miejscowosc"
@@ -11097,7 +11221,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "UVW8ASrZdcpYzA==",
+          "Base64": "WQXEjPVNOLp0oQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11112,12 +11236,12 @@ echo $response->getBody();
   ],
   "Platnosci": [
     {
-      "Guid": "bf557229-b4dc-4fb5-b4e4-31b89eed3f06",
+      "Guid": "3d775255-62b5-4076-8d2e-4d3c44402c11",
       "Podmiot": {
         "TypPodmiotu": "NieOkreślony",
         "ID": 1,
         "Kod": "Kod",
-        "Guid": "a717b0d5-df75-4749-a327-aba522df33ea",
+        "Guid": "3d37eb8b-f7b5-4b85-b1ba-5977c1bda085",
         "ExternalID": "ExternalID",
         "EuVAT": "EuVAT",
         "Miejscowosc": "Miejscowosc"
@@ -11128,8 +11252,8 @@ echo $response->getBody();
       "Opis": "Opis",
       "Termin": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "TerminDni": 1,
       "Kwota": {
@@ -11163,7 +11287,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "GEYuguUaZpDd3w==",
+          "Base64": "ioXlXG8Cwn3Pxw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11180,8 +11304,8 @@ echo $response->getBody();
     {
       "Data": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "Symbol": "Symbol",
       "Wymiar": "Wymiar",
@@ -11214,7 +11338,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "UW17koDQKXthtQ==",
+          "Base64": "WGrkIJfYRH+dpQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11229,20 +11353,20 @@ echo $response->getBody();
   ],
   "ZadaniaCRM": [
     {
-      "Guid": "28cdc970-2e04-4b02-9b6c-3f7d223bc092",
+      "Guid": "28d917c7-bd8b-41be-962b-e7e2d1c82e99",
       "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
       "Numer": "Numer",
       "<b>Nazwa</b>": "Nazwa",
       "Opis": "Opis",
       "<b>DataOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "<b>DataDo</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "ProwadzacyKod": "ProwadzacyKod",
       "KontrahentKod": "KontrahentKod",
@@ -11268,7 +11392,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "tly3ozb8oi7Vkg==",
+          "Base64": "Ghpsejyrd2BOdg==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11286,13 +11410,13 @@ echo $response->getBody();
     "<b>DataKSeF</b>": null,
     "DataPrzeslaniaKSeF": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "DataPrzyjeciaKSeF": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "Link": "Link",
     "ContentXML": "ContentXML"
@@ -11317,7 +11441,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "OKcs2ZiYCdyrpg==",
+      "Base64": "ZEiuAf8t5FGLwQ==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -11335,7 +11459,7 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "712dc197-590e-411f-8693-60b534cbf89a",
+  "Guid": "7f0def8b-504b-4a59-890b-21513d4287fa",
   "NumerDokumentu": "NumerDokumentu",
   "NumerDodatkowy": "NumerDodatkowy",
   "WartoscCy": {
@@ -11348,20 +11472,20 @@ echo $response->getBody();
   },
   "ZadaniaCRM": [
     {
-      "Guid": "c9aa7aa9-865f-4873-8e79-acea592353be",
+      "Guid": "82ea6955-451b-45de-8fb3-f82a4e7dc4d1",
       "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
       "Numer": "Numer",
       "<b>Nazwa</b>": "Nazwa",
       "Opis": "Opis",
       "<b>DataOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "<b>DataDo</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "ProwadzacyKod": "ProwadzacyKod",
       "KontrahentKod": "KontrahentKod",
@@ -11387,7 +11511,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "RtPXI/K0AS/hKQ==",
+          "Base64": "Luj7J+RWZkYOUg==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11447,26 +11571,26 @@ echo $response->getBody();
 <div class='code-container'><pre class='code-block'>{
   "Data": [
     {
-      "Guid": "570bfe50-c39f-41fc-9b29-e917e681f994",
+      "Guid": "0dfbb37d-fff6-4167-acad-15daedf84aae",
       "DataEwidencji": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DataWplywu": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DataWystawienia": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DataOperacji": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "DaneKontrahenta": {
         "Nazwa": "Nazwa",
@@ -11499,15 +11623,15 @@ echo $response->getBody();
         "KodDefinicjiPOV": "KodDefinicjiPOV",
         "DataPowstania": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         }
       },
       "Podmiot": {
         "TypPodmiotu": "NieOkreślony",
         "ID": 1,
         "Kod": "Kod",
-        "Guid": "0e8ddbc4-ddc4-436f-80a9-f475a32daa6c",
+        "Guid": "04605e0f-0c68-424c-94a4-05d8f6173ad8",
         "ExternalID": "ExternalID",
         "EuVAT": "EuVAT",
         "Miejscowosc": "Miejscowosc"
@@ -11548,7 +11672,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "nAlBOhjJwaH6EQ==",
+              "Base64": "eowfqp9vVQYVHw==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -11563,12 +11687,12 @@ echo $response->getBody();
       ],
       "Platnosci": [
         {
-          "Guid": "4f88148f-eee3-4672-8e3c-aa03af15f687",
+          "Guid": "64ca9276-9650-4268-b57f-a6a923ece9bc",
           "Podmiot": {
             "TypPodmiotu": "NieOkreślony",
             "ID": 1,
             "Kod": "Kod",
-            "Guid": "1354b961-9bbd-47ce-999a-3c8e687de8b3",
+            "Guid": "3c866c3a-c1c4-4f21-8605-e681c3bbf2c5",
             "ExternalID": "ExternalID",
             "EuVAT": "EuVAT",
             "Miejscowosc": "Miejscowosc"
@@ -11579,8 +11703,8 @@ echo $response->getBody();
           "Opis": "Opis",
           "Termin": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           },
           "TerminDni": 1,
           "Kwota": {
@@ -11617,7 +11741,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "FIlmrIOLKwiiwA==",
+              "Base64": "WSjufz6lo4pTlA==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -11634,8 +11758,8 @@ echo $response->getBody();
         {
           "Data": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           },
           "Symbol": "Symbol",
           "Wymiar": "Wymiar",
@@ -11671,7 +11795,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "LrPx5ZqCHuV26A==",
+              "Base64": "JmoovXBfBzuaJQ==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -11686,20 +11810,20 @@ echo $response->getBody();
       ],
       "ZadaniaCRM": [
         {
-          "Guid": "a50a7956-98d0-4f07-86af-f7fc3df70564",
+          "Guid": "a2bac58b-38ed-4a70-965a-09f77cbb924b",
           "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
           "Numer": "Numer",
           "<b>Nazwa</b>": "Nazwa",
           "Opis": "Opis",
           "<b>DataOd</b>": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           },
           "<b>DataDo</b>": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 9,
-            "<b>Day</b>": 14
+            "<b>Month</b>": 10,
+            "<b>Day</b>": 12
           },
           "ProwadzacyKod": "ProwadzacyKod",
           "KontrahentKod": "KontrahentKod",
@@ -11728,7 +11852,7 @@ echo $response->getBody();
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "LKGCCpCOIxI87A==",
+              "Base64": "1gUDhI4+eLXvHA==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -11746,13 +11870,13 @@ echo $response->getBody();
         "<b>DataKSeF</b>": null,
         "DataPrzeslaniaKSeF": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "DataPrzyjeciaKSeF": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "Link": "Link",
         "ContentXML": "ContentXML"
@@ -11780,7 +11904,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "/MBLDibGw9hJVA==",
+          "Base64": "qfl12oj2W5yKsg==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11853,16 +11977,16 @@ echo $response->getBody();
       },
       "DataRozliczenia": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "StanRozliczenia": "Nierozliczony",
-      "Guid": "2aef355e-a92d-410d-98c4-1e4ec518e84f",
+      "Guid": "c41c7d41-d2cc-4946-a294-f02027d41765",
       "Podmiot": {
         "TypPodmiotu": "NieOkreślony",
         "ID": 1,
         "Kod": "Kod",
-        "Guid": "12ab6c09-d69d-4fc1-9e99-094d3b3324c5",
+        "Guid": "94354d2b-8ce6-436e-a27d-7b6770dff3d9",
         "ExternalID": "ExternalID",
         "EuVAT": "EuVAT",
         "Miejscowosc": "Miejscowosc"
@@ -11873,8 +11997,8 @@ echo $response->getBody();
       "Opis": "Opis",
       "Termin": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "TerminDni": 1,
       "Kwota": {
@@ -11911,7 +12035,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "VMwbTAn07vxfeg==",
+          "Base64": "paVOaeBqP1tttg==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11958,31 +12082,31 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "826b2e34-9ce4-43f9-9f63-3de96dc6cd1b",
+  "Guid": "7312bf0a-5134-4dbc-851f-a37b03ce2f27",
   "<b>Definicja</b>": "Definicja",
   "StanWprowadzony": false,
   "<b>DataWplywu</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "<b>DataEwidencji</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "Numer": "Numer",
   "NumerDodatkowy": "NumerDodatkowy",
   "<b>NumerDokumentu</b>": "NumerDokumentu",
   "<b>DataDokumentu</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "<b>DataOperacji</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "Opis": "Opis",
   "Wartosc": {
@@ -11993,7 +12117,7 @@ echo $response->getBody();
     "TypPodmiotu": "NieOkreślony",
     "ID": 1,
     "Kod": "Kod",
-    "Guid": "335089c8-5567-46ed-bda1-864d28e6b928",
+    "Guid": "3be73151-0a6c-4eab-85fb-6ace9ae1ef39",
     "ExternalID": "ExternalID",
     "EuVAT": "EuVAT",
     "Miejscowosc": "Miejscowosc"
@@ -12002,8 +12126,8 @@ echo $response->getBody();
     {
       "Data": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "Symbol": "Symbol",
       "Wymiar": "Wymiar",
@@ -12036,7 +12160,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "Su/RebuPQvx6wA==",
+          "Base64": "EiP/WLUdrS5KFw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12051,12 +12175,12 @@ echo $response->getBody();
   ],
   "Platnosci": [
     {
-      "Guid": "833719ed-73eb-4332-aa1a-e63d8d56aced",
+      "Guid": "f32c0691-e9fd-4389-819d-6662f611da07",
       "Podmiot": {
         "TypPodmiotu": "NieOkreślony",
         "ID": 1,
         "Kod": "Kod",
-        "Guid": "650e77b1-fa47-411f-950d-276275fab389",
+        "Guid": "cf60a7ff-df26-47a7-98ef-0aba42da43b3",
         "ExternalID": "ExternalID",
         "EuVAT": "EuVAT",
         "Miejscowosc": "Miejscowosc"
@@ -12067,8 +12191,8 @@ echo $response->getBody();
       "Opis": "Opis",
       "Termin": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "TerminDni": 1,
       "Kwota": {
@@ -12102,7 +12226,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "uad5wrN9JbCqBA==",
+          "Base64": "ch8sYYG2YO654A==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12117,20 +12241,20 @@ echo $response->getBody();
   ],
   "ZadaniaCRM": [
     {
-      "Guid": "4afc16b9-e05c-4077-8692-b4c2a34f7019",
+      "Guid": "e8ef0a18-0f31-410a-8638-26a4173a7aa7",
       "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
       "Numer": "Numer",
       "<b>Nazwa</b>": "Nazwa",
       "Opis": "Opis",
       "<b>DataOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "<b>DataDo</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "ProwadzacyKod": "ProwadzacyKod",
       "KontrahentKod": "KontrahentKod",
@@ -12156,7 +12280,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "0y9g13NKoeTLkQ==",
+          "Base64": "W+4dqjFEPw6sQA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12189,7 +12313,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "daql82AjK+15cA==",
+      "Base64": "rG4MK4h4sw7uyQ==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -12243,7 +12367,7 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "716521b3-009a-4563-87ca-6fc64b757f3e",
+  "Guid": "bf79705f-83a4-436d-9bd8-16b52f3e16a3",
   "<b>Symbol</b>": "Symbol",
   "<b>RodzajMatrycy</b>": "Zakup",
   "Blokada": false,
@@ -12279,7 +12403,7 @@ echo $response->getBody();
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "LnhpTBpeAa/dEg==",
+        "Base64": "HFWUwo6VbpcQjw==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -12338,7 +12462,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "taT2bMDLh7oV1g==",
+          "Base64": "rb+DPsgITdrKaQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12371,7 +12495,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "DFEmOD2PxhxlVQ==",
+      "Base64": "JdV0O2teXOGN+w==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -12425,7 +12549,7 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "36dd94ed-b653-4aff-8482-467beab0b215",
+  "Guid": "d8e1dba7-d1ca-4413-ae46-74eb79349b07",
   "<b>Symbol</b>": "Symbol",
   "OpisMatryca": "OpisMatryca",
   "<b>RodzajMatrycy</b>": "Wplata",
@@ -12471,7 +12595,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "1fNl+fVRONG8Ng==",
+          "Base64": "j9b78n0STB3haw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12504,7 +12628,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "BPWNo8KrajhkgQ==",
+      "Base64": "ATeoTmgREJ9XEQ==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -12558,14 +12682,14 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "01d9b395-7913-4b01-a305-31e6bb5e04da",
+  "Guid": "08d75226-0970-4b9a-b296-f4bf7f6f4d9b",
   "IdPaczki": 1,
   "<b>RodzajPrzelewu</b>": "Standardowy",
   "<b>Definicja</b>": "Definicja",
   "<b>DataPrzelewu</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "Seria": "Seria",
   "Wariant": "Standardowy",
@@ -12597,13 +12721,13 @@ echo $response->getBody();
   "NumerDokumentu": "NumerDokumentu",
   "MppOkresOd": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "MppOkresDo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "OpisPrzelewu": "OpisPrzelewu",
   "OnlineMgsId": "OnlineMgsId",
@@ -12630,7 +12754,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "dMSW2lDqVYUNLw==",
+      "Base64": "pc4JNGuSfLma5g==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -12688,7 +12812,7 @@ echo $response->getBody();
   "IDs": [
     1
   ],
-  "Guid": "22107c70-fee4-41f3-b991-1b4649c24de1",
+  "Guid": "a091cf99-cc0a-445b-aaaa-5f168d531fa0",
   "NumerPrzelewu": "NumerPrzelewu"
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -12698,14 +12822,14 @@ echo $response->getBody();
 <div class='code-container'><pre class='code-block'>{
   "Data": [
     {
-      "Guid": "8bb153dc-a4b6-45d3-a76e-680f2e2cc0f8",
+      "Guid": "9a420de5-74fc-41d5-91da-a7389477d4bf",
       "IdPaczki": 1,
       "<b>RodzajPrzelewu</b>": "Standardowy",
       "<b>Definicja</b>": "Definicja",
       "<b>DataPrzelewu</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "Seria": "Seria",
       "Wariant": "Standardowy",
@@ -12737,13 +12861,13 @@ echo $response->getBody();
       "NumerDokumentu": "NumerDokumentu",
       "MppOkresOd": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "MppOkresDo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "OpisPrzelewu": "OpisPrzelewu",
       "OnlineMgsId": "OnlineMgsId",
@@ -12773,7 +12897,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "cQb/49keOsYGdg==",
+          "Base64": "2KgLg9k5izQO/A==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12826,13 +12950,13 @@ echo $response->getBody();
   "Okres": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "SymbolDefinicjiPaczki": "SymbolDefinicjiPaczki",
@@ -12845,7 +12969,7 @@ echo $response->getBody();
 <div class='code-container'><pre class='code-block'>{
   "Data": [
     {
-      "Guid": "5f423586-bf57-4a52-953e-aa1a5e6701c6",
+      "Guid": "dd5ed5ab-aa57-4420-b908-2d1033dbda0b",
       "Definicja": {
         "Symbol": "Symbol",
         "Nazwa": "Nazwa"
@@ -12853,8 +12977,8 @@ echo $response->getBody();
       "NumerPaczki": "NumerPaczki",
       "Data": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "Status": "Planowana",
       "Nazwa": "Nazwa",
@@ -12890,7 +13014,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "KvfGSr8q5uT/QA==",
+            "Base64": "MNLLnjwyityNzg==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -12926,7 +13050,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "RFY8V4wAb8nzkw==",
+          "Base64": "8F8RnK9lHqrslQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12973,20 +13097,20 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>[
   {
-    "Guid": "7c51d7d4-332d-4ce4-b9fb-a23be01f56bb",
+    "Guid": "261dd2fd-964f-4a0c-98ad-99cf0e6d85d9",
     "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
     "Numer": "Numer",
     "<b>Nazwa</b>": "Nazwa",
     "Opis": "Opis",
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "ProwadzacyKod": "ProwadzacyKod",
     "KontrahentKod": "KontrahentKod",
@@ -13012,7 +13136,7 @@ echo $response->getBody();
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "NxhcaASgkX2RrQ==",
+        "Base64": "4+pf9vMPiXqSlQ==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -13033,20 +13157,20 @@ echo $response->getBody();
   "TestMode": false,
   "Data": [
     {
-      "Guid": "9b7d5a1e-4f15-4cd3-a6a3-59db841e3d87",
+      "Guid": "ca218871-a091-474c-9a2a-a7865ffe3a38",
       "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
       "Numer": "Numer",
       "<b>Nazwa</b>": "Nazwa",
       "Opis": "Opis",
       "<b>DataOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "<b>DataDo</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "ProwadzacyKod": "ProwadzacyKod",
       "KontrahentKod": "KontrahentKod",
@@ -13072,7 +13196,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "gQTQJadB6jTM9Q==",
+          "Base64": "sRle7yRSrmzFkQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -13143,7 +13267,7 @@ echo $response->getBody();
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "tmxS61qHACRydQ==",
+      "Base64": "J5WW1BDY86EDkg==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -13217,17 +13341,17 @@ echo $response->getBody();
     "<b>ZrodloDodatku</b>": "Pracownik",
     "IdZrodla": 1,
     "KodPracownika": "KodPracownika",
-    "Guid": "52486886-babf-4f36-8398-14ee54ef6634",
+    "Guid": "b2ab715f-b839-4f1e-ad0c-075f98996116",
     "IDExternal": 1,
     "<b>DataAktualnosci</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>OkresOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "<b>OkresDo</b>": null,
     "<b>CzyAktualizowac</b>": false,
@@ -13267,7 +13391,7 @@ echo $response->getBody();
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "JYe8clCALCMJfA==",
+        "Base64": "1HZ6unUgkwAKzg==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -13290,7 +13414,7 @@ echo $response->getBody();
     {
       "IDExternal": 1,
       "ID": 1,
-      "Guid": "a3a48a87-5cd9-4f0b-b392-df578ef204fa",
+      "Guid": "8fb5a23e-cc45-4cfd-9bf1-df5633587363",
       "DocumentNumber": "DocumentNumber"
     }
   ],
@@ -13336,8 +13460,8 @@ echo $response->getBody();
     "<b>DefinicjaNazwaSlownika</b>": "DefinicjaNazwaSlownika",
     "<b>DataAktualizacji</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "Aktualizuj": false,
     "PodzielnikPozycje": [
@@ -13364,7 +13488,7 @@ echo $response->getBody();
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "NP3YZSutmqc+xA==",
+            "Base64": "wAzo8TozCLan6w==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -13397,7 +13521,7 @@ echo $response->getBody();
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "CQCvnxp2VfqNFw==",
+        "Base64": "2YJXZ54htZ2QhQ==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -13421,7 +13545,7 @@ echo $response->getBody();
       "IDExternal": 1,
       "IDSource": 1,
       "ID": 1,
-      "Guid": "f40d877a-d766-4891-90f4-423e93774297",
+      "Guid": "ed0110f7-b151-4a40-930a-27d3c6115e96",
       "Name": "Name"
     }
   ],
@@ -13466,7 +13590,7 @@ echo $response->getBody();
   "Data": [
     {
       "IDExternal": 1,
-      "Guid": "0ab19f2e-44fd-4cb6-9a70-7fda92df9e24",
+      "Guid": "0d401924-d125-43f0-b3e1-5347f5fd7ce2",
       "<b>Aktualizacja</b>": false,
       "IDSource": 1,
       "KodPracownika": "KodPracownika",
@@ -13476,17 +13600,17 @@ echo $response->getBody();
       "Okres": {
         "From": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "To": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         }
       },
-      "Data": "2026-09-14T13:07:35.1102710Z",
-      "Termin": "2026-09-14T13:07:35.1102931Z",
+      "Data": "2026-10-12T13:36:30.6183596Z",
+      "Termin": "2026-10-12T13:36:30.6183709Z",
       "Seria": "Seria",
       "DokumentDodatkowyPozycje": [
         {
@@ -13514,7 +13638,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "/x+0sIa7LxdP4w==",
+          "Base64": "7HvdkCEgVZxAog==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -13538,7 +13662,7 @@ echo $response->getBody();
     {
       "IDExternal": 1,
       "ID": 1,
-      "Guid": "98175e05-4bd2-40b0-b13b-ddeddeb1f308",
+      "Guid": "8443b4c3-1c93-4556-a84e-203342d684ad",
       "DocumentNumber": "DocumentNumber"
     }
   ],
@@ -13592,8 +13716,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -13608,7 +13732,7 @@ echo $response->getBody();
   "Data": [
     {
       "IDExternal": 1,
-      "Guid": "0bca6b54-9d5a-4ad0-b483-16b56b47d48c",
+      "Guid": "ae46d4de-a9bf-4956-a339-54e74f394ef1",
       "<b>Aktualizacja</b>": false,
       "IDSource": 1,
       "KodPracownika": "KodPracownika",
@@ -13618,17 +13742,17 @@ echo $response->getBody();
       "Okres": {
         "From": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         },
         "To": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 9,
-          "<b>Day</b>": 14
+          "<b>Month</b>": 10,
+          "<b>Day</b>": 12
         }
       },
-      "Data": "2026-09-14T13:07:35.1235613Z",
-      "Termin": "2026-09-14T13:07:35.1235664Z",
+      "Data": "2026-10-12T13:36:30.6289991Z",
+      "Termin": "2026-10-12T13:36:30.6290029Z",
       "Seria": "Seria",
       "DokumentDodatkowyPozycje": [
         {
@@ -13659,7 +13783,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "duEyroWrQchMYw==",
+          "Base64": "/o25bZIMkTIxrw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -13723,8 +13847,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -13785,8 +13909,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -13800,21 +13924,21 @@ echo $response->getBody();
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "7059aca2-8546-48a1-a4cf-4b576ca2a324",
+      "Guid": "3f537afe-1eb1-4ab7-adad-66ba64adde03",
       "DataAktualnosci": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "OkresOd": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "OkresDo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "IdDefinicjiUmowy": 1,
       "Numer": "Numer",
@@ -13843,7 +13967,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "mC3FCsJieV6WZw==",
+          "Base64": "8icGQw+338bfJw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -13906,8 +14030,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -13924,17 +14048,17 @@ echo $response->getBody();
       "<b>ZrodloDodatku</b>": "Pracownik",
       "IdZrodla": 1,
       "KodPracownika": "KodPracownika",
-      "Guid": "f6d34c85-fdff-4452-9929-cbe30b3430ec",
+      "Guid": "9db879f3-a39d-45ed-bb72-822c61406778",
       "IDExternal": 1,
       "<b>DataAktualnosci</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "<b>OkresOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 9,
-        "<b>Day</b>": 14
+        "<b>Month</b>": 10,
+        "<b>Day</b>": 12
       },
       "<b>OkresDo</b>": null,
       "<b>CzyAktualizowac</b>": false,
@@ -13977,7 +14101,7 @@ echo $response->getBody();
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "c5d4s1WGCWVNDQ==",
+          "Base64": "JnvFnBGEIj/JrA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -14031,7 +14155,7 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>[
   {
-    "Guid": "2aae7d64-04b6-4714-9ac0-037f3a389c69",
+    "Guid": "cbbe5a0c-f301-472d-ab1a-7c0826285b21",
     "Nazwa": "Nazwa",
     "PozycjaPIT": "PozycjaPIT",
     "Priorytet": 1,
@@ -14058,7 +14182,7 @@ echo $response->getBody();
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "fazrFhgQgufPtg==",
+        "Base64": "LJdUcyBPutx7+Q==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -14095,19 +14219,19 @@ echo $response->getBody();
   "KodPracownika": "KodPracownika",
   "DataWaznosciNaDzien": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   },
   "Termin": {
     "From": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "To": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     }
   },
   "DefBadaniaLekarskiegoNazwa": "DefBadaniaLekarskiegoNazwa",
@@ -14123,8 +14247,8 @@ echo $response->getBody();
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 9,
-    "<b>Day</b>": 14
+    "<b>Month</b>": 10,
+    "<b>Day</b>": 12
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -14133,7 +14257,7 @@ echo $response->getBody();
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>[
   {
-    "Guid": "7962e261-bdb6-4b77-9c7c-89de54c79283",
+    "Guid": "97c4a371-3f10-4eef-8e32-015fdeae36db",
     "KodPracownika": "KodPracownika",
     "IdPracownika": 1,
     "DefinicjaNazwa": "DefinicjaNazwa",
@@ -14141,30 +14265,30 @@ echo $response->getBody();
     "Anulowane": false,
     "DataWykonaniaDoDnia": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "DataWykonaniaDoDniaNastepne": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "DataWykonania": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "DataWaznosci": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "PracaWOkularach": false,
     "KwotaDofinansowania": 1.0,
     "DataDofinansowania": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 9,
-      "<b>Day</b>": 14
+      "<b>Month</b>": 10,
+      "<b>Day</b>": 12
     },
     "Opis": "Opis",
     "ID": 1,
@@ -14190,7 +14314,7 @@ echo $response->getBody();
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "ErplXJqdahv2VA==",
+        "Base64": "f3HDSCUVaV6xPQ==",
         "Features": [
           {
             "<b>Name</b>": "Name",
