@@ -6,6 +6,7 @@
 
 | Produkt                | Wersja dll     | Data testu       | Status |
 |------------------------|----------------|------------------|--------|
+| AltOne.KartyCzasuPracy | 2606.0.1.30003 | 02.11.2026 16:12 | ✅      |
 | AltOne.KartyCzasuPracy | 2606.0.1.30001 | 12.10.2026 15:33 | ✅      |
 
 ### enova365 2606.2.3

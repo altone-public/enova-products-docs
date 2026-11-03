@@ -671,6 +671,9 @@ body.dark {
         <li><strong>Currency</strong> - monetary values: <code>"Value": "1234.56 PLN"</code></li>
         <li><strong>Percent</strong> - percentages: <code>"Value": "15.5"</code></li>
         <li><strong>Reference</strong> - object references: <code>"Value": "TableName:123"</code></li>
+        <li><strong>Tree</strong> - a single hierarchical path: <code>"Value": "Narciarstwo\\Buty"</code></li>
+        <li><strong>Array</strong> - collection of literal strings: <code>"Value": ["1", "2", "3"]</code></li>
+        <li><strong>ArrayOfTrees</strong> - collection of tree paths as a JSON array of strings: <code>"Value": ["1", "2", "3"]</code></li>
     </ul>
 
     <p>
@@ -678,6 +681,108 @@ body.dark {
         both typed values (e.g., <code>123</code>) and string representations (e.g., <code>"123"</code>). 
         Requests are deserialized using System.Text.Json. Both <code>Name</code> and <code>Value</code>
         must be present; an explicit <code>"Value": null</code> is allowed, while omitting <code>Value</code> is an error.
+    </p>
+
+    <h3>Tree - A Single Hierarchical Path</h3>
+    <p>For the <code>Asortyment</code> feature, include this entry in the object's <code>Features</code> collection when writing:</p>
+    <div class="code-container">
+        <pre class="code-block">
+{ "Name": "Asortyment", "Value": "Narciarstwo\\Buty" }
+        </pre>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <button class="expand-btn" onclick="toggleExpand(this)">Expand</button>
+    </div>
+    <p>The same feature in a read response:</p>
+    <div class="code-container">
+        <pre class="code-block">
+{ "Name": "Asortyment", "Value": "Narciarstwo\\Buty", "Type": "Tree" }
+        </pre>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <button class="expand-btn" onclick="toggleExpand(this)">Expand</button>
+    </div>
+    <p>
+        Writing also accepts Soneta's full path: <code>"Value": "\\Narciarstwo\\Buty\\"</code>.
+        Reading removes only leading and trailing backslashes, preserving internal levels and spaces.
+        Escape each backslash as <code>\\</code> in JSON. Send <code>null</code> or <code>""</code> to clear the selection;
+        reading then returns <code>""</code>. Arrays, objects, numbers and booleans are rejected.
+        This also applies to historical features. A setter algorithm still receives a single string.
+    </p>
+
+    <h3>Array - Collections of Strings</h3>
+    <p>
+        A multi-value feature of type <code>Array</code> uses a JSON array of strings.
+        For a feature named <code>Cecha wielow</code>, include this entry in the object's <code>Features</code> collection when writing:
+    </p>
+    <div class="code-container">
+        <pre class="code-block">
+{ "Name": "Cecha wielow", "Value": ["1", "2", "3"] }
+        </pre>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <button class="expand-btn" onclick="toggleExpand(this)">Expand</button>
+    </div>
+    <p>The same feature in a read response:</p>
+    <div class="code-container">
+        <pre class="code-block">
+{ "Name": "Cecha wielow", "Value": ["1", "2", "3"], "Type": "Array" }
+        </pre>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <button class="expand-btn" onclick="toggleExpand(this)">Expand</button>
+    </div>
+    <p>
+        <code>Array</code> preserves literal string contents, including spaces and backslashes.
+        Send string elements such as <code>"1"</code>: <code>[1, 2, 3]</code> and the text <code>"1|2|3"</code> are rejected.
+        The definition determines the type; the feature's name does not change it.
+        Send <code>null</code>, <code>""</code> or <code>[]</code> to clear the collection; reading then returns <code>[]</code>.
+    </p>
+
+    <h3>ArrayOfTrees - Matching Write and Read Formats</h3>
+    <p>
+        An <code>ArrayOfTrees</code> feature uses a flat JSON array of strings in both write requests and read responses.
+        The examples assume an accessible feature named <code>eSklep Kategorie</code> on the target object.
+        Include the following feature in the object's <code>Features</code> collection when writing:
+    </p>
+    <div class="code-container">
+        <pre class="code-block">
+{
+  "Name": "eSklep Kategorie",
+  "Value": ["1", "2", "3"]
+}
+        </pre>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <button class="expand-btn" onclick="toggleExpand(this)">Expand</button>
+    </div>
+    <p>The same feature in a read response:</p>
+    <div class="code-container">
+        <pre class="code-block">
+{
+  "Name": "eSklep Kategorie",
+  "Value": ["1", "2", "3"],
+  "Type": "ArrayOfTrees"
+}
+        </pre>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <button class="expand-btn" onclick="toggleExpand(this)">Expand</button>
+    </div>
+    <p>
+        Reading removes only the leading and trailing backslashes added by Soneta.
+        Internal path separators are preserved, so multi-level paths use the same JSON representation when writing and reading:
+    </p>
+    <div class="code-container">
+        <pre class="code-block">
+{
+  "Name": "eSklep Kategorie",
+  "Value": ["Dom\\Łazienka", "Elektronika\\Telefony"]
+}
+        </pre>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <button class="expand-btn" onclick="toggleExpand(this)">Expand</button>
+    </div>
+    <p>
+        In JSON, <code>\\</code> represents a single backslash. Soneta may sort the collection when saving.
+        Send strings such as <code>"1"</code> inside the array: numeric elements, objects, null elements and the text
+        <code>"1|2|3"</code> are rejected. <code>Type</code> is informational; the feature definition determines the write type.
+        These rules also apply to <code>GetFeatures</code>/<code>UpdateFeatures</code>, attachments and historical features.
+        Historical writes require <code>UpdateDate</code>.
     </p>
 
     <h3>Clearing Feature Values (Default Values)</h3>
@@ -692,6 +797,10 @@ body.dark {
 // Text is cleared to an empty string; a reference is cleared to null
 "String":     ""
 "Reference":  null
+
+// Collections - clear the selection
+"Array":      []
+"ArrayOfTrees": []
 
 // Numeric types - reset to zero
 "Int":        0
@@ -834,6 +943,16 @@ body.dark {
 { "Name": "Manager", "Value": null }           // → null
 { "Name": "Manager", "Value": "" }             // → null
 
+// Clearing string collections (Array) - each alternative clears the selection to []
+{ "Name": "Cecha wielow", "Value": [] }        // → []
+{ "Name": "Cecha wielow", "Value": null }      // → []
+{ "Name": "Cecha wielow", "Value": "" }        // → []
+
+// Clearing tree collections (ArrayOfTrees) - each alternative clears the selection to []
+{ "Name": "eSklep Kategorie", "Value": [] }     // → []
+{ "Name": "eSklep Kategorie", "Value": null }   // → []
+{ "Name": "eSklep Kategorie", "Value": "" }     // → []
+
 // Clearing numeric fields (Int, Decimal, Double) - sets to 0
 { "Name": "Quantity", "Value": null }          // → 0
 { "Name": "Price", "Value": "" }               // → 0.00
@@ -882,7 +1001,8 @@ body.dark {
         <li>Read-only (calculated) features with <code>Get</code>/<code>GetArgs</code> algorithms are returned in responses and skipped when writing. <code>UpdateFeatures</code> reports each skipped feature in <code>Warnings</code> with type <code>ReadOnlyFeature</code></li>
         <li>If all features sent to <code>UpdateFeatures</code> are read-only, the response has <code>Success: true</code>, warnings and a description explaining that no changes were saved</li>
         <li><code>Value</code> is required, including when clearing a field: send an explicit <code>null</code> or <code>""</code>. Omitting a feature from the list leaves its value unchanged</li>
-        <li>The <code>Value</code> can be sent as a typed value or string - both formats are accepted</li>
+        <li>Scalar feature values can be sent as typed values or strings. <code>Array</code> and <code>ArrayOfTrees</code> use JSON arrays of strings</li>
+        <li>For <code>Array</code> and <code>ArrayOfTrees</code>, <code>null</code>, <code>""</code> and <code>[]</code> clear the collection; reading then returns <code>[]</code>. Only for <code>ArrayOfTrees</code>, the array <code>[""]</code> selects the tree root</li>
         <li>Sending <code>null</code> or <code>""</code> clears the field and sets it to its default value</li>
         <li>Default values match the behavior of clearing fields in the enova365 user interface</li>
         <li>String values are cleared to <code>""</code>, references to <code>null</code>, and other types to their zero/empty values</li>
@@ -1031,7 +1151,7 @@ Response time: 97 ms, Status Code: 200 OK
 
 <hr class='section-separator' />
 <h2 id='AltOne_WCF_Core'>AltOne.WebAPI.Core</h2>
-<p class='assembly-version'>Assembly name: AltOne.WCF.Core<br> Version: 2606.0.1.80100-Alfa+484a165d431e3a96981c4d14afda9c20201236a1,<br>Last modified: 2.10.2026 13:47:10</p>
+<p class='assembly-version'>Assembly name: AltOne.WCF.Core<br> Version: 2606.0.1.80102+fd55e59ec068d45db193441a255c7c5de449d3d3,<br>Last modified: 2.11.2026 15:26:54</p>
 <h3 id='AltOne_WCF_Core-Metody'>List of available methods:</h3>
 <h4>Interface: IHandel2</h4>
 <ul class='methods-list'>
@@ -1094,7 +1214,7 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "DokumentHandlowy": {
-    "Guid": "e5c643df-d09b-4b05-bfde-06305d229903",
+    "Guid": "8a498d64-4447-4d98-b7ed-05231d75af10",
     "NumerPelny": "NumerPelny",
     "Definicja": "Definicja",
     "Magazyn": "Magazyn",
@@ -1103,13 +1223,13 @@ Response time: 97 ms, Status Code: 200 OK
     "Opis": "Opis",
     "Data": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "DataOperacji": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "SposobLiczeniaVAT": "OdNetto",
     "DaneKontrahenta": {
@@ -1146,8 +1266,8 @@ Response time: 97 ms, Status Code: 200 OK
       "Numer": "Numer",
       "DataOtrzymania": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       }
     },
     "NettoCy": {
@@ -1188,8 +1308,8 @@ Response time: 97 ms, Status Code: 200 OK
           {
             "Data": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 10,
-              "<b>Day</b>": 12
+              "<b>Month</b>": 11,
+              "<b>Day</b>": 3
             },
             "<b>Symbol</b>": "Symbol",
             "<b>Wymiar</b>": "Wymiar",
@@ -1239,7 +1359,7 @@ Response time: 97 ms, Status Code: 200 OK
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "7gf4looO8q4wyA==",
+        "Base64": "ezdZKPnVrVMu4A==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -1286,8 +1406,8 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "81d8e9c5-503f-47e9-9112-4bc57603f9e5",
-  "DataAktualizacji": "2026-10-12T13:36:28.6440343Z",
+  "Guid": "ec974dcd-0a8e-4cef-8ea5-8862f2a62a38",
+  "DataAktualizacji": "2026-11-03T11:14:00.6537174Z",
   "Aktualizuj": false,
   "PowodAktualizacji": "PowodAktualizacji",
   "Kod": "Kod",
@@ -1308,7 +1428,7 @@ Response time: 97 ms, Status Code: 200 OK
   },
   "Obywatelstwo": "Obywatelstwo",
   "Plec": "Kobieta",
-  "DataUrodzenia": "2026-10-12T13:36:28.6440550Z",
+  "DataUrodzenia": "2026-11-03T11:14:00.6537331Z",
   "MiejsceUrodzenia": "MiejsceUrodzenia",
   "PESEL": "PESEL",
   "NIP": "5242873585",
@@ -1408,13 +1528,13 @@ Response time: 97 ms, Status Code: 200 OK
   "Zatrudnienie": {
     "OkresOd": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "OkresDo": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "TypUmowy": "Brak",
     "Wymiar": {
@@ -1427,13 +1547,13 @@ Response time: 97 ms, Status Code: 200 OK
     "Zwolniony": false,
     "DataRozpPracy": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "DataZawarcia": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "ID": 1,
     "Features": [
@@ -1455,7 +1575,7 @@ Response time: 97 ms, Status Code: 200 OK
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "t0BR7zW5+12Dzg==",
+        "Base64": "wiR67hwFy/Bgxg==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -1496,7 +1616,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "hpwd0l5AM3pYiw==",
+          "Base64": "xbMt6bHK9TRtiw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -1529,7 +1649,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "llJTouEwQzPziA==",
+      "Base64": "TQCrqqEj2evaJw==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -1584,9 +1704,9 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "Kod": "Kod",
   "ID": 1,
-  "Guid": "75a6996b-9aa6-4166-9649-e97936140d3a",
+  "Guid": "d1bec55b-0b17-4d29-b884-039d52c45a3e",
   "CechaExternalID": "CechaExternalID",
-  "DataAktualnosci": "2026-10-12T13:36:28.6512045Z",
+  "DataAktualnosci": "2026-11-03T11:14:00.6604829Z",
   "Zatrudnienie": false,
   "AdresDoKorespondencji": false,
   "Rachunki": false,
@@ -1605,8 +1725,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -1615,8 +1735,8 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "PracownikDTO": {
-    "Guid": "b87cd3a6-fc11-4f12-8f3d-5f3e520e7b27",
-    "DataAktualizacji": "2026-10-12T13:36:28.6725639Z",
+    "Guid": "7ac44e31-6030-4ff3-bfcd-874b05961264",
+    "DataAktualizacji": "2026-11-03T11:14:00.6802612Z",
     "Aktualizuj": false,
     "PowodAktualizacji": "PowodAktualizacji",
     "Kod": "Kod",
@@ -1637,7 +1757,7 @@ Response time: 97 ms, Status Code: 200 OK
     },
     "Obywatelstwo": "Obywatelstwo",
     "Plec": "Kobieta",
-    "DataUrodzenia": "2026-10-12T13:36:28.6725851Z",
+    "DataUrodzenia": "2026-11-03T11:14:00.6802925Z",
     "MiejsceUrodzenia": "MiejsceUrodzenia",
     "PESEL": "PESEL",
     "NIP": "5242873585",
@@ -1737,13 +1857,13 @@ Response time: 97 ms, Status Code: 200 OK
     "Zatrudnienie": {
       "OkresOd": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "OkresDo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "TypUmowy": "Brak",
       "Wymiar": {
@@ -1756,13 +1876,13 @@ Response time: 97 ms, Status Code: 200 OK
       "Zwolniony": false,
       "DataRozpPracy": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DataZawarcia": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "ID": 1,
       "AttachmentsCount": 1,
@@ -1787,7 +1907,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "e1fZbu1PEIuYmQ==",
+          "Base64": "LzJ6957ZYbb6ww==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -1831,7 +1951,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "MyljBClptbZbEQ==",
+            "Base64": "J+UQ+VjfbdjHxQ==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -1867,7 +1987,7 @@ Response time: 97 ms, Status Code: 200 OK
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "GMgywkDX1/mpcQ==",
+        "Base64": "6DK5ZsjN77Yqug==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -1915,9 +2035,9 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "Kod": "Kod",
   "ID": 1,
-  "Guid": "a294bc2d-2761-4a6b-b6f2-12b532028970",
+  "Guid": "4e949e07-5d54-4e03-8bc0-75a3ef808567",
   "CechaExternalID": "CechaExternalID",
-  "DataAktualnosci": "2026-10-12T13:36:28.6761730Z",
+  "DataAktualnosci": "2026-11-03T11:14:00.6830564Z",
   "Zatrudnienie": false,
   "AdresDoKorespondencji": false,
   "Rachunki": false,
@@ -1936,8 +2056,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -1951,8 +2071,8 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "c2e66af0-b747-4a94-a85c-3974226101ce",
-      "DataAktualizacji": "2026-10-12T13:36:28.6955387Z",
+      "Guid": "0a9bf81f-a1ad-41b4-bd3a-cf514277db8d",
+      "DataAktualizacji": "2026-11-03T11:14:00.7060307Z",
       "Aktualizuj": false,
       "PowodAktualizacji": "PowodAktualizacji",
       "Kod": "Kod",
@@ -1973,7 +2093,7 @@ Response time: 97 ms, Status Code: 200 OK
       },
       "Obywatelstwo": "Obywatelstwo",
       "Plec": "Kobieta",
-      "DataUrodzenia": "2026-10-12T13:36:28.6955533Z",
+      "DataUrodzenia": "2026-11-03T11:14:00.7060473Z",
       "MiejsceUrodzenia": "MiejsceUrodzenia",
       "PESEL": "PESEL",
       "NIP": "5242873585",
@@ -2073,13 +2193,13 @@ Response time: 97 ms, Status Code: 200 OK
       "Zatrudnienie": {
         "OkresOd": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "OkresDo": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "TypUmowy": "Brak",
         "Wymiar": {
@@ -2092,13 +2212,13 @@ Response time: 97 ms, Status Code: 200 OK
         "Zwolniony": false,
         "DataRozpPracy": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DataZawarcia": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "ID": 1,
         "AttachmentsCount": 1,
@@ -2123,7 +2243,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "E2rg6GJ5DzG8pQ==",
+            "Base64": "Gqk1TsA2MvMNsA==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -2167,7 +2287,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "5OfHu2qAKEWW2A==",
+              "Base64": "Kck1BbW4Pecglg==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -2203,7 +2323,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "9CAY1fIMeRPxCQ==",
+          "Base64": "VTGy/8CMW/AnAw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -2251,9 +2371,9 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "Kod": "Kod",
   "ID": 1,
-  "Guid": "ea190796-9d68-49b2-8239-f85ad7c319a6",
+  "Guid": "aa1818ad-7e88-4321-9af8-2a51bf9c88c7",
   "CechaExternalID": "CechaExternalID",
-  "DataAktualnosci": "2026-10-12T13:36:28.6980893Z",
+  "DataAktualnosci": "2026-11-03T11:14:00.7087409Z",
   "Zatrudnienie": false,
   "AdresDoKorespondencji": false,
   "Rachunki": false,
@@ -2272,8 +2392,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -2287,7 +2407,7 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "2fa50d99-13f1-41bb-b58f-7fdb8662cf21",
+      "Guid": "a49916d3-a85e-4bc9-88f2-eea75e71ec0e",
       "Kod": "Kod",
       "NumerAkt": "NumerAkt",
       "<b>Imie</b>": "Imie",
@@ -2303,13 +2423,13 @@ Response time: 97 ms, Status Code: 200 OK
       "Zatrudnienie": {
         "OkresOd": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "OkresDo": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "JednostkaOrg": "JednostkaOrg"
       },
@@ -2336,7 +2456,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "OJL/u34nVz7Y+w==",
+          "Base64": "6cSoyCajVGk0Qw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -2421,7 +2541,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "oDauuZrPctCfDg==",
+          "Base64": "89U4MmkgWbgNHw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -2489,7 +2609,7 @@ Response time: 97 ms, Status Code: 200 OK
     "LoginSuccess": false,
     "ZalogowanyOperator": "ZalogowanyOperator",
     "InformationError": "InformationError",
-    "RefreshConfig": "2026-10-12T13:36:28.7218052Z"
+    "RefreshConfig": "2026-11-03T11:14:00.7320202Z"
   },
   "Key": "Key",
   "<b>Success</b>": false,
@@ -2614,7 +2734,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "7SiCMDBxTa03tg==",
+            "Base64": "kFKowawRgTT6ug==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -2650,7 +2770,7 @@ Response time: 97 ms, Status Code: 200 OK
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "xzykG3gbTeyc3A==",
+        "Base64": "yxar3XgKAe6Dag==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -2726,7 +2846,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "FInOT30LDMjcaw==",
+          "Base64": "HL6nXxflIHUJDw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -2759,7 +2879,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "qqfpvBzQQFxvHg==",
+      "Base64": "wgJsY8V/fLL+IQ==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -2835,7 +2955,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "/y+wKiKFrPQPeQ==",
+      "Base64": "6ig8CGS8hLoq+Q==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -2890,7 +3010,7 @@ Response time: 97 ms, Status Code: 200 OK
   "Extension": "Extension",
   "Link": "Link",
   "SubType": "None",
-  "Base64": "UgvsKbcoUtXECw==",
+  "Base64": "7v2puA9pTkIX2Q==",
   "Features": [
     {
       "<b>Name</b>": "Name",
@@ -2943,7 +3063,7 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "<b>ID</b>": 1,
   "<b>TableName</b>": "TableName",
-  "DataAktualnosci": "2026-10-12T13:36:28.7517216Z"
+  "DataAktualnosci": "2026-11-03T11:14:00.7668765Z"
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
 <h5>Schema (JSON) for class <b>GetResultFeatures</b>:</h5>
@@ -3053,7 +3173,7 @@ Response time: 97 ms, Status Code: 200 OK
   "EuVAT": "EuVAT",
   "PESEL": "PESEL",
   "Miejscowosc": "Miejscowosc",
-  "Guid": "3201a36f-22b6-4758-8e7d-b76c166ef22f",
+  "Guid": "8b50ea6c-3023-434e-ade0-bedc30998885",
   "CechaExternalID": "CechaExternalID",
   "Powiazania": false,
   "WarunkiHandlowe": false,
@@ -3073,8 +3193,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -3085,7 +3205,7 @@ Response time: 97 ms, Status Code: 200 OK
   "Count": 1,
   "Kontrahenci": [
     {
-      "Guid": "282244df-5d9d-4251-be91-583350b69db8",
+      "Guid": "e991e2a5-8d8a-45b8-bfe2-4e36c71ae9f4",
       "Kod": null,
       "<b>Nazwa</b>": "Nazwa",
       "Blokada": false,
@@ -3205,7 +3325,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "BGribzkLLBBjOA==",
+              "Base64": "Q2Wltu6t25wTNA==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -3260,13 +3380,13 @@ Response time: 97 ms, Status Code: 200 OK
             "RodzajPowiazania": "Inny",
             "DataOd": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 10,
-              "<b>Day</b>": 12
+              "<b>Month</b>": 11,
+              "<b>Day</b>": 3
             },
             "DataDo": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 10,
-              "<b>Day</b>": 12
+              "<b>Month</b>": 11,
+              "<b>Day</b>": 3
             },
             "RolaPodmiotu": "Inna",
             "OdbiorcaPlatnik": false
@@ -3303,7 +3423,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "IvDehT+9rvEKpg==",
+          "Base64": "a29BvDrlF7zwuA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -3355,7 +3475,7 @@ Response time: 97 ms, Status Code: 200 OK
   "EuVAT": "EuVAT",
   "PESEL": "PESEL",
   "Miejscowosc": "Miejscowosc",
-  "Guid": "c677acb6-818f-41ac-a1bb-9cd81b3a883e",
+  "Guid": "ebaf902c-74ff-4983-a287-4c6fcacaef1f",
   "CechaExternalID": "CechaExternalID",
   "Powiazania": false,
   "WarunkiHandlowe": false,
@@ -3375,8 +3495,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -3390,7 +3510,7 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "7d37dac0-a6f1-4df2-88d7-7a32c4aa961a",
+      "Guid": "51d67978-c849-47bd-b49c-b8d47f1ad6d7",
       "Kod": null,
       "<b>Nazwa</b>": "Nazwa",
       "Blokada": false,
@@ -3510,7 +3630,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "ur6Ne10auJEPkA==",
+              "Base64": "IuOgrAKe1Z0eKw==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -3565,13 +3685,13 @@ Response time: 97 ms, Status Code: 200 OK
             "RodzajPowiazania": "Inny",
             "DataOd": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 10,
-              "<b>Day</b>": 12
+              "<b>Month</b>": 11,
+              "<b>Day</b>": 3
             },
             "DataDo": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 10,
-              "<b>Day</b>": 12
+              "<b>Month</b>": 11,
+              "<b>Day</b>": 3
             },
             "RolaPodmiotu": "Inna",
             "OdbiorcaPlatnik": false
@@ -3608,7 +3728,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "kLHdg/6jtrNufA==",
+          "Base64": "FJm3qIPeWOLsKg==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -3655,7 +3775,7 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "538bdd40-2bad-4c85-b06f-92460a779d08",
+  "Guid": "09db6ee9-9e59-4aa4-ab35-bcdf89edf737",
   "Kod": null,
   "<b>Nazwa</b>": "Nazwa",
   "Blokada": false,
@@ -3772,7 +3892,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "YVvLFcONA6UCWA==",
+          "Base64": "XzTrIOLOIZ8Dmg==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -3827,13 +3947,13 @@ Response time: 97 ms, Status Code: 200 OK
         "RodzajPowiazania": "Inny",
         "DataOd": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DataDo": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "RolaPodmiotu": "Inna",
         "OdbiorcaPlatnik": false
@@ -3867,7 +3987,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "joJEmll/tGGbGQ==",
+      "Base64": "LjgGR9BVmfkckA==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -3981,13 +4101,13 @@ Response time: 97 ms, Status Code: 200 OK
   "RodzajPowiazania": "Inny",
   "DataOd": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DataDo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "RolaPodmiotu": "Inna",
   "OdbiorcaPlatnik": false
@@ -4070,7 +4190,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "GljY5wYFRyCCoA==",
+          "Base64": "U4PeLVS2wEHurw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -4153,7 +4273,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "SYp9ywsFTMI1ow==",
+          "Base64": "m9KjDDukMiWReQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -4240,7 +4360,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "kdQeBEu2o5KbKg==",
+          "Base64": "xo+jG5XdBAQCmw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -4320,7 +4440,7 @@ Response time: 97 ms, Status Code: 200 OK
 </div>
 <hr class='section-separator' />
 <h2 id='AltOne_WCF_DataExchangeTable'>AltOne.WebAPI.DataExchangeTable</h2>
-<p class='assembly-version'>Assembly name: AltOne.WCF.DataExchangeTable<br> Version: 2606.0.1.60100+be025e51fbe379a846634a8bf4bd82c7c10eaa70,<br>Last modified: 13.08.2026 14:32:51</p>
+<p class='assembly-version'>Assembly name: AltOne.WCF.DataExchangeTable<br> Version: 2606.0.1.60100+be025e51fbe379a846634a8bf4bd82c7c10eaa70,<br>Last modified: 2.11.2026 15:26:54</p>
 <h3 id='AltOne_WCF_DataExchangeTable-Metody'>List of available methods:</h3>
 <h4>Interface: IDataExchangeTable2</h4>
 <ul class='methods-list'>
@@ -4344,7 +4464,7 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "<b>ExternalSystem</b>": "ExternalSystem",
   "<b>SecurityCode</b>": "SecurityCode",
-  "ShowFutureRecords": "2026-10-12T13:36:28.8611392Z"
+  "ShowFutureRecords": "2026-11-03T11:14:00.8753112Z"
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
 <h5>Schema (JSON) for class <b>GetTablesDataChangeResult</b>:</h5>
@@ -4395,7 +4515,7 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>SourceTable</b>": "SourceTable",
   "<b>ExternalSystem</b>": "ExternalSystem",
   "<b>SecurityCode</b>": "SecurityCode",
-  "ShowFutureRecords": "2026-10-12T13:36:28.8659019Z",
+  "ShowFutureRecords": "2026-11-03T11:14:00.8811164Z",
   "SourceID": 1,
   "HideErrors": false,
   "Extended": false,
@@ -4411,8 +4531,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -4435,8 +4555,8 @@ Response time: 97 ms, Status Code: 200 OK
       "Error": false,
       "Description": "Description",
       "Extended": {
-        "CreationTime": "2026-10-12T13:36:28.8702596Z",
-        "TermToExport": "2026-10-12T13:36:28.8702660Z",
+        "CreationTime": "2026-11-03T11:14:00.8858192Z",
+        "TermToExport": "2026-11-03T11:14:00.8858249Z",
         "Operator": "Operator",
         "Memo": "Memo"
       }
@@ -4572,16 +4692,16 @@ Response time: 97 ms, Status Code: 200 OK
       },
       "DataRozliczenia": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "StanRozliczenia": "Nierozliczony",
-      "Guid": "481b8031-c0d0-4f14-a807-919101f66c6f",
+      "Guid": "a24ba8e4-9550-4cd6-b5a5-c492184e29bd",
       "Podmiot": {
         "TypPodmiotu": "NieOkreślony",
         "ID": 1,
         "Kod": "Kod",
-        "Guid": "6ebd2400-16da-40b2-a3bc-57fe20f5a54e",
+        "Guid": "13d6a43b-8d31-4cb4-9908-6ee7ee0b407e",
         "ExternalID": "ExternalID",
         "EuVAT": "EuVAT",
         "Miejscowosc": "Miejscowosc"
@@ -4592,8 +4712,8 @@ Response time: 97 ms, Status Code: 200 OK
       "Opis": "Opis",
       "Termin": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "TerminDni": 1,
       "Kwota": {
@@ -4629,7 +4749,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "sg5NqqGHhRfbiA==",
+          "Base64": "CPxW6UVfSFOq/Q==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -4683,28 +4803,28 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "Data": {
-    "Guid": "e96fde8f-c6ef-4978-9ad9-0980214ec529",
+    "Guid": "a98aaa96-a6f6-48fc-80b6-71e0255e6f64",
     "Definicja": "Definicja",
     "DataWplywu": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "DataEwidencji": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "Numer": "Numer",
     "Opis": "Opis",
     "Dekrety": [
       {
-        "Guid": "8abedc66-736a-429d-8189-4df860ef4aa5",
+        "Guid": "c4574aed-9ee2-4e80-946c-68869e300687",
         "Numer": "Numer",
         "Data": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "Opis": "Opis",
         "WN": {
@@ -4767,7 +4887,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "5mIKDyeWKqd8zw==",
+            "Base64": "EEMbi3BFQydRRQ==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -4803,7 +4923,7 @@ Response time: 97 ms, Status Code: 200 OK
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "ysjZds1tY8+m/A==",
+        "Base64": "sbg+2bXV31UmHw==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -4837,7 +4957,7 @@ Response time: 97 ms, Status Code: 200 OK
 </div>
 <hr class='section-separator' />
 <h2 id='AltOne_WebAPI_Motivizer'>AltOne.WebAPI.Motivizer</h2>
-<p class='assembly-version'>Assembly name: AltOne.WebAPI.Motivizer<br> Version: 2606.0.1.20000+a4c744e5afa115004d211c3185116be2dbd1bb08,<br>Last modified: 5.08.2026 23:05:28</p>
+<p class='assembly-version'>Assembly name: AltOne.WebAPI.Motivizer<br> Version: 2606.0.1.20000+a4c744e5afa115004d211c3185116be2dbd1bb08,<br>Last modified: 2.11.2026 15:26:54</p>
 <h3 id='AltOne_WebAPI_Motivizer-Metody'>List of available methods:</h3>
 <h4>Interface: IKadryMotivizer</h4>
 <ul class='methods-list'>
@@ -4862,16 +4982,16 @@ Response time: 97 ms, Status Code: 200 OK
   {
     "<b>ZrodloDodatku</b>": "Pracownik",
     "<b>IdZrodla</b>": 1,
-    "Guid": "3261a06e-d489-4875-be81-6c612be3326c",
+    "Guid": "0053b8ae-c85b-440b-a0d5-9719b56b672a",
     "<b>DataAktualnosci</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>OkresOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>OkresDo</b>": null,
     "<b>CzyAktualizowac</b>": false,
@@ -4911,7 +5031,7 @@ Response time: 97 ms, Status Code: 200 OK
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "5CLgfqxN4PYuGw==",
+        "Base64": "IfOdw/qg0g2yAg==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -4967,12 +5087,12 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "Kod": "Kod",
   "ID": 1,
-  "Guid": "9b1ff9ab-85b2-469c-bcba-47c8e602725e",
+  "Guid": "82485100-de6e-4ad1-a122-180d6b769bfc",
   "CechaExternalID": "CechaExternalID",
   "DataAktualnosci": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "IDs": [
     1
@@ -4989,8 +5109,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -5004,7 +5124,7 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "cb1fa9ef-f1ad-4351-82e6-86cc99c4f542",
+      "Guid": "ee8279f0-4445-4c00-92d2-6cc584b14e09",
       "Kod": "Kod",
       "NumerAkt": "NumerAkt",
       "<b>Imie</b>": "Imie",
@@ -5034,7 +5154,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "8jMXecW0TDI0bQ==",
+          "Base64": "F7FoaQByokXucA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -5081,7 +5201,7 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "<b>Guid</b>": "e6c2878e-a356-4ca7-95dd-ddbc4d63b12c"
+  "<b>Guid</b>": "a0e0110a-fa04-4add-b0e6-85693c3d2a54"
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
 <h5>Schema (JSON) for class <b>UpdateResult</b>:</h5>
@@ -5113,7 +5233,7 @@ Response time: 97 ms, Status Code: 200 OK
 </div>
 <hr class='section-separator' />
 <h2 id='AltOne_WebAPI_ObslugaCzasuPracy'>AltOne.WebAPI.ObslugaCzasuPracy</h2>
-<p class='assembly-version'>Assembly name: AltOne.WebAPI.ObslugaCzasuPracy<br> Version: 2606.0.1.20001+3d79ea42501321e833de351b6451bed91f83f0d2,<br>Last modified: 5.08.2026 23:05:28</p>
+<p class='assembly-version'>Assembly name: AltOne.WebAPI.ObslugaCzasuPracy<br> Version: 2606.0.1.20001+3d79ea42501321e833de351b6451bed91f83f0d2,<br>Last modified: 2.11.2026 15:26:54</p>
 <h3 id='AltOne_WebAPI_ObslugaCzasuPracy-Metody'>List of available methods:</h3>
 <h4>Interface: ICzasPracy</h4>
 <ul class='methods-list'>
@@ -5179,8 +5299,8 @@ Response time: 97 ms, Status Code: 200 OK
         "KodPracownika": "KodPracownika",
         "<b>Data</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DzienTygodnia": "Sunday",
         "StatusDnia": "Kalendarz",
@@ -5223,7 +5343,7 @@ Response time: 97 ms, Status Code: 200 OK
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "LBjlE+wOd3gNPw==",
+                "Base64": "bTmQM0mb9IUr0Q==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -5256,7 +5376,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "ls4GFHrz6aBn8Q==",
+            "Base64": "qyfVk1FyGj6PPA==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -5322,8 +5442,8 @@ Response time: 97 ms, Status Code: 200 OK
         "KodPracownika": "KodPracownika",
         "<b>Data</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "StatusDnia": "Kalendarz",
         "Godziny": {
@@ -5364,7 +5484,7 @@ Response time: 97 ms, Status Code: 200 OK
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "uECD/tN1JY0sBA==",
+                "Base64": "69c73WguS/yRZw==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -5398,7 +5518,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "P5oh68MTr5RvtQ==",
+            "Base64": "6PCaH4id869jbA==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -5462,13 +5582,13 @@ Response time: 97 ms, Status Code: 200 OK
   "Okres": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "OgraniczDoOkresuZatrudnienia": false
@@ -5484,8 +5604,8 @@ Response time: 97 ms, Status Code: 200 OK
       "KodPracownika": "KodPracownika",
       "<b>Data</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DzienTygodnia": "Sunday",
       "StatusDnia": "Kalendarz",
@@ -5531,7 +5651,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "cOO5klm6NhbdfQ==",
+              "Base64": "8MmiUFHVrRN8/w==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -5567,7 +5687,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "RuGOcjNRigUGYg==",
+          "Base64": "5Ape0vIyYgvT7w==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -5621,13 +5741,13 @@ Response time: 97 ms, Status Code: 200 OK
   "Okres": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "OgraniczDoOkresuZatrudnienia": false
@@ -5643,8 +5763,8 @@ Response time: 97 ms, Status Code: 200 OK
       "KodPracownika": "KodPracownika",
       "<b>Data</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "StatusDnia": "Kalendarz",
       "Godziny": {
@@ -5688,7 +5808,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "XuOZDRldCXQ+Vw==",
+              "Base64": "gGkWiVAego5FHg==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -5725,7 +5845,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "2mGTnY0dsoybmw==",
+          "Base64": "EqSrb0mVA64Z8A==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -5784,8 +5904,8 @@ Response time: 97 ms, Status Code: 200 OK
       "KodPracownika": "KodPracownika",
       "<b>Data</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DzienTygodnia": "Sunday",
       "StatusDnia": "Kalendarz",
@@ -5831,7 +5951,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "efFHO314E5RU7Q==",
+              "Base64": "UeHdHebjOnme/g==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -5867,7 +5987,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "d1kt1u1wWgjNMw==",
+          "Base64": "kjyTaIFksmXQ4g==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -5921,13 +6041,13 @@ Response time: 97 ms, Status Code: 200 OK
   "Okres": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "Definicja": "Definicja",
@@ -5944,8 +6064,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -5959,19 +6079,19 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "c42124c8-3b50-4e3e-ae2b-10485e3773dd",
+      "Guid": "a9bd3e37-de46-485a-a9ea-4a55c10b377e",
       "IDPracownika": 1,
       "KodPracownika": "KodPracownika",
       "Definicja": "Definicja",
       "DataOd": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DataDo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DniPracy": 1,
       "Godziny": {
@@ -5992,7 +6112,7 @@ Response time: 97 ms, Status Code: 200 OK
           "IdCzlonkaRodziny": 1
         }
       },
-      "LastChange": "2026-10-12T13:36:29.0095445Z",
+      "LastChange": "2026-11-03T11:14:01.0130064Z",
       "Korekty": [
         {
           "IDPracownika": 1,
@@ -6000,13 +6120,13 @@ Response time: 97 ms, Status Code: 200 OK
           "Definicja": "Definicja",
           "DataOd": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           },
           "DataDo": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           },
           "DniPracy": 1,
           "Godziny": {
@@ -6027,7 +6147,7 @@ Response time: 97 ms, Status Code: 200 OK
               "IdCzlonkaRodziny": 1
             }
           },
-          "LastChange": "2026-10-12T13:36:29.0095634Z",
+          "LastChange": "2026-11-03T11:14:01.0130216Z",
           "ID": 1,
           "AttachmentsCount": 1,
           "TableName": "TableName",
@@ -6051,7 +6171,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "pbwxBYs5UwdzPA==",
+              "Base64": "zT724CiWhFJhbQ==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -6088,7 +6208,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "j7XNGWmYshlQ9A==",
+          "Base64": "FAAdOQi950WY7A==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -6182,7 +6302,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "VadJaenZMpfbsQ==",
+          "Base64": "qDaeylO5T+E1SQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -6274,19 +6394,19 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "b9013a9f-6dcd-4f53-ae0e-7b72526d361b",
+  "Guid": "e9ecfd25-55ca-405c-8673-ee9f8f9fc87d",
   "IDPracownika": 1,
   "KodPracownika": "KodPracownika",
   "Definicja": "Definicja",
   "DataOd": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DataDo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DniPracy": 1,
   "Godziny": {
@@ -6307,7 +6427,7 @@ Response time: 97 ms, Status Code: 200 OK
       "IdCzlonkaRodziny": 1
     }
   },
-  "LastChange": "2026-10-12T13:36:29.0289335Z",
+  "LastChange": "2026-11-03T11:14:01.0336027Z",
   "Korekty": [
     {
       "IDPracownika": 1,
@@ -6315,13 +6435,13 @@ Response time: 97 ms, Status Code: 200 OK
       "Definicja": "Definicja",
       "DataOd": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DataDo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DniPracy": 1,
       "Godziny": {
@@ -6342,7 +6462,7 @@ Response time: 97 ms, Status Code: 200 OK
           "IdCzlonkaRodziny": 1
         }
       },
-      "LastChange": "2026-10-12T13:36:29.0289535Z",
+      "LastChange": "2026-11-03T11:14:01.0336192Z",
       "ID": 1,
       "Features": [
         {
@@ -6363,7 +6483,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "/tyx7MIgVhze4Q==",
+          "Base64": "yOHBKrrO+gHgDw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -6397,7 +6517,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "N9KbGrLNJTIOkg==",
+      "Base64": "ZSDhWUt6ayyjbQ==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -6456,13 +6576,13 @@ Response time: 97 ms, Status Code: 200 OK
   "Definicja": "Definicja",
   "DataOd": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DataDo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DniPracy": 1,
   "Godziny": {
@@ -6483,7 +6603,7 @@ Response time: 97 ms, Status Code: 200 OK
       "IdCzlonkaRodziny": 1
     }
   },
-  "LastChange": "2026-10-12T13:36:29.0386216Z",
+  "LastChange": "2026-11-03T11:14:01.0420435Z",
   "ID": 1,
   "Features": [
     {
@@ -6504,7 +6624,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "J9rjv1FZWFJniA==",
+      "Base64": "qDMWcTKVYthxGg==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -6559,7 +6679,7 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
   "ID": 1,
-  "Guid": "0817bfbf-9a6b-4692-888b-02f8453241bf"
+  "Guid": "06a64a79-38dc-4243-903b-b83d7f57ade3"
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
 <h5>Schema (JSON) for class <b>UpdateResult</b>:</h5>
@@ -6607,8 +6727,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "Data": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "IDPracownika": 1,
   "KodPracownika": "KodPracownika",
@@ -6635,13 +6755,13 @@ Response time: 97 ms, Status Code: 200 OK
       "Okres": {
         "<b>DataOd</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "<b>DataDo</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         }
       },
       "LimitDni": 1,
@@ -6673,7 +6793,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "tS31R7ppj0mqOw==",
+          "Base64": "qzSSYS/2UyMrEQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -6723,13 +6843,13 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>Okres</b>": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
@@ -6742,19 +6862,19 @@ Response time: 97 ms, Status Code: 200 OK
     {
       "TypDnia": "Pracy",
       "Nieobecnosc": {
-        "Guid": "95233fff-1185-42e5-a906-66874c9eec78",
+        "Guid": "3c8b76b2-59df-4150-ab5d-ce425a417fe0",
         "IDPracownika": 1,
         "KodPracownika": "KodPracownika",
         "Definicja": "Definicja",
         "DataOd": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DataDo": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DniPracy": 1,
         "Godziny": {
@@ -6775,7 +6895,7 @@ Response time: 97 ms, Status Code: 200 OK
             "IdCzlonkaRodziny": 1
           }
         },
-        "LastChange": "2026-10-12T13:36:29.0672148Z",
+        "LastChange": "2026-11-03T11:14:01.0693114Z",
         "Korekty": [
           {
             "IDPracownika": 1,
@@ -6783,13 +6903,13 @@ Response time: 97 ms, Status Code: 200 OK
             "Definicja": "Definicja",
             "DataOd": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 10,
-              "<b>Day</b>": 12
+              "<b>Month</b>": 11,
+              "<b>Day</b>": 3
             },
             "DataDo": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 10,
-              "<b>Day</b>": 12
+              "<b>Month</b>": 11,
+              "<b>Day</b>": 3
             },
             "DniPracy": 1,
             "Godziny": {
@@ -6810,7 +6930,7 @@ Response time: 97 ms, Status Code: 200 OK
                 "IdCzlonkaRodziny": 1
               }
             },
-            "LastChange": "2026-10-12T13:36:29.0672362Z",
+            "LastChange": "2026-11-03T11:14:01.0693227Z",
             "ID": 1,
             "AttachmentsCount": 1,
             "TableName": "TableName",
@@ -6834,7 +6954,7 @@ Response time: 97 ms, Status Code: 200 OK
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "+0R5l8G1UkYXWg==",
+                "Base64": "IVygrStaLHRLJw==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -6871,7 +6991,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "qgs90czwrZNo/g==",
+            "Base64": "vddADTU/br7Brg==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -6888,8 +7008,8 @@ Response time: 97 ms, Status Code: 200 OK
         "KodPracownika": "KodPracownika",
         "<b>Data</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "StatusDnia": "Kalendarz",
         "Godziny": {
@@ -6933,7 +7053,7 @@ Response time: 97 ms, Status Code: 200 OK
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "cSeXlLBlQQLCQw==",
+                "Base64": "n3CVtqKFat7BFw==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -6970,7 +7090,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "yThrNM9+9eci3w==",
+            "Base64": "4gEFU5mSXX0kZQ==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -7018,18 +7138,18 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "cfc7548e-95fe-4344-a568-13d03f41c5f0",
+  "Guid": "a11fae30-934e-4f83-acb9-ced63c189af7",
   "IDPracownika": 1,
   "KodPracownika": "KodPracownika",
   "DataOd": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DataDo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "Numer": "Numer",
   "ID": 1,
@@ -7052,7 +7172,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "7ZqtJQ/Q2zlrfA==",
+      "Base64": "/8bGI72+BKfKOA==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -7112,8 +7232,8 @@ Response time: 97 ms, Status Code: 200 OK
   "KodPracownika": "KodPracownika",
   "Data": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -7123,18 +7243,18 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "Data": [
     {
-      "Guid": "bed99942-2d70-4045-b86e-daed85361504",
+      "Guid": "0a02a532-716d-4b08-8934-b789fdcbc693",
       "IDPracownika": 1,
       "KodPracownika": "KodPracownika",
       "DataOd": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DataDo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "Numer": "Numer",
       "ID": 1,
@@ -7160,7 +7280,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "0yHITxxsUpTPFQ==",
+          "Base64": "rZW3xkvsMn5t3Q==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -7212,8 +7332,8 @@ Response time: 97 ms, Status Code: 200 OK
   "KodPracownika": "KodPracownika",
   "<b>Data</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -7227,32 +7347,32 @@ Response time: 97 ms, Status Code: 200 OK
       "KodPracownika": "KodPracownika",
       "Dzien": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "PracaZdalnaNaDzien": false,
       "WniosekPracaZdalna": {
         "Definicja": "Definicja",
         "DataZlozenia": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DataDecyzji": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "Okres": {
           "<b>DataOd</b>": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           },
           "<b>DataDo</b>": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           }
         }
       }
@@ -7298,13 +7418,13 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>Okres</b>": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "DefinicjaZdarzeniaKod": "DefinicjaZdarzeniaKod"
@@ -7324,8 +7444,8 @@ Response time: 97 ms, Status Code: 200 OK
       "Uwagi": "Uwagi",
       "Data": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "Godzina": "Godzina"
     }
@@ -7371,13 +7491,13 @@ Response time: 97 ms, Status Code: 200 OK
   "Period": {
     "DateFrom": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "DateTo": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "LimitToEmploymentPeriod": false
@@ -7393,8 +7513,8 @@ Response time: 97 ms, Status Code: 200 OK
       "EmployeeCode": "EmployeeCode",
       "<b>Date</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DayOfWeek": "Sunday",
       "DayStatus": "Kalendarz",
@@ -7440,7 +7560,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "W/HAlxf6geV6dA==",
+              "Base64": "xo7RVOPaUC4uXw==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -7476,7 +7596,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "aTnDY29o1eILQw==",
+          "Base64": "oQWQfNYVqfVFqA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -7530,13 +7650,13 @@ Response time: 97 ms, Status Code: 200 OK
   "Period": {
     "DateFrom": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "DateTo": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "LimitToEmploymentPeriod": false
@@ -7552,8 +7672,8 @@ Response time: 97 ms, Status Code: 200 OK
       "EmployeeCode": "EmployeeCode",
       "<b>Date</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DayStatus": "Kalendarz",
       "Hours": {
@@ -7597,7 +7717,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "ECDySCnAPiIv9g==",
+              "Base64": "mKo8dTp2ZfpEwg==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -7633,7 +7753,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "D3XT6ibbO35e/w==",
+          "Base64": "7gNL6hz63SPsBw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -7689,8 +7809,8 @@ Response time: 97 ms, Status Code: 200 OK
         "EmployeeCode": "EmployeeCode",
         "<b>Date</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DayOfWeek": "Sunday",
         "DayStatus": "Kalendarz",
@@ -7733,7 +7853,7 @@ Response time: 97 ms, Status Code: 200 OK
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "iIhR8wiOgXrAsw==",
+                "Base64": "ZbI29o1VbREGVA==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -7766,7 +7886,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "GBd6JnJgJxGUyw==",
+            "Base64": "RgmT4Z3Blkbekw==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -7832,8 +7952,8 @@ Response time: 97 ms, Status Code: 200 OK
         "EmployeeCode": "EmployeeCode",
         "<b>Date</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DayStatus": "Kalendarz",
         "Hours": {
@@ -7874,7 +7994,7 @@ Response time: 97 ms, Status Code: 200 OK
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "q1nHh+OKAYA1lA==",
+                "Base64": "Xyfensfvftt/5A==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -7907,7 +8027,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "K3BLIMxw7iOtpw==",
+            "Base64": "VUMIcL53CAHtxA==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -7976,8 +8096,8 @@ Response time: 97 ms, Status Code: 200 OK
       "EmployeeCode": "EmployeeCode",
       "<b>Date</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DayOfWeek": "Sunday",
       "DayStatus": "Kalendarz",
@@ -8023,7 +8143,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "wsPOfseFrpzFMQ==",
+              "Base64": "3hrZ0JVynTL1/g==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -8059,7 +8179,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "o1IVnWpGTcCbtg==",
+          "Base64": "K0Ykn5Z0gqc2YQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -8113,13 +8233,13 @@ Response time: 97 ms, Status Code: 200 OK
   "Period": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "Definition": "Definition",
@@ -8136,19 +8256,19 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "fefe201f-c8ee-49a7-a3c5-11c8823c6362",
+      "Guid": "9fd38af7-56e9-4f83-8d76-c89908e0b09d",
       "EmployeeID": 1,
       "EmployeeCode": "EmployeeCode",
       "AbsenceDefinition": "AbsenceDefinition",
       "DateFrom": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DateTo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "WorkingDaysNo": 1,
       "Hours": {
@@ -8170,7 +8290,7 @@ Response time: 97 ms, Status Code: 200 OK
           "DependantGuid": 1
         }
       },
-      "LastChange": "2026-10-12T13:36:29.1581381Z",
+      "LastChange": "2026-11-03T11:14:01.1710867Z",
       "Corrections": [
         {
           "EmployeeID": 1,
@@ -8178,13 +8298,13 @@ Response time: 97 ms, Status Code: 200 OK
           "AbsenceDefinition": "AbsenceDefinition",
           "DateFrom": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           },
           "DateTo": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           },
           "WorkingDaysNo": 1,
           "Hours": {
@@ -8206,7 +8326,7 @@ Response time: 97 ms, Status Code: 200 OK
               "DependantGuid": 1
             }
           },
-          "LastChange": "2026-10-12T13:36:29.1581561Z",
+          "LastChange": "2026-11-03T11:14:01.1711004Z",
           "ID": 1,
           "AttachmentsCount": 1,
           "TableName": "TableName",
@@ -8230,7 +8350,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "LoNB7eFI2u92VA==",
+              "Base64": "grNGE4qcJhkEPQ==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -8267,7 +8387,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "IQ5VO6ATm6IQRw==",
+          "Base64": "SAa1RcF1QZzfkQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -8361,7 +8481,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "UGRhtDFPMmlQvA==",
+          "Base64": "/A7v1KC7+AIdkw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -8453,19 +8573,19 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "b11ab5d5-1cec-4f59-9830-8aa613e1ce86",
+  "Guid": "5bbb7e00-5130-4429-977f-9bc46a819b2c",
   "EmployeeID": 1,
   "EmployeeCode": "EmployeeCode",
   "AbsenceDefinition": "AbsenceDefinition",
   "DateFrom": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DateTo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "WorkingDaysNo": 1,
   "Hours": {
@@ -8487,7 +8607,7 @@ Response time: 97 ms, Status Code: 200 OK
       "DependantGuid": 1
     }
   },
-  "LastChange": "2026-10-12T13:36:29.1809794Z",
+  "LastChange": "2026-11-03T11:14:01.1934406Z",
   "Corrections": [
     {
       "EmployeeID": 1,
@@ -8495,13 +8615,13 @@ Response time: 97 ms, Status Code: 200 OK
       "AbsenceDefinition": "AbsenceDefinition",
       "DateFrom": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DateTo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "WorkingDaysNo": 1,
       "Hours": {
@@ -8523,7 +8643,7 @@ Response time: 97 ms, Status Code: 200 OK
           "DependantGuid": 1
         }
       },
-      "LastChange": "2026-10-12T13:36:29.1809996Z",
+      "LastChange": "2026-11-03T11:14:01.1934528Z",
       "ID": 1,
       "Features": [
         {
@@ -8544,7 +8664,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "eRyqL8viFr4vLQ==",
+          "Base64": "DzRgB8TQa1J0cQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -8578,7 +8698,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "POYxRwnShQcHzw==",
+      "Base64": "IMppu9HMB/QvTQ==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -8637,13 +8757,13 @@ Response time: 97 ms, Status Code: 200 OK
   "AbsenceDefinition": "AbsenceDefinition",
   "DateFrom": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DateTo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "WorkingDaysNo": 1,
   "Hours": {
@@ -8665,7 +8785,7 @@ Response time: 97 ms, Status Code: 200 OK
       "DependantGuid": 1
     }
   },
-  "LastChange": "2026-10-12T13:36:29.1908914Z",
+  "LastChange": "2026-11-03T11:14:01.2024797Z",
   "ID": 1,
   "Features": [
     {
@@ -8686,7 +8806,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "bDq/gah1vGDGxw==",
+      "Base64": "ebbD6YKxQvYgjw==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -8741,7 +8861,7 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
   "ID": 1,
-  "Guid": "a59524e1-cad4-4901-9d29-01e73a4b5ff2"
+  "Guid": "7fa07a46-1548-41a6-8cf2-293b9e0afb8f"
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
 <h5>Schema (JSON) for class <b>UpdateResult</b>:</h5>
@@ -8789,8 +8909,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "Date": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "EmployeeID": 1,
   "EmployeeCode": "EmployeeCode",
@@ -8817,13 +8937,13 @@ Response time: 97 ms, Status Code: 200 OK
       "Period": {
         "DateFrom": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DateTo": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         }
       },
       "DaysLimit": 1,
@@ -8855,7 +8975,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "VxYmCO6RxWIpkQ==",
+          "Base64": "gjCU2o2OKFLx1A==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -8905,13 +9025,13 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>Period</b>": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
@@ -8924,19 +9044,19 @@ Response time: 97 ms, Status Code: 200 OK
     {
       "DayType": "Pracy",
       "Absence": {
-        "Guid": "f9affb80-e4fb-45e3-8f09-ff198fde542b",
+        "Guid": "983ac2ee-a103-4cef-896a-c2e43b32f249",
         "IDPracownika": 1,
         "KodPracownika": "KodPracownika",
         "Definicja": "Definicja",
         "DataOd": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DataDo": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DniPracy": 1,
         "Godziny": {
@@ -8957,7 +9077,7 @@ Response time: 97 ms, Status Code: 200 OK
             "IdCzlonkaRodziny": 1
           }
         },
-        "LastChange": "2026-10-12T13:36:29.2221789Z",
+        "LastChange": "2026-11-03T11:14:01.2354381Z",
         "Korekty": [
           {
             "IDPracownika": 1,
@@ -8965,13 +9085,13 @@ Response time: 97 ms, Status Code: 200 OK
             "Definicja": "Definicja",
             "DataOd": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 10,
-              "<b>Day</b>": 12
+              "<b>Month</b>": 11,
+              "<b>Day</b>": 3
             },
             "DataDo": {
               "<b>Year</b>": 2026,
-              "<b>Month</b>": 10,
-              "<b>Day</b>": 12
+              "<b>Month</b>": 11,
+              "<b>Day</b>": 3
             },
             "DniPracy": 1,
             "Godziny": {
@@ -8992,7 +9112,7 @@ Response time: 97 ms, Status Code: 200 OK
                 "IdCzlonkaRodziny": 1
               }
             },
-            "LastChange": "2026-10-12T13:36:29.2221976Z",
+            "LastChange": "2026-11-03T11:14:01.2354547Z",
             "ID": 1,
             "AttachmentsCount": 1,
             "TableName": "TableName",
@@ -9016,7 +9136,7 @@ Response time: 97 ms, Status Code: 200 OK
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "zGhqA50SX87L9g==",
+                "Base64": "BH9ledezNoThKA==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -9053,7 +9173,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "UFkvCIOx9bNcug==",
+            "Base64": "wNzRTW5SSMyN1w==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -9070,8 +9190,8 @@ Response time: 97 ms, Status Code: 200 OK
         "EmployeeCode": "EmployeeCode",
         "<b>Date</b>": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DayStatus": "Kalendarz",
         "Hours": {
@@ -9115,7 +9235,7 @@ Response time: 97 ms, Status Code: 200 OK
                 "Extension": "Extension",
                 "Link": "Link",
                 "SubType": "None",
-                "Base64": "75xfED/Qd7sA1A==",
+                "Base64": "qqek7Gv3MWt2Cg==",
                 "Features": [
                   {
                     "<b>Name</b>": "Name",
@@ -9151,7 +9271,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "JeamblnUIueD3g==",
+            "Base64": "GdFHcmtEANMUcw==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -9199,18 +9319,18 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "611789dd-da00-448c-b80c-f2c0abf918f7",
+  "Guid": "07faaad3-d64a-43ae-a40c-4c5c65b375e8",
   "EmployeeID": 1,
   "EmployeeCode": "EmployeeCode",
   "DateFrom": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DateTo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "Number": "Number",
   "ID": 1,
@@ -9233,7 +9353,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "Dask9+nms5E4/w==",
+      "Base64": "Zr6HMkmqw/7qtA==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -9291,8 +9411,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "Date": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "EmployeeID": 1,
   "EmployeeCode": "EmployeeCode"
@@ -9304,18 +9424,18 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "Data": [
     {
-      "Guid": "9c76f36f-b521-4696-a836-3f1c06192585",
+      "Guid": "e3f4a659-1ff3-4069-83d3-6f9fecd37a53",
       "EmployeeID": 1,
       "EmployeeCode": "EmployeeCode",
       "DateFrom": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DateTo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "Number": "Number",
       "ID": 1,
@@ -9341,7 +9461,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "oJAJtu+NS/McTQ==",
+          "Base64": "OCqoHDWULrwBxQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -9394,13 +9514,13 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>Period</b>": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "EventDefinitionCode": "EventDefinitionCode"
@@ -9420,8 +9540,8 @@ Response time: 97 ms, Status Code: 200 OK
       "Uwagi": "Uwagi",
       "Date": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "Time": "8:00"
     }
@@ -9465,8 +9585,8 @@ Response time: 97 ms, Status Code: 200 OK
   "EmployeeCode": "EmployeeCode",
   "<b>Date</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -9480,32 +9600,32 @@ Response time: 97 ms, Status Code: 200 OK
       "EmployeeCode": "EmployeeCode",
       "Date": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "RemoteWorkForDay": false,
       "RemoteWorkRequest": {
         "Definicja": "Definicja",
         "DataZlozenia": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DataDecyzji": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "Okres": {
           "<b>DataOd</b>": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           },
           "<b>DataDo</b>": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           }
         }
       }
@@ -9533,7 +9653,7 @@ Response time: 97 ms, Status Code: 200 OK
 </div>
 <hr class='section-separator' />
 <h2 id='AltOne_WebAPI_ObslugaFakturHandlowych'>AltOne.WebAPI.ObslugaFakturHandlowych</h2>
-<p class='assembly-version'>Assembly name: AltOne.WebAPI.ObslugaFakturHandlowych<br> Version: 2606.0.1.30000+58b1fb3d99c0ab4329ee87401adad706feaed311,<br>Last modified: 5.08.2026 23:05:28</p>
+<p class='assembly-version'>Assembly name: AltOne.WebAPI.ObslugaFakturHandlowych<br> Version: 2606.0.1.30000+58b1fb3d99c0ab4329ee87401adad706feaed311,<br>Last modified: 2.11.2026 15:26:54</p>
 <h3 id='AltOne_WebAPI_ObslugaFakturHandlowych-Metody'>List of available methods:</h3>
 <h4>Interface: IFakturyHandlowe2</h4>
 <ul class='methods-list'>
@@ -9559,21 +9679,21 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "bdf7b0ad-bbb4-456d-be89-db6cc6265474",
+  "Guid": "bf0252a6-b0bf-4166-a248-253901223258",
   "<b>DataOperacji</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "<b>Data</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DataDostawy": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "<b>Definicja</b>": "Definicja",
   "<b>Magazyn</b>": "Magazyn",
@@ -9625,8 +9745,8 @@ Response time: 97 ms, Status Code: 200 OK
         {
           "Data": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           },
           "<b>Symbol</b>": "Symbol",
           "<b>Wymiar</b>": "Wymiar",
@@ -9659,7 +9779,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "g/FcmGIYMiFkHg==",
+              "Base64": "Pa11yiiT/DXXGQ==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -9692,7 +9812,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "LMcXmQ48WsdClQ==",
+          "Base64": "EmEtl1IKHbi+og==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -9717,16 +9837,16 @@ Response time: 97 ms, Status Code: 200 OK
     "Numer": "Numer",
     "DataOtrzymania": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "Korekta": {
     "<b>NumerZrodlowy</b>": "NumerZrodlowy",
     "DataDokumentu": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "KorektaVAT": false,
@@ -9760,13 +9880,13 @@ Response time: 97 ms, Status Code: 200 OK
     "<b>DataKSeF</b>": null,
     "DataPrzeslaniaKSeF": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "DataPrzyjeciaKSeF": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "Link": "Link",
     "ContentXML": "ContentXML"
@@ -9832,7 +9952,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "F6ygPaKNkcRZ0A==",
+      "Base64": "/KoVu8iRYK+J7g==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -9850,13 +9970,13 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "9bba8195-c873-47ac-91f3-a91c3713f1bb",
+  "Guid": "6975eb5a-d193-4859-9207-564b955d7a52",
   "NumerDokumentu": "NumerDokumentu",
   "Kurs": 1.0,
   "DataWystawienia": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "WartoscBruttoCy": {
     "<b>Value</b>": 1.0,
@@ -9920,7 +10040,7 @@ Response time: 97 ms, Status Code: 200 OK
     "Extension": "Extension",
     "Link": "Link",
     "SubType": "None",
-    "Base64": "TJCNcjGdo+Pwnw==",
+    "Base64": "kZjaarcOXGb1MQ==",
     "Features": [
       {
         "<b>Name</b>": "Name",
@@ -9964,7 +10084,7 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "efa18758-ba42-4d2e-a892-e9bb0332171e",
+  "Guid": "a18fac5f-67fc-4a69-9f26-96c8de0589aa",
   "<b>Kod</b>": "Kod",
   "<b>Nazwa</b>": "Nazwa",
   "<b>TypTowaru</b>": "Towar",
@@ -9999,7 +10119,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "mdMH3oc9ENKXTg==",
+      "Base64": "FVDr6FdRIGM0Tg==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -10067,8 +10187,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -10082,7 +10202,7 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "18fc52ba-028c-484d-b601-a8be6e756148",
+      "Guid": "3e2f31b0-8d8b-40fa-889d-39bacbef0cac",
       "<b>Kod</b>": "Kod",
       "<b>Nazwa</b>": "Nazwa",
       "<b>TypTowaru</b>": "Towar",
@@ -10120,7 +10240,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "/J0ujN3IQgvVeg==",
+          "Base64": "yOB904y6Tb0rjA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10182,8 +10302,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -10197,21 +10317,21 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "d71d3f6a-87c4-4ec4-b544-5cbdef4eac9e",
+      "Guid": "2c296ae4-7238-4584-a8a0-e114406b4911",
       "<b>DataOperacji</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "<b>Data</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DataDostawy": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "<b>Definicja</b>": "Definicja",
       "<b>Magazyn</b>": "Magazyn",
@@ -10263,8 +10383,8 @@ Response time: 97 ms, Status Code: 200 OK
             {
               "Data": {
                 "<b>Year</b>": 2026,
-                "<b>Month</b>": 10,
-                "<b>Day</b>": 12
+                "<b>Month</b>": 11,
+                "<b>Day</b>": 3
               },
               "<b>Symbol</b>": "Symbol",
               "<b>Wymiar</b>": "Wymiar",
@@ -10300,7 +10420,7 @@ Response time: 97 ms, Status Code: 200 OK
                   "Extension": "Extension",
                   "Link": "Link",
                   "SubType": "None",
-                  "Base64": "Rpi2hV+415KG0g==",
+                  "Base64": "A1qGKoeCRTZ0JQ==",
                   "Features": [
                     {
                       "<b>Name</b>": "Name",
@@ -10336,7 +10456,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "h+fyBai/jgeJtQ==",
+              "Base64": "uN9SA7dPk0hwjw==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -10361,16 +10481,16 @@ Response time: 97 ms, Status Code: 200 OK
         "Numer": "Numer",
         "DataOtrzymania": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         }
       },
       "Korekta": {
         "<b>NumerZrodlowy</b>": "NumerZrodlowy",
         "DataDokumentu": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         }
       },
       "KorektaVAT": false,
@@ -10404,13 +10524,13 @@ Response time: 97 ms, Status Code: 200 OK
         "<b>DataKSeF</b>": null,
         "DataPrzeslaniaKSeF": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DataPrzyjeciaKSeF": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "Link": "Link",
         "ContentXML": "ContentXML"
@@ -10479,7 +10599,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "1x9c2OkoiOMAnQ==",
+          "Base64": "8KAJW17ZF6nR/w==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10540,8 +10660,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -10623,7 +10743,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "8Mb2p+R/EwAxTA==",
+          "Base64": "m/ECrMnl2sQqsQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10658,7 +10778,7 @@ Response time: 97 ms, Status Code: 200 OK
 </div>
 <hr class='section-separator' />
 <h2 id='AltOne_WebApi_ObslugaFakturKosztowych'>AltOne.WebApi.ObslugaFakturKosztowych</h2>
-<p class='assembly-version'>Assembly name: AltOne.WebApi.ObslugaFakturKosztowych<br> Version: 2606.0.1.40000+089ecbf43e8870bb1279d1b1fe9e36a2e0b90d5e,<br>Last modified: 5.08.2026 23:05:28</p>
+<p class='assembly-version'>Assembly name: AltOne.WebApi.ObslugaFakturKosztowych<br> Version: 2606.0.1.40000+089ecbf43e8870bb1279d1b1fe9e36a2e0b90d5e,<br>Last modified: 2.11.2026 15:26:54</p>
 <h3 id='AltOne_WebApi_ObslugaFakturKosztowych-Metody'>List of available methods:</h3>
 <h4>Interface: IFakturyKosztowe2</h4>
 <ul class='methods-list'>
@@ -10690,26 +10810,26 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "f5f92120-05da-4803-a073-e7bd2fc6d828",
+  "Guid": "25460d62-f8bf-4bdb-851f-100ea64154ee",
   "DataEwidencji": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DataWplywu": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DataWystawienia": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DataOperacji": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DaneKontrahenta": {
     "Nazwa": "Nazwa",
@@ -10742,15 +10862,15 @@ Response time: 97 ms, Status Code: 200 OK
     "KodDefinicjiPOV": "KodDefinicjiPOV",
     "DataPowstania": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "Podmiot": {
     "TypPodmiotu": "NieOkreślony",
     "ID": 1,
     "Kod": "Kod",
-    "Guid": "4947da9f-ff43-4f04-90b1-b3d7954b42f5",
+    "Guid": "38655515-5253-4d93-9781-c57c9a9ef50c",
     "ExternalID": "ExternalID",
     "EuVAT": "EuVAT",
     "Miejscowosc": "Miejscowosc"
@@ -10788,7 +10908,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "Pps+PLun3Q09UA==",
+          "Base64": "QsoK0jRJaZhL9g==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10803,12 +10923,12 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "Platnosci": [
     {
-      "Guid": "2c3059df-abe1-4a91-b53d-3a85898dee84",
+      "Guid": "a85b51dd-f756-4aa8-b0a4-1f9bbe2bb305",
       "Podmiot": {
         "TypPodmiotu": "NieOkreślony",
         "ID": 1,
         "Kod": "Kod",
-        "Guid": "caae3578-efa0-410b-aeff-43e681f17b42",
+        "Guid": "5d55b106-1e68-459c-960b-fe8f22766704",
         "ExternalID": "ExternalID",
         "EuVAT": "EuVAT",
         "Miejscowosc": "Miejscowosc"
@@ -10819,8 +10939,8 @@ Response time: 97 ms, Status Code: 200 OK
       "Opis": "Opis",
       "Termin": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "TerminDni": 1,
       "Kwota": {
@@ -10854,7 +10974,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "/JCzev+8/HWEUQ==",
+          "Base64": "+v1B62FOUaLR9A==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10871,8 +10991,8 @@ Response time: 97 ms, Status Code: 200 OK
     {
       "Data": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "Symbol": "Symbol",
       "Wymiar": "Wymiar",
@@ -10905,7 +11025,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "Zn3IfaZfo36lPQ==",
+          "Base64": "ncnp+XVzmE5fuQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10920,20 +11040,20 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "ZadaniaCRM": [
     {
-      "Guid": "7c4037b1-0d94-4b9d-bf43-5e8ed0106a8c",
+      "Guid": "118b863f-25ef-4136-a35f-28960dcbf7ca",
       "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
       "Numer": "Numer",
       "<b>Nazwa</b>": "Nazwa",
       "Opis": "Opis",
       "<b>DataOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "<b>DataDo</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "ProwadzacyKod": "ProwadzacyKod",
       "KontrahentKod": "KontrahentKod",
@@ -10959,7 +11079,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "Bg7YNvsKvP2tow==",
+          "Base64": "Psh7/Wx2egsyqQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -10977,13 +11097,13 @@ Response time: 97 ms, Status Code: 200 OK
     "<b>DataKSeF</b>": null,
     "DataPrzeslaniaKSeF": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "DataPrzyjeciaKSeF": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "Link": "Link",
     "ContentXML": "ContentXML"
@@ -11008,7 +11128,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "XuZMIkj9M6+FxA==",
+      "Base64": "mBLZtoch2eq2Cg==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -11026,7 +11146,7 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "1988a7d7-1e6e-4837-ba0e-af4f1d05668b",
+  "Guid": "630dd537-b58d-4224-bbc7-569edc60095d",
   "NumerDokumentu": "NumerDokumentu",
   "NumerDodatkowy": "NumerDodatkowy",
   "WartoscCy": {
@@ -11039,20 +11159,20 @@ Response time: 97 ms, Status Code: 200 OK
   },
   "ZadaniaCRM": [
     {
-      "Guid": "3fada34c-cb80-417a-8a84-88055e50e1a9",
+      "Guid": "ffae0aa2-adaf-4d30-93f7-1fcf5b4564a6",
       "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
       "Numer": "Numer",
       "<b>Nazwa</b>": "Nazwa",
       "Opis": "Opis",
       "<b>DataOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "<b>DataDo</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "ProwadzacyKod": "ProwadzacyKod",
       "KontrahentKod": "KontrahentKod",
@@ -11078,7 +11198,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "B3BPEofxW36enA==",
+          "Base64": "TvjnU/xSYUZ/QQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11127,26 +11247,26 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "29c6d633-1df9-4084-aafb-190ae0fc4f7d",
+  "Guid": "e5b99d28-590b-4b19-885a-e3f7c163597a",
   "DataEwidencji": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DataWplywu": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DataWystawienia": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DataOperacji": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "DaneKontrahenta": {
     "Nazwa": "Nazwa",
@@ -11179,15 +11299,15 @@ Response time: 97 ms, Status Code: 200 OK
     "KodDefinicjiPOV": "KodDefinicjiPOV",
     "DataPowstania": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "Podmiot": {
     "TypPodmiotu": "NieOkreślony",
     "ID": 1,
     "Kod": "Kod",
-    "Guid": "f5fb8e59-64d8-4c3e-8565-a52a838bb5b2",
+    "Guid": "405c78d0-3d60-4f67-a93a-5d2382c529e5",
     "ExternalID": "ExternalID",
     "EuVAT": "EuVAT",
     "Miejscowosc": "Miejscowosc"
@@ -11225,7 +11345,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "ZvLy/+W6y6zwKQ==",
+          "Base64": "o7KN03y0FhjNhw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11240,12 +11360,12 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "Platnosci": [
     {
-      "Guid": "8d6af53c-d826-493a-96d0-bb3d5176611e",
+      "Guid": "de2bec7f-57c4-4aac-af2b-47d2b5e75c62",
       "Podmiot": {
         "TypPodmiotu": "NieOkreślony",
         "ID": 1,
         "Kod": "Kod",
-        "Guid": "c952157c-d9f3-4ab5-b864-90a66c3b66b8",
+        "Guid": "1f32086f-78dd-48b1-9859-1a0a87ead78b",
         "ExternalID": "ExternalID",
         "EuVAT": "EuVAT",
         "Miejscowosc": "Miejscowosc"
@@ -11256,8 +11376,8 @@ Response time: 97 ms, Status Code: 200 OK
       "Opis": "Opis",
       "Termin": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "TerminDni": 1,
       "Kwota": {
@@ -11291,7 +11411,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "2DdTGYsjDqfP5w==",
+          "Base64": "Bhx9uo3yxVAgWA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11308,8 +11428,8 @@ Response time: 97 ms, Status Code: 200 OK
     {
       "Data": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "Symbol": "Symbol",
       "Wymiar": "Wymiar",
@@ -11342,7 +11462,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "GdWV7Sz3m1RiJA==",
+          "Base64": "vBJIIPk5l6F9Tw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11357,20 +11477,20 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "ZadaniaCRM": [
     {
-      "Guid": "eae36d9f-ee99-4fcf-8438-093d4b551ed0",
+      "Guid": "0eaeb89a-1eca-4e33-992a-7bc2fb926982",
       "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
       "Numer": "Numer",
       "<b>Nazwa</b>": "Nazwa",
       "Opis": "Opis",
       "<b>DataOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "<b>DataDo</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "ProwadzacyKod": "ProwadzacyKod",
       "KontrahentKod": "KontrahentKod",
@@ -11396,7 +11516,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "yAqr883t82EKuw==",
+          "Base64": "AkJp9/jqay5puA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11414,13 +11534,13 @@ Response time: 97 ms, Status Code: 200 OK
     "<b>DataKSeF</b>": null,
     "DataPrzeslaniaKSeF": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "DataPrzyjeciaKSeF": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "Link": "Link",
     "ContentXML": "ContentXML"
@@ -11445,7 +11565,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "/TJGFaRJPXAO1A==",
+      "Base64": "mMcNBzVvYRiDlA==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -11463,7 +11583,7 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "0e988d64-b8bf-4f62-818d-d7db4a2f21dc",
+  "Guid": "04a7a94b-838a-451d-adb1-4bc8d105f034",
   "NumerDokumentu": "NumerDokumentu",
   "NumerDodatkowy": "NumerDodatkowy",
   "WartoscCy": {
@@ -11476,20 +11596,20 @@ Response time: 97 ms, Status Code: 200 OK
   },
   "ZadaniaCRM": [
     {
-      "Guid": "32542f3c-71aa-4eb6-9ccf-6bb8a7ccb89d",
+      "Guid": "3b100aed-5caa-4bd4-a922-b7b6a5b6b683",
       "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
       "Numer": "Numer",
       "<b>Nazwa</b>": "Nazwa",
       "Opis": "Opis",
       "<b>DataOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "<b>DataDo</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "ProwadzacyKod": "ProwadzacyKod",
       "KontrahentKod": "KontrahentKod",
@@ -11515,7 +11635,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "P1EgGL19l1Myhw==",
+          "Base64": "RKBU7IyMCsWTMw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11575,26 +11695,26 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "Data": [
     {
-      "Guid": "c55e5fb6-5eed-4148-815d-969d07fcb04e",
+      "Guid": "d8fdcf58-27f9-45e1-a52b-4912e36aade4",
       "DataEwidencji": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DataWplywu": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DataWystawienia": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DataOperacji": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "DaneKontrahenta": {
         "Nazwa": "Nazwa",
@@ -11627,15 +11747,15 @@ Response time: 97 ms, Status Code: 200 OK
         "KodDefinicjiPOV": "KodDefinicjiPOV",
         "DataPowstania": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         }
       },
       "Podmiot": {
         "TypPodmiotu": "NieOkreślony",
         "ID": 1,
         "Kod": "Kod",
-        "Guid": "f3355006-9b68-4fe5-9a90-3bf4b6a5ff75",
+        "Guid": "b6c50279-6537-442b-aa0c-360267eaa6d5",
         "ExternalID": "ExternalID",
         "EuVAT": "EuVAT",
         "Miejscowosc": "Miejscowosc"
@@ -11676,7 +11796,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "mxSAMPjlHQ0RkQ==",
+              "Base64": "QdxN7iMU0YzakQ==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -11691,12 +11811,12 @@ Response time: 97 ms, Status Code: 200 OK
       ],
       "Platnosci": [
         {
-          "Guid": "67b21c9d-59a5-4a89-b9ea-c9541acb91e4",
+          "Guid": "6dbff6e6-d734-4074-ab1d-99e7b8fb67ba",
           "Podmiot": {
             "TypPodmiotu": "NieOkreślony",
             "ID": 1,
             "Kod": "Kod",
-            "Guid": "f65c5205-bc50-4a8b-a2e1-ec195c4ebc93",
+            "Guid": "c2b00304-d6f0-4ebd-b267-f0215bb7cff5",
             "ExternalID": "ExternalID",
             "EuVAT": "EuVAT",
             "Miejscowosc": "Miejscowosc"
@@ -11707,8 +11827,8 @@ Response time: 97 ms, Status Code: 200 OK
           "Opis": "Opis",
           "Termin": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           },
           "TerminDni": 1,
           "Kwota": {
@@ -11745,7 +11865,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "odN0WcF0QTsgMw==",
+              "Base64": "DANt5p238smnSg==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -11762,8 +11882,8 @@ Response time: 97 ms, Status Code: 200 OK
         {
           "Data": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           },
           "Symbol": "Symbol",
           "Wymiar": "Wymiar",
@@ -11799,7 +11919,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "knUX+pY91NDkFA==",
+              "Base64": "a+9CiF6DvJdKfA==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -11814,20 +11934,20 @@ Response time: 97 ms, Status Code: 200 OK
       ],
       "ZadaniaCRM": [
         {
-          "Guid": "6548d2ba-7acc-45d8-ad8d-30ea6ec6e718",
+          "Guid": "a6584854-cc80-44ed-a22f-7fef107a48f2",
           "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
           "Numer": "Numer",
           "<b>Nazwa</b>": "Nazwa",
           "Opis": "Opis",
           "<b>DataOd</b>": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           },
           "<b>DataDo</b>": {
             "<b>Year</b>": 2026,
-            "<b>Month</b>": 10,
-            "<b>Day</b>": 12
+            "<b>Month</b>": 11,
+            "<b>Day</b>": 3
           },
           "ProwadzacyKod": "ProwadzacyKod",
           "KontrahentKod": "KontrahentKod",
@@ -11856,7 +11976,7 @@ Response time: 97 ms, Status Code: 200 OK
               "Extension": "Extension",
               "Link": "Link",
               "SubType": "None",
-              "Base64": "M2YUOfwVeQsDSA==",
+              "Base64": "b7jdVY7Jq4vkjg==",
               "Features": [
                 {
                   "<b>Name</b>": "Name",
@@ -11874,13 +11994,13 @@ Response time: 97 ms, Status Code: 200 OK
         "<b>DataKSeF</b>": null,
         "DataPrzeslaniaKSeF": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "DataPrzyjeciaKSeF": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "Link": "Link",
         "ContentXML": "ContentXML"
@@ -11908,7 +12028,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "3qqXm2t7vPOCmw==",
+          "Base64": "7adc6oi1lJwASQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -11981,16 +12101,16 @@ Response time: 97 ms, Status Code: 200 OK
       },
       "DataRozliczenia": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "StanRozliczenia": "Nierozliczony",
-      "Guid": "8614202b-e99b-4007-914c-8ea54e3a3cd0",
+      "Guid": "66d3de3e-12df-4054-bbbd-eac18c3df310",
       "Podmiot": {
         "TypPodmiotu": "NieOkreślony",
         "ID": 1,
         "Kod": "Kod",
-        "Guid": "76d026c7-6f79-48be-a47c-f7764d4725c3",
+        "Guid": "ace74838-03f9-4761-9644-c9166aae00f6",
         "ExternalID": "ExternalID",
         "EuVAT": "EuVAT",
         "Miejscowosc": "Miejscowosc"
@@ -12001,8 +12121,8 @@ Response time: 97 ms, Status Code: 200 OK
       "Opis": "Opis",
       "Termin": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "TerminDni": 1,
       "Kwota": {
@@ -12039,7 +12159,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "ggFa+R9jqwoHpg==",
+          "Base64": "SasSdkz+AJaMoA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12086,31 +12206,31 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "982fc742-3f68-4ed8-9dca-0d5321ec18e6",
+  "Guid": "fc2ca565-23b4-43cc-9e06-12e7edf3c33f",
   "<b>Definicja</b>": "Definicja",
   "StanWprowadzony": false,
   "<b>DataWplywu</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "<b>DataEwidencji</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "Numer": "Numer",
   "NumerDodatkowy": "NumerDodatkowy",
   "<b>NumerDokumentu</b>": "NumerDokumentu",
   "<b>DataDokumentu</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "<b>DataOperacji</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "Opis": "Opis",
   "Wartosc": {
@@ -12121,7 +12241,7 @@ Response time: 97 ms, Status Code: 200 OK
     "TypPodmiotu": "NieOkreślony",
     "ID": 1,
     "Kod": "Kod",
-    "Guid": "cc7b1b81-ed6f-4141-939d-d708d9ead275",
+    "Guid": "4be9283f-c088-42c6-8495-c192137630b2",
     "ExternalID": "ExternalID",
     "EuVAT": "EuVAT",
     "Miejscowosc": "Miejscowosc"
@@ -12130,8 +12250,8 @@ Response time: 97 ms, Status Code: 200 OK
     {
       "Data": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "Symbol": "Symbol",
       "Wymiar": "Wymiar",
@@ -12164,7 +12284,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "LICGK0BC32QqVw==",
+          "Base64": "iD41+YwkqtIDcw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12179,12 +12299,12 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "Platnosci": [
     {
-      "Guid": "6c269874-caf5-4372-bb3a-23263a552757",
+      "Guid": "c2f32413-a96e-41f8-92e6-2b6e1e7d9f29",
       "Podmiot": {
         "TypPodmiotu": "NieOkreślony",
         "ID": 1,
         "Kod": "Kod",
-        "Guid": "4b4f0c99-1030-45f5-a15f-169501c82561",
+        "Guid": "d7106870-ce89-4712-a2d8-76b08bea2cf8",
         "ExternalID": "ExternalID",
         "EuVAT": "EuVAT",
         "Miejscowosc": "Miejscowosc"
@@ -12195,8 +12315,8 @@ Response time: 97 ms, Status Code: 200 OK
       "Opis": "Opis",
       "Termin": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "TerminDni": 1,
       "Kwota": {
@@ -12230,7 +12350,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "hmGS2zHyiUDMVA==",
+          "Base64": "xbZspcXPlSYYGQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12245,20 +12365,20 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "ZadaniaCRM": [
     {
-      "Guid": "e5409c4d-13a9-4967-af8c-2b0e2efd78ad",
+      "Guid": "65ed80da-4d4e-4381-8a15-cdd90d1fde4a",
       "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
       "Numer": "Numer",
       "<b>Nazwa</b>": "Nazwa",
       "Opis": "Opis",
       "<b>DataOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "<b>DataDo</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "ProwadzacyKod": "ProwadzacyKod",
       "KontrahentKod": "KontrahentKod",
@@ -12284,7 +12404,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "YqS2K//7R+dsYQ==",
+          "Base64": "UWhdCKcVYRtRbw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12317,7 +12437,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "y/143wIYmAHffw==",
+      "Base64": "A0X4Wa4YNWFQtQ==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -12371,7 +12491,7 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "ce123450-b991-4ede-9978-e6b572e2c148",
+  "Guid": "feddf654-ce3e-4ff7-9ca2-eec68feecb29",
   "<b>Symbol</b>": "Symbol",
   "<b>RodzajMatrycy</b>": "Zakup",
   "Blokada": false,
@@ -12407,7 +12527,7 @@ Response time: 97 ms, Status Code: 200 OK
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "3mD5PAYZ7g2tVA==",
+        "Base64": "kdHfdBYRpodgcg==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -12466,7 +12586,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "v1ldqfhkH3LSQw==",
+          "Base64": "ZbzU7Mh2sOKMtw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12499,7 +12619,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "SfAWQT3//e/Pkw==",
+      "Base64": "+YCLErAld+Dsiw==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -12553,7 +12673,7 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "5c1b5538-1a52-4b3d-b606-ad4286a07648",
+  "Guid": "9073f654-b590-445a-ad83-48fed5092a6f",
   "<b>Symbol</b>": "Symbol",
   "OpisMatryca": "OpisMatryca",
   "<b>RodzajMatrycy</b>": "Wplata",
@@ -12599,7 +12719,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "5RqUN+GD++4NdQ==",
+          "Base64": "3wPh9X86whCKJQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12632,7 +12752,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "YmgCTVwUhBulHw==",
+      "Base64": "/T0r8a3KkqufLQ==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -12686,14 +12806,14 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>{
   "TestMode": false,
-  "Guid": "0af606d6-67c6-4ba1-b129-6bc8e8b1d73b",
+  "Guid": "131477ca-2f1c-439f-9247-07326a198d21",
   "IdPaczki": 1,
   "<b>RodzajPrzelewu</b>": "Standardowy",
   "<b>Definicja</b>": "Definicja",
   "<b>DataPrzelewu</b>": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "Seria": "Seria",
   "Wariant": "Standardowy",
@@ -12725,13 +12845,13 @@ Response time: 97 ms, Status Code: 200 OK
   "NumerDokumentu": "NumerDokumentu",
   "MppOkresOd": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "MppOkresDo": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "OpisPrzelewu": "OpisPrzelewu",
   "OnlineMgsId": "OnlineMgsId",
@@ -12758,7 +12878,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "1/1hP7q6+7sIDA==",
+      "Base64": "5I3vmkAw78LSSw==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -12816,7 +12936,7 @@ Response time: 97 ms, Status Code: 200 OK
   "IDs": [
     1
   ],
-  "Guid": "1c710467-2da7-40af-9df0-d1b399c799d0",
+  "Guid": "7a279149-d208-477a-ad4e-8ff91c5d1005",
   "NumerPrzelewu": "NumerPrzelewu"
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -12826,14 +12946,14 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "Data": [
     {
-      "Guid": "88afb260-f511-46ae-a53e-e26a95802e6d",
+      "Guid": "e9444dc3-3e7e-4620-8a8e-c26e9d1aca85",
       "IdPaczki": 1,
       "<b>RodzajPrzelewu</b>": "Standardowy",
       "<b>Definicja</b>": "Definicja",
       "<b>DataPrzelewu</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "Seria": "Seria",
       "Wariant": "Standardowy",
@@ -12865,13 +12985,13 @@ Response time: 97 ms, Status Code: 200 OK
       "NumerDokumentu": "NumerDokumentu",
       "MppOkresOd": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "MppOkresDo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "OpisPrzelewu": "OpisPrzelewu",
       "OnlineMgsId": "OnlineMgsId",
@@ -12901,7 +13021,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "ZHEXTkepfQ2/Ng==",
+          "Base64": "MkADPK4mkeE0Jw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -12954,13 +13074,13 @@ Response time: 97 ms, Status Code: 200 OK
   "Okres": {
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "SymbolDefinicjiPaczki": "SymbolDefinicjiPaczki",
@@ -12973,7 +13093,7 @@ Response time: 97 ms, Status Code: 200 OK
 <div class='code-container'><pre class='code-block'>{
   "Data": [
     {
-      "Guid": "fe1829fa-1b4c-4a93-842e-fef6c048afed",
+      "Guid": "90d62a9b-7c6e-45da-91b0-ab0991895a2d",
       "Definicja": {
         "Symbol": "Symbol",
         "Nazwa": "Nazwa"
@@ -12981,8 +13101,8 @@ Response time: 97 ms, Status Code: 200 OK
       "NumerPaczki": "NumerPaczki",
       "Data": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "Status": "Planowana",
       "Nazwa": "Nazwa",
@@ -13018,7 +13138,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "zAho8V12t9VI2g==",
+            "Base64": "9s53FCWEQsgO/g==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -13054,7 +13174,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "AW12pIO/a2tSzg==",
+          "Base64": "pv5faucKklgJ7Q==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -13101,20 +13221,20 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>[
   {
-    "Guid": "70edadd0-4d98-41c7-90c2-367dfbb4b67b",
+    "Guid": "8e208705-d1e8-47d8-b367-03bd2dc6fd45",
     "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
     "Numer": "Numer",
     "<b>Nazwa</b>": "Nazwa",
     "Opis": "Opis",
     "<b>DataOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>DataDo</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "ProwadzacyKod": "ProwadzacyKod",
     "KontrahentKod": "KontrahentKod",
@@ -13140,7 +13260,7 @@ Response time: 97 ms, Status Code: 200 OK
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "DH4FcTc+2IIaIA==",
+        "Base64": "tnTIQQLXvDBpJQ==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -13161,20 +13281,20 @@ Response time: 97 ms, Status Code: 200 OK
   "TestMode": false,
   "Data": [
     {
-      "Guid": "40b1faaf-54fd-4846-9822-bafce68ffd3f",
+      "Guid": "2b49e252-738a-47da-98dc-b3b9138af962",
       "<b>DefinicjaZadaniaSymbol</b>": "DefinicjaZadaniaSymbol",
       "Numer": "Numer",
       "<b>Nazwa</b>": "Nazwa",
       "Opis": "Opis",
       "<b>DataOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "<b>DataDo</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "ProwadzacyKod": "ProwadzacyKod",
       "KontrahentKod": "KontrahentKod",
@@ -13200,7 +13320,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "dnsJiCI2iElTZw==",
+          "Base64": "NetYmZp0xiZWcw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -13271,7 +13391,7 @@ Response time: 97 ms, Status Code: 200 OK
       "Extension": "Extension",
       "Link": "Link",
       "SubType": "None",
-      "Base64": "bTIU5PtPHBOzSA==",
+      "Base64": "WzDz45XAfHsNPw==",
       "Features": [
         {
           "<b>Name</b>": "Name",
@@ -13313,7 +13433,7 @@ Response time: 97 ms, Status Code: 200 OK
 </div>
 <hr class='section-separator' />
 <h2 id='AltOne_WebAPI_ObslugaKadrowa'>AltOne.WebAPI.ObslugaKadrowa</h2>
-<p class='assembly-version'>Assembly name: AltOne.WebAPI.ObslugaKadrowa<br> Version: 2606.0.1.20000+3a17c97e2d9bd53aaa380ffe78a62ccb0f1eedc1,<br>Last modified: 5.08.2026 23:05:28</p>
+<p class='assembly-version'>Assembly name: AltOne.WebAPI.ObslugaKadrowa<br> Version: 2606.0.1.20000+3a17c97e2d9bd53aaa380ffe78a62ccb0f1eedc1,<br>Last modified: 2.11.2026 15:26:54</p>
 <h3 id='AltOne_WebAPI_ObslugaKadrowa-Metody'>List of available methods:</h3>
 <h4>Interface: IKadry</h4>
 <ul class='methods-list'>
@@ -13345,17 +13465,17 @@ Response time: 97 ms, Status Code: 200 OK
     "<b>ZrodloDodatku</b>": "Pracownik",
     "IdZrodla": 1,
     "KodPracownika": "KodPracownika",
-    "Guid": "49cea6a5-44d1-4560-ab39-1fdd3babfcbf",
+    "Guid": "65b93156-7988-46cb-83ed-3e91729727ea",
     "IDExternal": 1,
     "<b>DataAktualnosci</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>OkresOd</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "<b>OkresDo</b>": null,
     "<b>CzyAktualizowac</b>": false,
@@ -13395,7 +13515,7 @@ Response time: 97 ms, Status Code: 200 OK
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "0zxFoBQolGrqGg==",
+        "Base64": "TkqeyA0LIjZhbw==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -13418,7 +13538,7 @@ Response time: 97 ms, Status Code: 200 OK
     {
       "IDExternal": 1,
       "ID": 1,
-      "Guid": "2c41637d-762d-4654-bacd-c7916dd01e99",
+      "Guid": "1a8e6885-81ec-4f90-adca-30f3011617bb",
       "DocumentNumber": "DocumentNumber"
     }
   ],
@@ -13464,8 +13584,8 @@ Response time: 97 ms, Status Code: 200 OK
     "<b>DefinicjaNazwaSlownika</b>": "DefinicjaNazwaSlownika",
     "<b>DataAktualizacji</b>": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "Aktualizuj": false,
     "PodzielnikPozycje": [
@@ -13492,7 +13612,7 @@ Response time: 97 ms, Status Code: 200 OK
             "Extension": "Extension",
             "Link": "Link",
             "SubType": "None",
-            "Base64": "6TblXG8t1bNbmA==",
+            "Base64": "GDYnbyej9gz2jA==",
             "Features": [
               {
                 "<b>Name</b>": "Name",
@@ -13525,7 +13645,7 @@ Response time: 97 ms, Status Code: 200 OK
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "8rlbcj2HIanQUQ==",
+        "Base64": "YjswvfztltmOeg==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -13549,7 +13669,7 @@ Response time: 97 ms, Status Code: 200 OK
       "IDExternal": 1,
       "IDSource": 1,
       "ID": 1,
-      "Guid": "36587c99-7fc1-49bd-8764-864f15234d9b",
+      "Guid": "d8d5c9ee-daae-4e0a-9ffb-64249d0f1e3e",
       "Name": "Name"
     }
   ],
@@ -13594,7 +13714,7 @@ Response time: 97 ms, Status Code: 200 OK
   "Data": [
     {
       "IDExternal": 1,
-      "Guid": "203c9da2-ce7b-455a-90e2-486254e3cf6d",
+      "Guid": "0117af55-ee73-4db3-aa8f-e0ca2eb1f7ff",
       "<b>Aktualizacja</b>": false,
       "IDSource": 1,
       "KodPracownika": "KodPracownika",
@@ -13604,17 +13724,17 @@ Response time: 97 ms, Status Code: 200 OK
       "Okres": {
         "From": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "To": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         }
       },
-      "Data": "2026-10-12T13:36:29.5482138Z",
-      "Termin": "2026-10-12T13:36:29.5482239Z",
+      "Data": "2026-11-03T11:14:01.5555273Z",
+      "Termin": "2026-11-03T11:14:01.5555363Z",
       "Seria": "Seria",
       "DokumentDodatkowyPozycje": [
         {
@@ -13642,7 +13762,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "l2QWfIVImAN+ow==",
+          "Base64": "XJO6NbLolQA2KQ==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -13666,7 +13786,7 @@ Response time: 97 ms, Status Code: 200 OK
     {
       "IDExternal": 1,
       "ID": 1,
-      "Guid": "d326366c-7f3e-4e0c-a0f9-a3dc5e16ddf2",
+      "Guid": "f2db0d56-9e73-445c-a0bc-fc1ba3cbea5b",
       "DocumentNumber": "DocumentNumber"
     }
   ],
@@ -13720,8 +13840,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -13736,7 +13856,7 @@ Response time: 97 ms, Status Code: 200 OK
   "Data": [
     {
       "IDExternal": 1,
-      "Guid": "56172b29-3490-4730-bb74-e9c1f3e367fb",
+      "Guid": "48bd887d-860f-4566-b3e8-15d51a1b81d3",
       "<b>Aktualizacja</b>": false,
       "IDSource": 1,
       "KodPracownika": "KodPracownika",
@@ -13746,17 +13866,17 @@ Response time: 97 ms, Status Code: 200 OK
       "Okres": {
         "From": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         },
         "To": {
           "<b>Year</b>": 2026,
-          "<b>Month</b>": 10,
-          "<b>Day</b>": 12
+          "<b>Month</b>": 11,
+          "<b>Day</b>": 3
         }
       },
-      "Data": "2026-10-12T13:36:29.5609801Z",
-      "Termin": "2026-10-12T13:36:29.5609877Z",
+      "Data": "2026-11-03T11:14:01.5676278Z",
+      "Termin": "2026-11-03T11:14:01.5676323Z",
       "Seria": "Seria",
       "DokumentDodatkowyPozycje": [
         {
@@ -13787,7 +13907,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "tOzIS6qZFZZ7Xg==",
+          "Base64": "1dUDPbyoFmyhGA==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -13851,8 +13971,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -13913,8 +14033,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -13928,21 +14048,21 @@ Response time: 97 ms, Status Code: 200 OK
   "<b>ReadRecords</b>": 1,
   "Data": [
     {
-      "Guid": "65a66752-0163-45e4-a118-c3c79aa86a85",
+      "Guid": "ba87dedb-d5aa-4497-bcd8-59c4cf2eeffe",
       "DataAktualnosci": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "OkresOd": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "OkresDo": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "IdDefinicjiUmowy": 1,
       "Numer": "Numer",
@@ -13971,7 +14091,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "qJUp5OPFlWz36A==",
+          "Base64": "5g/gj8A6MPt0Cw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -14034,8 +14154,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -14052,17 +14172,17 @@ Response time: 97 ms, Status Code: 200 OK
       "<b>ZrodloDodatku</b>": "Pracownik",
       "IdZrodla": 1,
       "KodPracownika": "KodPracownika",
-      "Guid": "77730bde-48c2-4162-9ddd-bade395ad354",
+      "Guid": "a79e6c75-586f-4e34-bfab-5915977007a0",
       "IDExternal": 1,
       "<b>DataAktualnosci</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "<b>OkresOd</b>": {
         "<b>Year</b>": 2026,
-        "<b>Month</b>": 10,
-        "<b>Day</b>": 12
+        "<b>Month</b>": 11,
+        "<b>Day</b>": 3
       },
       "<b>OkresDo</b>": null,
       "<b>CzyAktualizowac</b>": false,
@@ -14105,7 +14225,7 @@ Response time: 97 ms, Status Code: 200 OK
           "Extension": "Extension",
           "Link": "Link",
           "SubType": "None",
-          "Base64": "G3h6ykNlmlJlXw==",
+          "Base64": "GHN8xv9LP2odiw==",
           "Features": [
             {
               "<b>Name</b>": "Name",
@@ -14159,7 +14279,7 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>[
   {
-    "Guid": "89a7d2e0-66ca-4f14-ac9f-67525eddd1e9",
+    "Guid": "bad345c2-3367-4dfd-818d-7140d628af1b",
     "Nazwa": "Nazwa",
     "PozycjaPIT": "PozycjaPIT",
     "Priorytet": 1,
@@ -14186,7 +14306,7 @@ Response time: 97 ms, Status Code: 200 OK
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "cZFcGssci6wOcw==",
+        "Base64": "rAdDlFhVLQWZWw==",
         "Features": [
           {
             "<b>Name</b>": "Name",
@@ -14223,19 +14343,19 @@ Response time: 97 ms, Status Code: 200 OK
   "KodPracownika": "KodPracownika",
   "DataWaznosciNaDzien": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   },
   "Termin": {
     "From": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "To": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     }
   },
   "DefBadaniaLekarskiegoNazwa": "DefBadaniaLekarskiegoNazwa",
@@ -14251,8 +14371,8 @@ Response time: 97 ms, Status Code: 200 OK
   ],
   "UpdateDate": {
     "<b>Year</b>": 2026,
-    "<b>Month</b>": 10,
-    "<b>Day</b>": 12
+    "<b>Month</b>": 11,
+    "<b>Day</b>": 3
   }
 }</pre><button class='copy-btn' onclick='copyCode(this)'>Copy</button><button class='expand-btn' onclick='toggleExpand(this)'>Expand</button></div>
 <h5>Sample response:</h5>
@@ -14261,7 +14381,7 @@ Response time: 97 ms, Status Code: 200 OK
 <h5>Sample JSON file:</h5>
 <div class='code-container'><pre class='code-block'>[
   {
-    "Guid": "6623606e-274d-4902-b56b-2a218be50ee7",
+    "Guid": "93feaeec-a1ec-4259-a92c-a71a12118d74",
     "KodPracownika": "KodPracownika",
     "IdPracownika": 1,
     "DefinicjaNazwa": "DefinicjaNazwa",
@@ -14269,30 +14389,30 @@ Response time: 97 ms, Status Code: 200 OK
     "Anulowane": false,
     "DataWykonaniaDoDnia": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "DataWykonaniaDoDniaNastepne": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "DataWykonania": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "DataWaznosci": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "PracaWOkularach": false,
     "KwotaDofinansowania": 1.0,
     "DataDofinansowania": {
       "<b>Year</b>": 2026,
-      "<b>Month</b>": 10,
-      "<b>Day</b>": 12
+      "<b>Month</b>": 11,
+      "<b>Day</b>": 3
     },
     "Opis": "Opis",
     "ID": 1,
@@ -14318,7 +14438,7 @@ Response time: 97 ms, Status Code: 200 OK
         "Extension": "Extension",
         "Link": "Link",
         "SubType": "None",
-        "Base64": "RM/suR7FoK4rBg==",
+        "Base64": "mYYEzfEfI9jXmA==",
         "Features": [
           {
             "<b>Name</b>": "Name",

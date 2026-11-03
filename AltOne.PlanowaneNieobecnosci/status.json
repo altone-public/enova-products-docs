@@ -201,5 +201,12 @@
     "Wersja": "26100000",
     "Status": "passed",
     "Data": "2026-10-12 15:32:57"
+  },
+  {
+    "Nazwa": "AltOne.PlanowaneNieobecnosci",
+    "WersjaDLL": "2606.0.1.20001",
+    "Wersja": "26100000",
+    "Status": "passed",
+    "Data": "2026-11-02 16:10:41"
   }
 ]

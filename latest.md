@@ -6,24 +6,24 @@
 
 | Produkt                               | Wersja dll           | Data testu       | Status |
 |---------------------------------------|----------------------|------------------|--------|
+| AltOne.ProduktODK                     | 2606.0.1.90101       | 03.11.2026 12:13 | ✅      |
+| AltOne.KartyCzasuPracy                | 2606.0.1.30003       | 02.11.2026 16:12 | ✅      |
+| AltOne.WielowymiarowyPodzialPlac      | 2606.0.1.190002      | 02.11.2026 16:12 | ✅      |
+| AltOne.WebAPI.Core                    | 2606.0.1.80102       | 02.11.2026 16:12 | ✅      |
+| AltOne.PlanowaneNieobecnosci          | 2606.0.1.20001       | 02.11.2026 16:10 | ✅      |
 | AltOne.BazaWiedzy                     | 2606.0.1.30000       | 12.10.2026 15:33 | ✅      |
-| AltOne.KartyCzasuPracy                | 2606.0.1.30001       | 12.10.2026 15:33 | ✅      |
 | AltOne.AkceptacjaRachunkowBankowych   | 2606.0.1.20000       | 12.10.2026 15:33 | ✅      |
 | AltOne.WebApi.DataExchangeTable       | 2606.0.1.60100       | 12.10.2026 15:33 | ✅      |
-| AltOne.WielowymiarowyPodzialPlac      | 2606.0.1.190000      | 12.10.2026 15:33 | ✅      |
 | AltOne.WnioskiPracownicze             | 2606.0.1.30000       | 12.10.2026 15:33 | ✅      |
 | AltOne.WebAPI.ObslugaKadrowa          | 2606.0.1.20000       | 12.10.2026 15:33 | ✅      |
 | AltOne.WebAPI.ObslugaFakturHandlowych | 2606.0.1.30000       | 12.10.2026 15:33 | ✅      |
 | AltOne.WebApi.ObslugaFakturKosztowych | 2606.0.1.40000       | 12.10.2026 15:33 | ✅      |
 | AltOne.WebAPI.ObslugaCzasuPracy       | 2606.0.1.20001       | 12.10.2026 15:33 | ✅      |
-| AltOne.WebAPI.Core                    | 2606.0.1.80100-Alfa  | 12.10.2026 15:33 | ✅      |
 | AltOne.WebAPI.Motivizer               | 2606.0.1.20000       | 12.10.2026 15:33 | ✅      |
 | AltOne.TwoFactorAuth                  | 2606.0.1.30000       | 12.10.2026 15:33 | ✅      |
-| AltOne.ProduktODK                     | 2606.0.1.90000       | 12.10.2026 15:33 | ✅      |
 | AltOne.Pulpity.Wizytowki              | 2606.0.1.50000       | 12.10.2026 15:33 | ✅      |
 | AltOne.PowiadomieniaOPlatnosciach     | 2606.0.1.20000       | 12.10.2026 15:32 | ✅      |
 | AltOne.ListyProjektowe                | 2606.0.1.210000      | 12.10.2026 15:32 | ✅      |
-| AltOne.PlanowaneNieobecnosci          | 2606.0.1.20000       | 12.10.2026 15:32 | ✅      |
 | AltOne.PotwierdzanieObecnosciPulpity  | 2606.0.1.40000       | 12.10.2026 15:32 | ✅      |
 | AltOne.LazyApproval                   | 2606.0.1.20000       | 12.10.2026 15:32 | ✅      |
 | AltOne.ImportDokHandlowych            | 2606.0.1.220101      | 12.10.2026 15:32 | ✅      |

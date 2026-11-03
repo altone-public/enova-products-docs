@@ -6,6 +6,7 @@
 
 | Produkt                      | Wersja dll     | Data testu       | Status |
 |------------------------------|----------------|------------------|--------|
+| AltOne.PlanowaneNieobecnosci | 2606.0.1.20001 | 02.11.2026 16:10 | ✅      |
 | AltOne.PlanowaneNieobecnosci | 2606.0.1.20000 | 12.10.2026 15:32 | ✅      |
 
 ### enova365 2606.2.3
