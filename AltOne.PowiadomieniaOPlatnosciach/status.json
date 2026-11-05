@@ -201,5 +201,12 @@
     "Wersja": "26100000",
     "Status": "passed",
     "Data": "2026-10-12 15:32:58"
+  },
+  {
+    "Nazwa": "AltOne.PowiadomieniaOPlatnosciach",
+    "WersjaDLL": "2606.0.1.20000",
+    "Wersja": "26100002",
+    "Status": "passed",
+    "Data": "2026-11-05 15:54:15"
   }
 ]
